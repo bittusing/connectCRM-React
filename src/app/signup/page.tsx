@@ -1,7 +1,4 @@
-import { Metadata } from "next";
-import metadataStatic from "@/utils/metadataStatic";
-import LoginPage from "@/components/Pages/Authentication/LoginPage";
-export const metadata: Metadata = metadataStatic;
+import LoginPage from "../../Pages/Authentication/LoginPage";
 
 const SignUpPage = () => {
   return (

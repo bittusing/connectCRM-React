@@ -9,17 +9,19 @@ export default function WelcomePage() {
           <Link className="mb-10 inline-block" to="/">
             <img
               className="hidden dark:block"
-              src={"/images/logo/logo.svg"}
+              src={"/images/logo/crmLogoFull.png"}
               alt="Logo"
               width={176}
-              height={32}
+              height={22}
+              style={{ width: "209px", height: "auto", borderRadius: "33px" }}
             />
             <img
               className="dark:hidden"
-              src={"/images/logo/logo-dark.svg"}
+              src={"/images/logo/crmLogoFull.png"}
               alt="Logo"
               width={176}
               height={32}
+              style={{ width: "auto", height: "auto", borderRadius: "33px" }}
             />
           </Link>
           <p className="mb-3 text-xl font-medium text-dark dark:text-white">

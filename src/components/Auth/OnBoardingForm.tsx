@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import InputGroup from '@/components/FormElements/InputGroup';
-import SelectGroupOne from '@/components/FormElements/SelectGroup/SelectGroupOne';
+import InputGroup from '../FormElements/InputGroup';
+import SelectGroupOne from '../FormElements/SelectGroup/SelectGroupOne';
 
 // Common timezones array
 const timezones = [
