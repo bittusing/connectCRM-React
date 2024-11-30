@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import DynamicDataManagement from "@/components/DynamicDataManagement/DynamicDataManagement";
-// import { randomUUID } from "crypto";
+import DynamicDataManagement from "../../../components/DynamicDataManagement/DynamicDataManagement";
 
 const dataInitial: {
   leadSourceName: string;

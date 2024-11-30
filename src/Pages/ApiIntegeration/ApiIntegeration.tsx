@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import TextAreaCustom from "@/components/FormElements/TextArea/TextAreaCustom";
 import { CopyOutlined } from "@ant-design/icons";
+import TextAreaCustom from "../../components/FormElements/TextArea/TextAreaCustom";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 
 export default function ApiIntegeration() {
   const [apiService, setApiService] = useState("housing");

@@ -4,7 +4,7 @@ import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import SearchForm from "../../components/Header/SearchForm";
 import { SearchOutlined } from "@ant-design/icons";
 import AdvanceFilterUI from "../Components/AdvanceFilterUI";
-import useScreenHook from "@/hooks/useScreenHook";
+import useScreenHook from "../../hooks/useScreenHook";
 
 const selectOptionsData = {
   agents: {

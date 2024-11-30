@@ -1,13 +1,12 @@
-"use client";
 
 import React, { useState } from "react";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import DateTimePicker from "@/components/FormElements/DatePicker/DateTimePicker";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import CallDetails from "./components/CallDetails";
 import AnalysisReport from "./components/AnalysisReport";
-import TabPanel from "@/components/TabPanel/TabPanel";
 import Summary from "./components/Summary";
+import TabPanel from "../../components/TabPanel/TabPanel";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
+import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
 
 const EmployeeReport: React.FC = () => {
   const [employee, setEmployee] = useState("Admin");

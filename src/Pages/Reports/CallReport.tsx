@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import DateTimePicker from "@/components/FormElements/DatePicker/DateTimePicker";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
+import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import CallDetails from "../CallManage/components/CallDetails";
 
 export default function CallReport() {

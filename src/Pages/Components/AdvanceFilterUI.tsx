@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import DateTimePicker from "@/components/FormElements/DatePicker/DateTimePicker";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
-import { leadStatus } from "@/utils/Constants/UsefullJSON";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
+import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
+import { leadStatus } from "../../utils/Constants/UsefullJSON";
+
 
 const AdvanceFilterUI: React.FC = () => {
   const [status, setStatus] = useState<string | number>("");

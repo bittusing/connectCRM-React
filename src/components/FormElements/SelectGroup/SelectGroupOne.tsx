@@ -1,6 +1,6 @@
 "use client";
-import { SelectProps } from "@/types/selectType";
 import React, { useEffect, useState } from "react";
+import { SelectProps } from "../../../types/selectType";
 
 const SelectGroupOne = ({
   customClasses,

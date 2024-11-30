@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import DatePickerOne from "@/components/FormElements/DatePicker/DatePickerOne";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
-import CustomAntdTable from "@/components/Tables/CustomAntdTable";
-import useScreenHook from "@/hooks/useScreenHook";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
+import useScreenHook from "../../hooks/useScreenHook";
+import CustomAntdTable from "../../components/Tables/CustomAntdTable";
+import DatePickerOne from "../../components/FormElements/DatePicker/DatePickerOne";
+
 
 interface EmployeeData {
   key: string;

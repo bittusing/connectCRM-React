@@ -7,11 +7,11 @@ import AllDetailsFields from "../Components/AllDetailsFields";
 import AdditionalInformation from "../Components/AdditionalInformation";
 import AttachmentTab from "../Components/AttachmentTab";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
-import DateTimePicker from "@/components/FormElements/DatePicker/DateTimePicker";
-import TabPanel from "@/components/TabPanel/TabPanel";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import { AGEND_NAMES } from "@/utils/Constants/UsefullJSON";
-import LeadStatusUI from "@/components/CommonUI/LeadStatus/LeadStatus";
+import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
+import TabPanel from "../../components/TabPanel/TabPanel";
+import { AGEND_NAMES } from "../../utils/Constants/UsefullJSON";
+import LeadStatusUI from "../../components/CommonUI/LeadStatus/LeadStatus";
 
 const staticData = [
   {

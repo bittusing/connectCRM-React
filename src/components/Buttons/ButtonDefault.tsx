@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Link } from "react-router-dom";
-import useScreenHook from "@/hooks/useScreenHook";
+import useScreenHook from "../../hooks/useScreenHook";
 
 interface ButtonPropTypes {
   label: string;

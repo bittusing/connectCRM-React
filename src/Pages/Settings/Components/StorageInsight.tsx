@@ -4,12 +4,12 @@ import {
   DownloadOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
-import DonutSlickDesign from "@/components/Charts/DonutSlickDesign";
-import CustomAntdTable from "@/components/Tables/CustomAntdTable";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import DateTimePicker from "@/components/FormElements/DatePicker/DateTimePicker";
-import AudioPlayer from "@/components/AudioPlayer/AudioPlayer";
+import AudioPlayer from "../../../components/AudioPlayer/AudioPlayer";
+import DateTimePicker from "../../../components/FormElements/DatePicker/DateTimePicker";
+import SelectGroupOne from "../../../components/FormElements/SelectGroup/SelectGroupOne";
+import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
+import DonutSlickDesign from "../../../components/Charts/DonutSlickDesign";
+import ButtonDefault from "../../../components/Buttons/ButtonDefault";
 
 const StorageInsights = () => {
   const data = [

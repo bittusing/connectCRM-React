@@ -1,15 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import InputGroup from "@/components/FormElements/InputGroup";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import type { CollapseProps } from "antd";
 import AdditionalLeadDetails from "./AdditionalLeadDetails";
 import CustomCollapse from "../../components/FormElements/CustomCollapse";
 import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
-import { AGEND_NAMES, leadStatus as leadStatusConstant } from "@/utils/Constants/UsefullJSON";
-import LeadStatusUI from "@/components/CommonUI/LeadStatus/LeadStatus";
+import InputGroup from "../../components/FormElements/InputGroup";
+import {
+  AGEND_NAMES,
+  leadStatus as leadStatusConstant,
+} from "../../utils/Constants/UsefullJSON";
+import LeadStatusUI from "../../components/CommonUI/LeadStatus/LeadStatus";
 
 const selectOptionsData = {
   leadSources: {
@@ -98,7 +101,7 @@ export default function AddLeads() {
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -109,7 +112,7 @@ export default function AddLeads() {
 
   const handleSelectChange = (
     name: string,
-    value: string | number | string[] | number[],
+    value: string | number | string[] | number[]
   ) => {
     setFormData((prevData) => ({
       ...prevData,

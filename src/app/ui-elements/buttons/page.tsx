@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import metadataStatic from "@/utils/metadataStatic";
 
 export const metadata: Metadata = metadataStatic;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import InputGroup from "@/components/FormElements/InputGroup";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
+import InputGroup from "../../components/FormElements/InputGroup";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 
 const countryOptions = [

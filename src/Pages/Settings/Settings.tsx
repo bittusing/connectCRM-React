@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import TabPanel from "@/components/TabPanel/TabPanel";
 import GeneralSetting from "./Components/GeneralSetting";
 import DepartmentSetting from "./Components/DepartmentSetting";
 import SubscriptionInfo from "./Components/SubscriptionInfo";
-import useScreenHook from "@/hooks/useScreenHook";
+import useScreenHook from "../../hooks/useScreenHook";
 import CRMFields from "./Components/CRMFields";
 import StorageInsights from "./Components/StorageInsight";
+import TabPanel from "../../components/TabPanel/TabPanel";
 
 const Settings: React.FC = () => {
   const tabsData = [

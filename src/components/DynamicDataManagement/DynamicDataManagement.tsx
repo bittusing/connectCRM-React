@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "antd";
 import { EyeFilled, EditFilled, EyeInvisibleFilled } from "@ant-design/icons";
-import InputGroup from "@/components/FormElements/InputGroup";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
+import InputGroup from "../../components/FormElements/InputGroup";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import CustomAntdTable from "../Tables/CustomAntdTable";
 interface Field {
   name: string;

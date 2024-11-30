@@ -88,7 +88,7 @@ const AudioPlayer = ({ audioFile }: { audioFile: string }) => {
       <div className="relative flex-1">
         <audio
           ref={audioRef}
-          src={`https://file-examples.com/storage/fe83e8a190674337794c387/2017/11/file_example_MP3_700KB.mp3`}
+          src={`https://cdn.freesound.org/previews/771/771700_5674468-lq.mp3`}
           //   src={
           //     audioFile
           //       ? `/api/audio/${audioFile}`

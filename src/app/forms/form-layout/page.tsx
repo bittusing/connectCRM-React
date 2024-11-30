@@ -2,9 +2,9 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import { Link } from "react-router-dom";
-import InputGroup from "@/components/FormElements/InputGroup";
+import InputGroup from "../../components/FormElements/InputGroup";
 
 import metadataStatic from "@/utils/metadataStatic";
 

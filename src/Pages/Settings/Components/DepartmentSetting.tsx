@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Button, Input } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import InputGroup from "@/components/FormElements/InputGroup";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
-import CustomAntdTable from "@/components/Tables/CustomAntdTable";
+import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
+import ButtonDefault from "../../../components/Buttons/ButtonDefault";
+import SelectGroupOne from "../../../components/FormElements/SelectGroup/SelectGroupOne";
+import InputGroup from "../../../components/FormElements/InputGroup";
 
 interface User {
   key: string;

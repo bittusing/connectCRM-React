@@ -1,19 +1,11 @@
-import { Metadata } from "next";
-import DefaultLayout from "@/components/Layouts/DefaultLaout";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import metadataStatic from "@/utils/metadataStatic";
-import ProductAndServiceDash from "@/components/Pages/ProductAndServices/ProductAndServiceDash";
-
-export const metadata: Metadata = metadataStatic;
+import ProductAndServiceDash from "../../Pages/ProductAndServices/ProductAndServiceDash";
 
 const ProductAndServicesPage = () => {
   return (
-    <DefaultLayout>
-      <div className="mx-auto max-w-7xl">
-        {/* <Breadcrumb pageName="Product and Services" /> */}
-        <ProductAndServiceDash/>
-      </div>
-    </DefaultLayout>
+    <div className="mx-auto max-w-7xl">
+      {/* <Breadcrumb pageName="Product and Services" /> */}
+      <ProductAndServiceDash />
+    </div>
   );
 };
 

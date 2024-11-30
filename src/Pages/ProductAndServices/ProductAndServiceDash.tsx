@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import DynamicDataManagement from "@/components/DynamicDataManagement/DynamicDataManagement";
+import DynamicDataManagement from "../../components/DynamicDataManagement/DynamicDataManagement";
 
 interface ProductService {
   key: string;

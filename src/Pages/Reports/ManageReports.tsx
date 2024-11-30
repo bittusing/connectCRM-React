@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Input, DatePicker, Table } from "antd";
 import dayjs from "dayjs";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
-import CustomAntdTable from "@/components/Tables/CustomAntdTable";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
+import CustomAntdTable from "../../components/Tables/CustomAntdTable";
 
 const { RangePicker } = DatePicker;
 

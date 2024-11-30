@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DynamicDataManagement from "@/components/DynamicDataManagement/DynamicDataManagement";
+import DynamicDataManagement from "../../../components/DynamicDataManagement/DynamicDataManagement";
 
 const dataInitial: {
   key: string;

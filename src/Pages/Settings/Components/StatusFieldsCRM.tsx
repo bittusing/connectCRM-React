@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import DynamicDataManagement from "@/components/DynamicDataManagement/DynamicDataManagement";
-import CheckboxTwo from "@/components/FormElements/Checkboxes/CheckboxTwo";
 import { Switch, Tooltip } from "antd";
-import SwitcherTwo from "@/components/FormElements/Switchers/SwitcherTwo";
+import SwitcherTwo from "../../../components/FormElements/Switchers/SwitcherTwo";
+import CheckboxTwo from "../../../components/FormElements/Checkboxes/CheckboxTwo";
+import DynamicDataManagement from "../../../components/DynamicDataManagement/DynamicDataManagement";
+
 
 const dataInitial: {
   key: string;

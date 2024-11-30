@@ -5,6 +5,7 @@ import "./index.css";
 import "./css/linePattern.css";
 import "./css/satoshi.css";
 import "./css/style.css";
+import "flatpickr/dist/flatpickr.min.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

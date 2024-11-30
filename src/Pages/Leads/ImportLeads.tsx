@@ -2,8 +2,8 @@
 
 import React, { useState, useRef } from "react";
 import { message } from "antd";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
+import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
+import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import FileUploadFillType from "../../components/FormElements/FileUpload/FileUploadFillType";
 
 const ImportLeads: React.FC = () => {

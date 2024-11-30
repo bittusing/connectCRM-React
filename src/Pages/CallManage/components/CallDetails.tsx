@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import CustomAntdTable from "@/components/Tables/CustomAntdTable";
+import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
 
 const { Search } = Input;
 

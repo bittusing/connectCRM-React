@@ -1,7 +1,7 @@
 import React from "react";
-import InputGroup from "@/components/FormElements/InputGroup";
-import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import { leadStatus, lostReasonOptions } from "@/utils/Constants/UsefullJSON";
+import InputGroup from "../../FormElements/InputGroup";
+import SelectGroupOne from "../../FormElements/SelectGroup/SelectGroupOne";
+import { leadStatus, lostReasonOptions } from "../../../utils/Constants/UsefullJSON";
 
 export default function LeadStatusUI({
   handleInputChange,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import InputGroup from "@/components/FormElements/InputGroup";
-import ButtonDefault from "@/components/Buttons/ButtonDefault";
+import ButtonDefault from "../../../components/Buttons/ButtonDefault";
+import InputGroup from "../../../components/FormElements/InputGroup";
 
 const GeneralSetting: React.FC = () => {
   const [formData, setFormData] = useState({
