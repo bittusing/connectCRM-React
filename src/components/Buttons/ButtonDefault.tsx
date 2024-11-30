@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import useScreenHook from "@/hooks/useScreenHook";
 
 interface ButtonPropTypes {
@@ -64,7 +64,7 @@ const ButtonDefault = ({
           } flex max-h-[50px] w-full min-w-[130px] items-center justify-center  gap-2.5 rounded-md py-3 text-center font-medium transition-colors duration-200 hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
             fullWidth ? "!w-full" : "!max-w-[130px]"
           }`}
-          href={link || "#"}
+          to={link || "#"}
           onClick={() => {
             if (!loading) {
               onClick();

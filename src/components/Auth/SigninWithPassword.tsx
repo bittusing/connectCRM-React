@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 export default function SigninWithPassword() {
   const [data, setData] = useState({
@@ -121,7 +121,7 @@ export default function SigninWithPassword() {
         </label>
 
         <Link
-          href="/auth/forgot-password"
+          to="/auth/forgot-password"
           className="select-none font-satoshi text-base font-medium text-dark underline duration-300 hover:text-primary dark:text-white dark:hover:text-primary"
         >
           Forgot Password?

@@ -12,12 +12,14 @@ import { FaHandshake, FaMoneyBill1Wave } from "react-icons/fa6";
 import { MdEventRepeat } from "react-icons/md";
 import { HiTrendingUp, HiTrendingDown } from "react-icons/hi";
 
-import ChartOne from "@/components/Charts/ChartOne";
-import DataStatsOne from "@/components/DataStats/DataStatsOne";
-import StatusStats from "@/components/StatusStats/StatusStats";
-import { dataStats } from "@/types/dataStats";
-import { statusStatsType } from "@/types/statusStats";
-import { targetStatsType } from "@/types/targetStats";
+// import ChartOne from "@/components/Charts/ChartOne";
+
+// import DataStatsOne from "@/components/DataStats/DataStatsOne";
+// import StatusStats from "@/components/StatusStats/StatusStats";
+
+import { dataStats } from "../../types/dataStats";
+import { statusStatsType } from "../../types/statusStats";
+import { targetStatsType } from "../../types/targetStats";
 
 import DonutCharts from "../Charts/DonutChart";
 import ChartTwo from "../Charts/ChartTwo";
@@ -28,6 +30,9 @@ import DollarIcon from "../Assets/Icons/DashBoardIcons/DollarIcon";
 import TargetStats from "../TargetStats/TargetStats";
 import EmployeePerformance from "../Tables/EmployeePerformance";
 import CalendarBox from "../CalenderBox/CalenderBox";
+import ChartOne from "../Charts/ChartOne";
+import DataStatsOne from "../DataStats/DataStatsOne";
+import StatusStats from "../StatusStats/StatusStats";
 
 const StatusStatsData: statusStatsType[] = [
   {

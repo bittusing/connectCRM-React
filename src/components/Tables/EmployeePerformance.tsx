@@ -1,5 +1,4 @@
-import { EMPLOYEE_PERFORMANCE } from "@/types/employeePerformance";
-import Image from "next/image";
+import { EMPLOYEE_PERFORMANCE } from "../../types/employeePerformance";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 
 const employeeData: EMPLOYEE_PERFORMANCE[] = [
@@ -105,7 +104,7 @@ const EmployeePerformance = () => {
             {/* Employee Header */}
             <div className="mb-3 flex items-center gap-3">
               <div className="relative flex-shrink-0">
-                <Image
+                <img
                   src={employee.avatar}
                   alt={employee.name}
                   width={48}
@@ -239,7 +238,7 @@ const EmployeePerformance = () => {
           >
             <div className="col-span-2 flex items-center gap-3.5 px-2 py-4">
               <div className="relative flex-shrink-0">
-                <Image
+                <img
                   src={employee.avatar}
                   alt={employee.name}
                   width={48}

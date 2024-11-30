@@ -1,21 +1,18 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import NotFound from "./Pages/NotFound/NotFound";
+import navRoutes from "./routes/routes";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import './App.css'
+import Overview from "./components/Dashboard/Overview";
 
-function NotFound() {
-  return (
-    <div className="p-4 text-center">
-      <h1 className="text-2xl font-bold text-red-500">404 - Page Not Found</h1>
-    </div>
-  );
-}
-
-function Dashboard() {
-  return (
-    <div className="p-4 text-center">
-      <h1 className="text-2xl font-bold">Welcome to Connect CRM Dashboard</h1>
-    </div>
-  );
-}
+// function Dashboard() {
+//   return (
+//     <div className="p-4 text-center">
+//       <h1 className="text-2xl font-bold">Welcome to Connect CRM Dashboard</h1>
+//     </div>
+//   );
+// }
 
 function Login() {
   return (
@@ -30,9 +27,22 @@ export default function App() {
     <Router>
       <Routes>
         {/* Define your routes here */}
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Dashboard />}>
+           <Route index element={<Overview/>} />;
+            {navRoutes?.map((route, item) => {
+              const routProps = {
+                path: route.path,
+                Component: route.component,
+              };
+              return <Route key={route.path + item} {...routProps} />;
+             
+            })}
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound text={"not found 404"} />} />
+          {/* <Route path="/logout" element={<Logout />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} /> */}
       </Routes>
     </Router>
   );

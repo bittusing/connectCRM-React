@@ -1,7 +1,6 @@
 import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import { Link } from "react-router-dom";
+//import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import Signin from "@/components/Auth/Signin";
@@ -25,15 +24,15 @@ const SignIn: React.FC = () => {
 
           <div className="hidden w-full p-7.5 xl:block xl:w-1/2">
             <div className="custom-gradient-1 overflow-hidden rounded-2xl px-12.5 pt-12.5 dark:!bg-dark-2 dark:bg-none">
-              <Link className="mb-10 inline-block" href="/">
-                <Image
+              <Link className="mb-10 inline-block" to="/">
+                <img
                   className="hidden dark:block"
                   src={"/images/logo/logo.svg"}
                   alt="Logo"
                   width={176}
                   height={32}
                 />
-                <Image
+                <img
                   className="dark:hidden"
                   src={"/images/logo/logo-dark.svg"}
                   alt="Logo"
@@ -55,7 +54,7 @@ const SignIn: React.FC = () => {
               </p>
 
               <div className="mt-31">
-                <Image
+                <img
                   src={"/images/grids/grid-02.svg"}
                   alt="Logo"
                   width={405}

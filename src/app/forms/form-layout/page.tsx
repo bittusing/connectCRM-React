@@ -3,7 +3,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import SelectGroupOne from "@/components/FormElements/SelectGroup/SelectGroupOne";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import InputGroup from "@/components/FormElements/InputGroup";
 
 import metadataStatic from "@/utils/metadataStatic";
@@ -133,7 +133,7 @@ const FormLayout = () => {
                   </label>
 
                   <Link
-                    href="#"
+                    to="#"
                     className="text-body-sm text-primary hover:underline"
                   >
                     Forget password?

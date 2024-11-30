@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import ClickOutside from "@/components/ClickOutside";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import ClickOutside from "../ClickOutside";
 
 const notificationList = [
   {
@@ -36,14 +35,17 @@ const DropdownNotification = () => {
   const [notifying, setNotifying] = useState(true);
 
   return (
-    <ClickOutside onClick={() => setDropdownOpen(false)} className="relative hidden sm:block">
+    <ClickOutside
+      onClick={() => setDropdownOpen(false)}
+      className="relative hidden sm:block"
+    >
       <li>
         <Link
           onClick={() => {
             setNotifying(false);
             setDropdownOpen(!dropdownOpen);
           }}
-          href="#"
+          to="#"
           className="relative flex h-12 w-12 items-center justify-center rounded-full border border-stroke bg-gray-2 text-dark hover:text-primary dark:border-dark-4 dark:bg-dark-3 dark:text-white dark:hover:text-white"
         >
           <span className="relative">
@@ -91,10 +93,10 @@ const DropdownNotification = () => {
                 <li key={index}>
                   <Link
                     className="flex items-center gap-4 rounded-[10px] p-2.5 hover:bg-gray-2 dark:hover:bg-dark-3"
-                    href="#"
+                    to="#"
                   >
                     <span className="block h-14 w-14 rounded-full">
-                      <Image
+                      <img
                         width={112}
                         height={112}
                         src={item.image}
@@ -121,7 +123,7 @@ const DropdownNotification = () => {
 
             <Link
               className="flex items-center justify-center rounded-[7px] border border-primary p-2.5 font-medium text-primary hover:bg-blue-light-5 dark:border-dark-4 dark:text-dark-6 dark:hover:border-primary dark:hover:bg-blue-light-3 dark:hover:text-primary"
-              href="#"
+              to="#"
             >
               See all notifications
             </Link>

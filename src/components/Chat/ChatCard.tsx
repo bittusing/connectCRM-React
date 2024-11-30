@@ -1,6 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Chat } from "@/types/chat";
+import { Link } from "react-router-dom";
+//import { Chat } from "@/types/chat";
 
 const chatData: Chat[] = [
   {
@@ -61,12 +60,12 @@ const ChatCard = () => {
       <div>
         {chatData.map((chat, key) => (
           <Link
-            href="/"
+            to="/"
             className="flex items-center gap-4.5 px-7.5 py-3 hover:bg-gray-1 dark:hover:bg-dark-2"
             key={key}
           >
             <div className="relative h-14 w-14 rounded-full">
-              <Image
+              <img
                 width={56}
                 height={56}
                 src={chat.avatar}

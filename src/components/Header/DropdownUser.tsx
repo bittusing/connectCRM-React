@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import ClickOutside from "@/components/ClickOutside";
+
+import { Link } from "react-router-dom";
+import ClickOutside from "../ClickOutside";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -11,10 +11,10 @@ const DropdownUser = () => {
       <Link
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className="flex items-center gap-4"
-        href="#"
+        to="#"
       >
         <span className="h-12 w-12 rounded-full">
-          <Image
+          <img
             width={112}
             height={112}
             src="/images/user/user-03.png"
@@ -25,6 +25,17 @@ const DropdownUser = () => {
             alt="User"
             className="overflow-hidden rounded-full"
           />
+          {/* <img
+            width={112}
+            height={112}
+            src="/images/user/user-03.png"
+            style={{
+              width: "auto",
+              height: "auto",
+            }}
+            alt="User"
+            className="overflow-hidden rounded-full"
+          /> */}
         </span>
 
         <span className="flex items-center gap-2 font-medium text-dark dark:text-dark-6">
@@ -55,7 +66,7 @@ const DropdownUser = () => {
         >
           <div className="flex items-center gap-2.5 px-5 pb-5.5 pt-3.5">
             <span className="relative block h-12 w-12 rounded-full">
-              <Image
+              <img
                 width={112}
                 height={112}
                 src="/images/user/user-03.png"
@@ -66,6 +77,17 @@ const DropdownUser = () => {
                 alt="User"
                 className="overflow-hidden rounded-full"
               />
+              {/* <img
+                width={112}
+                height={112}
+                src="/images/user/user-03.png"
+                style={{
+                  width: "auto",
+                  height: "auto",
+                }}
+                alt="User"
+                className="overflow-hidden rounded-full"
+              /> */}
 
               <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-white bg-green dark:border-gray-dark"></span>
             </span>
@@ -82,7 +104,7 @@ const DropdownUser = () => {
           <ul className="flex flex-col gap-1 border-y-[0.5px] border-stroke p-2.5 dark:border-dark-3">
             {/* <li>
               <Link
-                href="/profile"
+                to="/profile"
                 className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
               >
                 <svg
@@ -112,7 +134,7 @@ const DropdownUser = () => {
 
             <li>
               <Link
-                href="/pages/settings"
+                to="/pages/settings"
                 className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
               >
                 <svg

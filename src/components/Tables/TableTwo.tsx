@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Product } from "@/types/product";
+//import { Product } from "@/types/product";
 
 const productData: Product[] = [
   {
@@ -71,7 +70,7 @@ const TableTwo = () => {
           <div className="col-span-3 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12.5 w-15 rounded-md">
-                <Image
+                <img
                   src={product.image}
                   width={60}
                   height={50}

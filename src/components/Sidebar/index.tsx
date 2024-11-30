@@ -1,16 +1,14 @@
 "use client";
 
 import React from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import SidebarItem from "@/components/Sidebar/SidebarItem";
-import ClickOutside from "@/components/ClickOutside";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { Link } from "react-router-dom";
 import { LuUserPlus } from "react-icons/lu";
 import { LiaPhoneVolumeSolid } from "react-icons/lia";
 import { TbReportAnalytics } from "react-icons/tb";
 import { IoSettingsOutline } from "react-icons/io5";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import ClickOutside from "../ClickOutside";
+import SidebarItem from "./SidebarItem";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -273,7 +271,6 @@ const menuGroups = [
 ];
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-  const pathname = usePathname();
 
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
@@ -288,8 +285,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       >
         {/* <!-- SIDEBAR HEADER --> */}
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 xl:py-10">
-          <Link href="/">
-            <Image
+          <Link to="/">
+            {/* <img
               width={176}
               height={32}
               src={"/images/logo/crmLogoFull.png"}
@@ -299,13 +296,33 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               className="dark:hidden"
               style={{ width: "auto", height: "auto", borderRadius: "33px" }}
             />
-            <Image
+            <img
               width={176}
               height={32}
               // src={"/images/logo/logo.svg"}
               src={"/images/logo/crmLogoFull.png"}
               alt="Logo"
               priority
+              className="hidden dark:block"
+              style={{ width: "auto", height: "auto", borderRadius: "33px" }}
+            /> */}
+            <img
+              width={176}
+              height={32}
+              src={"/images/logo/crmLogoFull.png"}
+              // src={"/images/logo/logo-dark.svg"}
+              alt="Logo"
+              // priority
+              className="dark:hidden"
+              style={{ width: "auto", height: "auto", borderRadius: "33px" }}
+            />
+            <img
+              width={176}
+              height={32}
+              // src={"/images/logo/logo.svg"}
+              src={"/images/logo/crmLogoFull.png"}
+              alt="Logo"
+              // priority
               className="hidden dark:block"
               style={{ width: "auto", height: "auto", borderRadius: "33px" }}
             />
