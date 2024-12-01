@@ -1,5 +1,4 @@
 import { ApexOptions } from "apexcharts";
-import React from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 
@@ -87,7 +86,7 @@ const ChartOne: React.FC = () => {
       },
       y: {
         title: {
-          formatter: function (e) {
+          formatter: function (_e) {
             return "";
           },
         },

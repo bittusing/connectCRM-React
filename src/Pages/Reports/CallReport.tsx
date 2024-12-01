@@ -1,5 +1,4 @@
-"use client"
-import React, { useState } from "react";
+import { useState } from "react";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
@@ -14,11 +13,11 @@ export default function CallReport() {
     setEmployee(value);
   };
 
-  const handleFromDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleFromDateChange = (_selectedDates: Date[], dateStr: string) => {
     setFromDate(dateStr);
   };
 
-  const handleToDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleToDateChange = (_selectedDates: Date[], dateStr: string) => {
     setToDate(dateStr);
   };
 

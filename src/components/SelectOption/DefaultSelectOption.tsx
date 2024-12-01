@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ClickOutside from "../ClickOutside";
 
 const DefaultSelectOption = ({ options }: any) => {

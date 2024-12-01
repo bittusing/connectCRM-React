@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { CopyOutlined } from "@ant-design/icons";
 import TextAreaCustom from "../../components/FormElements/TextArea/TextAreaCustom";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";

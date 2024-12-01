@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import SearchForm from "../../components/Header/SearchForm";
@@ -76,7 +76,7 @@ const selectOptionsData = {
 };
 
 export default function LeadsTableHeader() {
-  const [formData, setFormData] = useState({
+  const [_formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",

@@ -5,10 +5,6 @@ interface Location {
   longitude: number;
 }
 
-interface GeolocationError {
-  message: string;
-}
-
 const GetLocation = () => {
   const [location, setLocation] = useState<Location | null>(null);
   const [error, setError] = useState<string>('');

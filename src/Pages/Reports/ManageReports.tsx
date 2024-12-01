@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Card, Row, Col, Input, DatePicker, Table } from "antd";
+import { Card, DatePicker } from "antd";
 import dayjs from "dayjs";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
@@ -28,7 +28,10 @@ const ManageReports: React.FC = () => {
     "2024-10-20",
   ]);
 
-  const handleDateRangeChange = (dates: any, dateStrings: [string, string]) => {
+  const handleDateRangeChange = (
+    _dates: any,
+    dateStrings: [string, string]
+  ) => {
     setDateRange(dateStrings);
   };
 
@@ -37,29 +40,29 @@ const ManageReports: React.FC = () => {
     // Implement your submit logic here
   };
 
-  const handleRefresh = () => {
-    console.log("Refreshing data");
-    // Implement your refresh logic here
-  };
+  // const handleRefresh = () => {
+  //   console.log("Refreshing data");
+  //   // Implement your refresh logic here
+  // };
 
   const columns = [
     {
       title: "Sr. No.",
       dataIndex: "srNo",
       key: "srNo",
-      minWidth:80
+      minWidth: 80,
     },
     {
       title: "Client Name",
       dataIndex: "clientName",
       key: "clientName",
-      minWidth:115
+      minWidth: 115,
     },
     {
       title: "Lead Price",
       dataIndex: "leadPrice",
       key: "leadPrice",
-      minWidth:113
+      minWidth: 113,
     },
   ];
 
@@ -153,7 +156,7 @@ const ManageReports: React.FC = () => {
         className="dark:bg-gray-700 dark:text-white"
       />
 
-      <style jsx global>{`
+      <style>{`
         .ant-select-selector,
         .ant-input,
         .ant-picker {

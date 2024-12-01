@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import { Switch, Tooltip } from "antd";
+import { useState } from "react";
+import { Tooltip } from "antd";
 import SwitcherTwo from "../../../components/FormElements/Switchers/SwitcherTwo";
-import CheckboxTwo from "../../../components/FormElements/Checkboxes/CheckboxTwo";
 import DynamicDataManagement from "../../../components/DynamicDataManagement/DynamicDataManagement";
-
 
 const dataInitial: {
   key: string;
@@ -50,20 +48,20 @@ export default function StatusFieldsCRM() {
       title: "S.No",
       dataIndex: "index",
       key: "index",
-      render: (text: any, record: any, index: number) => index + 1,
+      render: (_text: any, _record: any, index: number) => index + 1,
     },
     {
       title: "Status name",
       dataIndex: "status",
       key: "status",
-      minWidth:120,
+      minWidth: 120,
     },
     {
       title: "Show on dashboard",
       dataIndex: "key",
       key: "key",
-      minWidth:166,
-      render: (key: string, record: any, index: number) => {
+      minWidth: 166,
+      render: (key: string, _record: any, _index: number) => {
         return (
           <Tooltip title="You can toggle the status field that you want to show on your Dashboard.">
             <div className="flex justify-start">
@@ -77,12 +75,12 @@ export default function StatusFieldsCRM() {
       title: "Follow-Up Filter",
       dataIndex: "key",
       key: "key",
-      minWidth:166,
-      render: (key: string, record: any, index: number) => {
+      minWidth: 166,
+      render: (key: string, _record: any, _index: number) => {
         return (
           <Tooltip title="All those fields whose toggle is enabled will not be shown in follow up dashboard.">
             <div className="flex justify-start">
-              <SwitcherTwo id={key+"followupFilter"}/>
+              <SwitcherTwo id={key + "followupFilter"} />
             </div>
           </Tooltip>
         );
@@ -97,7 +95,7 @@ export default function StatusFieldsCRM() {
 
   const handleEdit = (key: any, updatedItem: any) => {
     setData(
-      data.map((item) => (item.key === key ? { ...updatedItem, key } : item)),
+      data.map((item) => (item.key === key ? { ...updatedItem, key } : item))
     );
   };
 
@@ -108,8 +106,8 @@ export default function StatusFieldsCRM() {
   const handleUpdate = (key: string, status: boolean) => {
     setData(
       data.map((item) =>
-        item.key === key ? { ...item, onDashboard: !status } : item,
-      ),
+        item.key === key ? { ...item, onDashboard: !status } : item
+      )
     );
   };
   return (

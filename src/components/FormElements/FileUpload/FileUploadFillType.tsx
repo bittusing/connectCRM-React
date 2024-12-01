@@ -1,5 +1,4 @@
-import React from "react";
-import { message, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
 interface InputGroupProps {

@@ -20,11 +20,11 @@ const EmployeeList: React.FC = () => {
   const [endDate, setEndDate] = useState<string>("");
   const { deviceType } = useScreenHook();
 
-  const handleStartDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleStartDateChange = (_selectedDates: Date[], dateStr: string) => {
     setStartDate(dateStr);
   };
 
-  const handleEndDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleEndDateChange = (_selectedDates: Date[], dateStr: string) => {
     setEndDate(dateStr);
   };
 

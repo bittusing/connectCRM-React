@@ -17,11 +17,11 @@ const EmployeeReport: React.FC = () => {
     setEmployee(value);
   };
 
-  const handleFromDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleFromDateChange = (_selectedDates: Date[], dateStr: string) => {
     setFromDate(dateStr);
   };
 
-  const handleToDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleToDateChange = (_selectedDates: Date[], dateStr: string) => {
     setToDate(dateStr);
   };
 

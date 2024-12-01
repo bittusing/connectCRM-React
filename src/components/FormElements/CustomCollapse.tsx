@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { Collapse } from "antd";
 import type { CollapseProps } from "antd";
 
@@ -7,7 +7,7 @@ export default function CustomCollapse({ items }: CollapseProps) {
     <>
       <Collapse items={items} defaultActiveKey={["1"]} className="bg-primary" />
 
-      <style jsx global>{`
+      <style>{`
         .ant-collapse>.ant-collapse-item >.ant-collapse-header .ant-collapse-arrow{
             color: white;
         }

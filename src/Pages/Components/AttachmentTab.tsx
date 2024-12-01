@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Table, Input, Spin, message, Tooltip } from "antd";
+import { Button, Spin, message, Tooltip } from "antd";
 import {
   DeleteFilled,
-  DeleteOutlined,
   EditFilled,
-  UploadOutlined,
 } from "@ant-design/icons";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import InputGroup from "../../components/FormElements/InputGroup";
@@ -12,8 +10,6 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 import FileUploadFillType from "../../components/FormElements/FileUpload/FileUploadFillType";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
 import useGetLocation from "../../hooks/useGetLocation";
-import GetLocation from "../../utils/GetLocation";
-import AlertError from "../../components/Alerts/AlertError";
 interface Location {
   latitude: number;
   longitude: number;

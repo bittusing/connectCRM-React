@@ -1,4 +1,3 @@
-import React from "react";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
@@ -99,7 +98,7 @@ export default function DonutSlickDesign({
         type="radialBar"
         height={200}
       />
-      <style jsx global>{`
+      <style>{`
         .apexcharts-datalabel-value {
           fill: #374151 !important;
         }

@@ -1,5 +1,3 @@
-// import Overview from "../components/Dashboard/Overview";
-
 import ProductAndServicesPage from "../app/products-service/page";
 import CalendarBox from "../components/CalenderBox/CalenderBox";
 import ApiIntegeration from "../Pages/ApiIntegeration/ApiIntegeration";
@@ -10,17 +8,11 @@ import AllLeads from "../Pages/Leads/AllLeads";
 import FollowupLeads from "../Pages/Leads/FollowupLeads";
 import ImportLeads from "../Pages/Leads/ImportLeads";
 import LeadAction from "../Pages/Leads/LeadAction";
-import NotFound from "../Pages/NotFound/NotFound";
-import Testing from "../Pages/NotFound/Testing";
 import CallReport from "../Pages/Reports/CallReport";
 import ManageReports from "../Pages/Reports/ManageReports";
 import Settings from "../Pages/Settings/Settings";
 
 const navRoutes = [
-  //   {
-  //     path: "overview",
-  //     component: Overview,
-  //   },
   {
     path: "api-integeration",
     component: ApiIntegeration,

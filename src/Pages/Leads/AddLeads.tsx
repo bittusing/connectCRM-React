@@ -120,7 +120,7 @@ export default function AddLeads() {
     }));
   };
 
-  const handleDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleDateChange = (_selectedDates: Date[], dateStr: string) => {
     setFormData((prevData) => ({
       ...prevData,
       followUpDate: dateStr ? dateStr : "",
@@ -142,7 +142,13 @@ export default function AddLeads() {
               </h3>
               <ButtonDefault label="↓ Import" mode="link" link={"/import"} />
             </div>
-            <form action={handleSubmit}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
+              {" "}
               <div className="w-full p-6.5">
                 <div className="mb-4.5 flex flex-col gap-4.5 xl:flex-row">
                   <InputGroup

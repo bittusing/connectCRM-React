@@ -1,8 +1,7 @@
-"use client";
 import React, { useState } from "react";
 import { Calendar, Badge, Popover } from "antd";
 import type { Dayjs } from "dayjs";
-import type { BadgeProps, CalendarProps } from "antd";
+import type { BadgeProps } from "antd";
 import dayjs from "dayjs";
 
 interface CalendarEvent {
@@ -104,7 +103,7 @@ const CalendarBox: React.FC = () => {
           return info.originNode;
         }}
       />
-      <style jsx global>{`
+      <style>{`
         .dark .ant-picker-calendar.ant-picker-calendar-full .ant-picker-panel {
           background: #122031 !important;
         }

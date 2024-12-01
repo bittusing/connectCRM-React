@@ -4,9 +4,9 @@ interface Location {
   longitude: number;
 }
 
-interface GeolocationError {
-  message: string;
-}
+// interface GeolocationError {
+//   message: string;
+// }
 
 const useGetLocation = ({
   getLocationToggle,

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import CheckboxTwo from "../../components/FormElements/Checkboxes/CheckboxTwo";
@@ -120,7 +118,7 @@ const LeadAction: React.FC = () => {
     }));
   };
 
-  const handleDateChange = (selectedDates: Date[], dateStr: string) => {
+  const handleDateChange = (_selectedDates: Date[], dateStr: string) => {
     setFormData((prevData) => ({
       ...prevData,
       followup: dateStr,

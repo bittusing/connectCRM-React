@@ -1,10 +1,10 @@
-import React from "react";
-import { statusStatsType } from "@/types/statusStats";
+import { statusStatsType } from "../../types/statusStats";
 import { DoubleRightOutlined } from "@ant-design/icons";
 
 interface DataStatsProps {
   dataList: statusStatsType[];
 }
+
 const StatusStats: React.FC<DataStatsProps> = ({ dataList }) => {
   return (
     <>

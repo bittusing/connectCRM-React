@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout";
 // import { islogined } from "../../utils/loginHandler";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 // import Footer from "../../components/common/footer/Footer";
 // import Sidebar from "../../components/common/sidebar/Sidebar";
 // import ResponsiveSidebar from "../../components/mobileUI/ResponsiveSidebar";

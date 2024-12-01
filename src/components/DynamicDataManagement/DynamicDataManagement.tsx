@@ -82,9 +82,9 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
     }
   };
 
-  const handleDelete = (key: string) => {
-    onDelete(key);
-  };
+  // const handleDelete = (key: string) => {
+  //   onDelete(key);
+  // };
 
   const handleUpdate = (key: string, status: boolean) => {
     onUpdate(key, status);

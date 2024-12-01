@@ -1,6 +1,5 @@
-"use client";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import GoogleSigninButton from "../GoogleSigninButton";
 import SignUPForm from "../SignUpForm";
 import WelcomePage from "../WelcomePage";
@@ -94,7 +93,7 @@ export default function SignUp() {
           </div>
         </div>
         {/* Add this style block for dark mode support */}
-        <style jsx global>{`
+        <style>{`
           // Basic dark mode styles for Steps
           .dark .ant-steps .ant-steps-item-title {
             color: rgba(255, 255, 255, 0.85) !important;

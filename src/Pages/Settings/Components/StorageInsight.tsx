@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import {
-  DeleteFilled,
-  DownloadOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
+import { useState } from "react";
+import { DownloadOutlined } from "@ant-design/icons";
 import AudioPlayer from "../../../components/AudioPlayer/AudioPlayer";
 import DateTimePicker from "../../../components/FormElements/DatePicker/DateTimePicker";
 import SelectGroupOne from "../../../components/FormElements/SelectGroup/SelectGroupOne";
@@ -105,10 +101,12 @@ const StorageInsights = () => {
   };
 
   const handleFromDateChange = (selectedDates: Date[], dateStr: string) => {
+    console.log({ selectedDates });
     setFromDate(dateStr);
   };
 
   const handleToDateChange = (selectedDates: Date[], dateStr: string) => {
+    console.log({ selectedDates });
     setToDate(dateStr);
   };
 
@@ -124,7 +122,7 @@ const StorageInsights = () => {
         <div className="flex w-full flex-col items-center justify-center">
           <DonutSlickDesign
             chartSeries={chartSeries}
-            formatter={function (val: number) {
+            formatter={function () {
               return usedStorage + " GB";
             }}
           />

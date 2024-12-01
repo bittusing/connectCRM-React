@@ -1,5 +1,4 @@
 import { ApexOptions } from "apexcharts";
-import React from "react";
 import ReactApexChart from "react-apexcharts";
 
 const ChartFive: React.FC = () => {
@@ -51,7 +50,7 @@ const ChartFive: React.FC = () => {
       fontFamily: "Satoshi",
 
       markers: {
-        radius: 99,
+        size: 99,
       },
     },
     grid: {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import DynamicDataManagement from "../../../components/DynamicDataManagement/DynamicDataManagement";
 
 const dataInitial: {
@@ -24,7 +24,7 @@ export default function LostReasonFieldsCRM() {
       title: "S.No",
       dataIndex: "index",
       key: "index",
-      render: (text: any, record: any, index: number) => index + 1,
+      render: (_text: any, _record: any, index: number) => index + 1,
     },
     {
       title: "Lost reasons",

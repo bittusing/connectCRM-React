@@ -193,11 +193,11 @@ const CallDetails: React.FC = () => {
             `${range[0]}-${range[1]} of ${total} items`,
           pageSize: pageSize,
           pageSizeOptions: ["10", "20", "30", "40", "50"],
-          onShowSizeChange: (current: number, size: number) =>
+          onShowSizeChange: (_current: number, size: number) =>
             setPageSize(size),
         }}
       />
-      <style jsx global>{`
+      <style>{`
         .dark .ant-select-selector {
           background-color: #374151 !important;
           color: #fff !important;

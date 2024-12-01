@@ -1,5 +1,5 @@
-import React from "react";
-import { targetStatsType } from "@/types/targetStats";
+// import React from "react";
+import { targetStatsType } from "../../types/targetStats";
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { Progress } from "antd";
 

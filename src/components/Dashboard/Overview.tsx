@@ -1,6 +1,3 @@
-"use client";
-
-import React from "react";
 import {
   FaUserSecret,
   FaUserPlus,
@@ -13,19 +10,17 @@ import { MdEventRepeat } from "react-icons/md";
 import { HiTrendingUp, HiTrendingDown } from "react-icons/hi";
 
 // import ChartOne from "@/components/Charts/ChartOne";
-
 // import DataStatsOne from "@/components/DataStats/DataStatsOne";
 // import StatusStats from "@/components/StatusStats/StatusStats";
 
 import { dataStats } from "../../types/dataStats";
 import { statusStatsType } from "../../types/statusStats";
 import { targetStatsType } from "../../types/targetStats";
-
 import DonutCharts from "../Charts/DonutChart";
 import ChartTwo from "../Charts/ChartTwo";
-import ChatCard from "../Chat/ChatCard";
-import TableOne from "../Tables/TableOne";
-import MapOne from "../Maps/MapOne";
+// import ChatCard from "../Chat/ChatCard";
+// import TableOne from "../Tables/TableOne";
+// import MapOne from "../Maps/MapOne";
 import DollarIcon from "../Assets/Icons/DashBoardIcons/DollarIcon";
 import TargetStats from "../TargetStats/TargetStats";
 import EmployeePerformance from "../Tables/EmployeePerformance";

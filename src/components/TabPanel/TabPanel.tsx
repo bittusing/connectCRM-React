@@ -1,5 +1,4 @@
-import React from "react";
-import { Button, Tabs, Table } from "antd";
+import { Tabs } from "antd";
 const { TabPane } = Tabs;
 
 interface TabComponent {
@@ -36,7 +35,7 @@ export default function TabPanel({
           </TabPane>
         ))}
       </Tabs>
-      <style jsx global>{`
+      <style>{`
         .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
           color: #5750f1 !important;
         }

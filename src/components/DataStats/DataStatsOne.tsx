@@ -1,5 +1,4 @@
-import React from "react";
-import { dataStats } from "@/types/dataStats";
+import { dataStats } from "../../types/dataStats";
 import GrowthIconGreen from "../Assets/Icons/DashBoardIcons/GrowthIconGreen";
 import FallIconRed from "../Assets/Icons/DashBoardIcons/FallIconRed";
 

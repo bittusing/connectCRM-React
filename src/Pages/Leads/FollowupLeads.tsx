@@ -1,6 +1,5 @@
-"use client";
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Select } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";

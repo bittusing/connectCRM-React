@@ -1,5 +1,4 @@
 import { ApexOptions } from "apexcharts";
-import React from "react";
 import ReactApexChart from "react-apexcharts";
 import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 
@@ -81,12 +80,21 @@ const ChartTwo: React.FC = () => {
       fontWeight: 500,
       fontSize: "14px",
 
+      // markers: {
+      //   radius: 99,
+      //   width: 16,
+      //   height: 16,
+      //   strokeWidth: 10,
+      //   strokeColor: "transparent",
+      // },
       markers: {
-        radius: 99,
-        width: 16,
-        height: 16,
-        strokeWidth: 10,
-        strokeColor: "transparent",
+        size: 99,
+        // width: 16,
+        // height: 16,
+        strokeWidth: 10, // Instead of strokeColor
+        fillColors: ["transparent"], // If you need to set colors
+        offsetX: 0,
+        offsetY: 0,
       },
     },
     fill: {

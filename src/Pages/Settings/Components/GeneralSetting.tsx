@@ -133,7 +133,7 @@ const GeneralSetting: React.FC = () => {
         />
       </div>
 
-      <style jsx global>{`
+      <style>{`
         .dark .ant-input {
           background-color: #374151;
           border-color: #4b5563;

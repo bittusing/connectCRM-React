@@ -1,4 +1,3 @@
-import React from "react";
 import { Table, Button } from "antd";
 import {
   EyeOutlined,
@@ -96,7 +95,7 @@ const CustomAntdTable = ({ columns, dataSource, pagination = false }: any) => {
         pagination={pagination}
         className="w-full bg-white dark:bg-transparent overflow-auto"
       />
-      <style jsx global>{`
+      <style>{`
         .dark .ant-table {
           background: transparent !important;
           color: white;
