@@ -1,4 +1,3 @@
-// import React from "react";
 
 export default function GoogleSigninButton({ text }: { text: string }) {
   return (

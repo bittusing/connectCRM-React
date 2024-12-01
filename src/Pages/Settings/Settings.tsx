@@ -1,5 +1,4 @@
 "use client";
-// import React from "react";
 import GeneralSetting from "./Components/GeneralSetting";
 import DepartmentSetting from "./Components/DepartmentSetting";
 import SubscriptionInfo from "./Components/SubscriptionInfo";

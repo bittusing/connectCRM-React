@@ -1,5 +1,4 @@
 "use client";
-// import React from "react";
 import SignUp from "../../components/Auth/SignUp";
 import Signin from "../../components/Auth/Signin";
 // import DarkModeSwitcher from "@/components/Header/DarkModeSwitcher";
