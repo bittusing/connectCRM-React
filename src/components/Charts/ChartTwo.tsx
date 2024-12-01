@@ -80,22 +80,22 @@ const ChartTwo: React.FC = () => {
       fontWeight: 500,
       fontSize: "14px",
 
-      // markers: {
-      //   radius: 99,
-      //   width: 16,
-      //   height: 16,
-      //   strokeWidth: 10,
-      //   strokeColor: "transparent",
-      // },
       markers: {
-        size: 99,
-        // width: 16,
-        // height: 16,
-        strokeWidth: 10, // Instead of strokeColor
-        fillColors: ["transparent"], // If you need to set colors
-        offsetX: 0,
-        offsetY: 0,
+        radius: 99,
+        width: 16,
+        height: 16,
+        strokeWidth: 10,
+        strokeColor: "transparent",
       },
+      // markers: {
+      //   size: 99,
+      //   // width: 16,
+      //   // height: 16,
+      //   strokeWidth: 10, // Instead of strokeColor
+      //   fillColors: ["transparent"], // If you need to set colors
+      //   offsetX: 0,
+      //   offsetY: 0,
+      // },
     },
     fill: {
       opacity: 1,

@@ -1,4 +1,3 @@
-// import React from "react";
 import InputGroup from "../../FormElements/InputGroup";
 import SelectGroupOne from "../../FormElements/SelectGroup/SelectGroupOne";
 import { leadStatus, lostReasonOptions } from "../../../utils/Constants/UsefullJSON";

@@ -1,4 +1,3 @@
-// import React from "react";
 
 const SearchForm = ({ customClasses = "" }: { customClasses?: string }) => {
   return (

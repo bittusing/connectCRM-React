@@ -1,5 +1,4 @@
-// import React from "react";
-
+import React from "react";
 const CheckMark: React.FC = () => {
   return (
     <svg
