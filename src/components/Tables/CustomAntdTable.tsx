@@ -4,6 +4,7 @@ import {
   DeleteOutlined,
   DownloadOutlined,
 } from "@ant-design/icons";
+import MiniLoader from "../CommonUI/Loader/MiniLoader";
 
 const columnsLocal = [
   {
@@ -88,13 +89,14 @@ const dataLocal = [
 ];
 const CustomAntdTable = ({ columns, dataSource, pagination = false }: any) => {
   return (
+    
     <div>
-      <Table
+     { true?<MiniLoader/>:<Table
         columns={columns || columnsLocal}
         dataSource={dataSource || dataLocal}
         pagination={pagination}
         className="w-full bg-white dark:bg-transparent overflow-auto"
-      />
+      />}
       <style>{`
         .dark .ant-table {
           background: transparent !important;

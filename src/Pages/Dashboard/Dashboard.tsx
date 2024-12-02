@@ -1,7 +1,8 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DefaultLayout from "../../layouts/DefaultLayout";
 // import { islogined } from "../../utils/loginHandler";
 import { Outlet } from "react-router-dom";
+import UniversalLoader from "../../components/CommonUI/Loader";
 // import Footer from "../../components/common/footer/Footer";
 // import Sidebar from "../../components/common/sidebar/Sidebar";
 // import ResponsiveSidebar from "../../components/mobileUI/ResponsiveSidebar";
@@ -9,6 +10,7 @@ import { Outlet } from "react-router-dom";
 
 export default function Dashboard() {
   //   const navigate = useNavigate();
+  const [loaderTime, setLoaderTime] = useState(true);
   //   const [loginState, setLoginState] = useState(false);
   //   useEffect(() => {
   //     const authenticated = islogined();
@@ -24,12 +26,18 @@ export default function Dashboard() {
   //         <Spin size="large" />
   //       </div>
   //     );
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaderTime(false);
+    }, 2800);
+  }, []);
+  if (loaderTime) return <UniversalLoader />;
 
   return (
     <>
-    <DefaultLayout>
-      <Outlet />
-    </DefaultLayout>
+      <DefaultLayout>
+        <Outlet />
+      </DefaultLayout>
     </>
     // <div className="flex md:flex-row flex-col bg-softGrey h-screen">
     //   {/* Side Bar  */}
