@@ -33,6 +33,7 @@ export default function SignUp() {
     currency: "INR",
     countryCode: "+91",
     mobileNumber: "",
+    industry:""
   });
 
   const [isFinalStep, setIsFinalStep] = useState(false);
