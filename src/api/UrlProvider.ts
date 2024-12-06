@@ -16,6 +16,7 @@ export const BASE_URL: string = import.meta.env.VITE_API_URL;
 
 export const END_POINT:EndPointType = {
     LOGIN: "signin",
+    SIGNUP: "register",
     Funnel: "survey",
     Crefunel: "survey",
     SubscrPlane: "v1/subscription",
