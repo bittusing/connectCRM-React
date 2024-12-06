@@ -1,6 +1,7 @@
 // UrlProvider.d.ts
 export interface EndPointType {
     LOGIN: string;
+    SIGNUP: string;
     Funnel: string;
     Crefunel: string;
     SubscrPlane: string;

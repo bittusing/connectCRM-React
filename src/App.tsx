@@ -33,8 +33,8 @@ export default function App() {
         <Route path="/login" element={<LoginPageUI />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<NotFound text={"Not found 404"} />} />
-        {/* <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />  */}
+         {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+          {/* <Route path="/reset-password" element={<ResetPassword />} />   */}
       </Routes>
     </Router>
   );

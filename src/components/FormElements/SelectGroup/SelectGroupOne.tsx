@@ -1,5 +1,27 @@
 import { useEffect, useState } from "react";
-import { SelectProps } from "../../../types/selectType";
+
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface OptionGroup {
+  label: string;
+  options: Option[];
+}
+
+interface SelectProps {
+  customClasses?: string;
+  wrapperClasses?: string;
+  label?: string;
+  required?: boolean;
+  disabled?: boolean;
+  options: (Option | OptionGroup)[];
+  setSelectedOption?: (value: string) => void;
+  selectedOption?: string;
+  placeholder?: string;
+  isGrouped?: boolean;
+}
 
 const SelectGroupOne = ({
   customClasses,
@@ -11,10 +33,9 @@ const SelectGroupOne = ({
   setSelectedOption = () => {},
   selectedOption = "",
   placeholder = "",
+  isGrouped = false,
 }: SelectProps) => {
-  const [selectedOptionLocal, setSelectedOptionLocal] = useState<
-    string | number
-  >(selectedOption);
+  const [selectedOptionLocal, setSelectedOptionLocal] = useState<string>(selectedOption);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const changeTextColor = () => {
@@ -25,8 +46,13 @@ const SelectGroupOne = ({
     setSelectedOption(selectedOptionLocal);
   }, [selectedOptionLocal]);
 
+  // Helper function to check if an option is a group
+  const isOptionGroup = (option: Option | OptionGroup): option is OptionGroup => {
+    return 'options' in option;
+  };  
+
   return (
-    <div className={`w-full ${wrapperClasses && wrapperClasses}`}>
+    <div className={`w-full ${wrapperClasses}`}>
       {label && (
         <label className="mb-3 block text-body-sm font-medium text-dark dark:text-white">
           {label}
@@ -43,16 +69,57 @@ const SelectGroupOne = ({
             setSelectedOptionLocal(e.target.value);
             changeTextColor();
           }}
-          aria-placeholder={placeholder}
           className={`relative z-20 w-full appearance-none rounded-[7px] border border-stroke bg-transparent px-5.5 py-3 outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-gray-2 dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary dark:disabled:bg-dark ${
             isOptionSelected ? "text-dark dark:text-white" : "text-gray-5"
-          } ${customClasses && customClasses}`}
+          } ${customClasses}`}
         >
-          {options?.map((item) => (
-            <option value={item.value} key={item.value}>
-              {item.label}
+          {placeholder && (
+            <option value="" disabled hidden>
+              {placeholder}
             </option>
-          ))}
+          )}
+          
+          {isGrouped ? (
+            // Render grouped options
+            options.map((group, groupIndex) => {
+              if (isOptionGroup(group)) {
+                return (
+                  <optgroup 
+                    key={`group-${groupIndex}`} 
+                    label={group.label}
+                    className="font-medium bg-gray-100 dark:bg-dark-3"
+                  >
+                    {group.options.map((option) => (
+                      <option
+                        key={option.value}
+                        value={option.value}
+                        className="bg-white dark:bg-dark-2 py-2"
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                );
+              }
+              return null;
+            })
+          ) : (
+            // Render flat options
+            options.map((option) => {
+              if (!isOptionGroup(option)) {
+                return (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    className="py-2"
+                  >
+                    {option.label}
+                  </option>
+                );
+              }
+              return null;
+            })
+          )}
         </select>
 
         <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">

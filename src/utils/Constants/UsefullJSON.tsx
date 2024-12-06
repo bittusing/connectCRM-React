@@ -68,4 +68,98 @@ const AGEND_NAMES = [
   },
 ]
 
-export { leadStatus, lostReasonOptions, AGEND_NAMES };
+interface IndustryOption {
+  value: string;
+  label: string;
+  category?: string;
+}
+
+const INDUSTRY_TYPES: IndustryOption[] = [
+  // Technology & IT
+  { value: "software_development", label: "Software Development", category: "Technology" },
+  { value: "it_services", label: "IT Services & Consulting", category: "Technology" },
+  { value: "cybersecurity", label: "Cybersecurity", category: "Technology" },
+  { value: "cloud_computing", label: "Cloud Computing", category: "Technology" },
+  { value: "ai_ml", label: "Artificial Intelligence & Machine Learning", category: "Technology" },
+  
+  // Manufacturing & Industry
+  { value: "manufacturing", label: "Manufacturing", category: "Manufacturing" },
+  { value: "automotive", label: "Automotive", category: "Manufacturing" },
+  { value: "aerospace", label: "Aerospace & Defense", category: "Manufacturing" },
+  { value: "construction", label: "Construction", category: "Manufacturing" },
+  { value: "electronics", label: "Electronics Manufacturing", category: "Manufacturing" },
+  
+  // Services
+  { value: "financial_services", label: "Financial Services", category: "Services" },
+  { value: "healthcare", label: "Healthcare & Medical", category: "Services" },
+  { value: "education", label: "Education & Training", category: "Services" },
+  { value: "consulting", label: "Business Consulting", category: "Services" },
+  { value: "legal_services", label: "Legal Services", category: "Services" },
+  
+  // Retail & Consumer
+  { value: "retail", label: "Retail & Consumer Goods", category: "Retail" },
+  { value: "ecommerce", label: "E-commerce", category: "Retail" },
+  { value: "food_beverage", label: "Food & Beverage", category: "Retail" },
+  { value: "hospitality", label: "Hospitality & Tourism", category: "Retail" },
+  { value: "luxury_goods", label: "Luxury Goods", category: "Retail" },
+  
+  // Media & Entertainment
+  { value: "media", label: "Media & Entertainment", category: "Media" },
+  { value: "advertising", label: "Advertising & Marketing", category: "Media" },
+  { value: "gaming", label: "Gaming & Interactive Media", category: "Media" },
+  { value: "publishing", label: "Publishing", category: "Media" },
+  { value: "broadcasting", label: "Broadcasting", category: "Media" },
+  
+  // Energy & Resources
+  { value: "energy", label: "Energy & Utilities", category: "Energy" },
+  { value: "oil_gas", label: "Oil & Gas", category: "Energy" },
+  { value: "mining", label: "Mining & Metals", category: "Energy" },
+  { value: "renewable_energy", label: "Renewable Energy", category: "Energy" },
+  { value: "agriculture", label: "Agriculture & Farming", category: "Energy" },
+  
+  // Transportation & Logistics
+  { value: "logistics", label: "Logistics & Supply Chain", category: "Transportation" },
+  { value: "transportation", label: "Transportation", category: "Transportation" },
+  { value: "warehousing", label: "Warehousing", category: "Transportation" },
+  { value: "shipping", label: "Shipping & Marine", category: "Transportation" },
+  { value: "aviation", label: "Aviation", category: "Transportation" },
+  
+  // Professional Services
+  { value: "real_estate", label: "Real Estate", category: "Professional" },
+  { value: "insurance", label: "Insurance", category: "Professional" },
+  { value: "banking", label: "Banking", category: "Professional" },
+  { value: "accounting", label: "Accounting & Bookkeeping", category: "Professional" },
+  { value: "hr_services", label: "HR Services", category: "Professional" },
+  
+  // Healthcare & Life Sciences
+  { value: "pharmaceuticals", label: "Pharmaceuticals", category: "Healthcare" },
+  { value: "biotech", label: "Biotechnology", category: "Healthcare" },
+  { value: "medical_devices", label: "Medical Devices", category: "Healthcare" },
+  { value: "healthcare_it", label: "Healthcare IT", category: "Healthcare" },
+  { value: "telemedicine", label: "Telemedicine", category: "Healthcare" },
+  
+  // Non-Profit & Government
+  { value: "non_profit", label: "Non-Profit Organization", category: "Other" },
+  { value: "government", label: "Government & Public Sector", category: "Other" },
+  { value: "education_institution", label: "Educational Institution", category: "Other" },
+  { value: "research", label: "Research & Development", category: "Other" },
+  { value: "other", label: "Other", category: "Other" }
+];
+
+// Helper function to get industries by category
+export const getIndustriesByCategory = (category: string): IndustryOption[] => {
+  return INDUSTRY_TYPES.filter(industry => industry.category === category);
+};
+
+// Helper function to get all unique categories
+export const getIndustryCategories = (): string[] => {
+  return Array.from(new Set(INDUSTRY_TYPES.map(industry => industry.category || "")));
+};
+
+// Helper function to find industry label by value
+export const getIndustryLabel = (value: string): string => {
+  const industry = INDUSTRY_TYPES.find(industry => industry.value === value);
+  return industry ? industry.label : "";
+};
+
+export { leadStatus, lostReasonOptions, AGEND_NAMES, INDUSTRY_TYPES };
