@@ -17,7 +17,7 @@ const StyledWrapper = styled.div`
   .loader {
     width: 44.8px;
     height: 44.8px;
-    color: #554cb5;
+    color: #5750F1;
     position: relative;
     background: radial-gradient(11.2px, currentColor 94%, #0000);
   }

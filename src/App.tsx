@@ -6,13 +6,21 @@ import Overview from "./components/Dashboard/Overview";
 import LoginPageUI from "./app/login/page";
 import SignUpPage from "./app/signup/page";
 import "./App.css";
+import { PrivateRoute } from "./components/Utils/PrivateRoute";
 
 export default function App() {
   return (
     <Router>
       <Routes>
         {/* Define your routes here */}
-        <Route path="/" element={<Dashboard />}>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        >
           <Route index element={<Overview />} />;
           {navRoutes?.map((route, item) => {
             const routProps = {
@@ -25,9 +33,8 @@ export default function App() {
         <Route path="/login" element={<LoginPageUI />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="*" element={<NotFound text={"Not found 404"} />} />
-        {/* <Route path="/logout" element={<Logout />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} /> */}
+        {/* <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />  */}
       </Routes>
     </Router>
   );
