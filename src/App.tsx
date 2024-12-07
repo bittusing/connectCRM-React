@@ -16,10 +16,13 @@ export default function App() {
         <Route
           path="/"
           element={
-            <PrivateRoute>
               <Dashboard />
-            </PrivateRoute>
           }
+          // element={
+          //   <PrivateRoute>
+          //     <Dashboard />
+          //   </PrivateRoute>
+          // }
         >
           <Route index element={<Overview />} />;
           {navRoutes?.map((route, item) => {

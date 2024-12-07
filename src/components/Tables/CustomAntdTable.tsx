@@ -89,14 +89,17 @@ const dataLocal = [
 ];
 const CustomAntdTable = ({ columns, dataSource, pagination = false }: any) => {
   return (
-    
     <div>
-     { true?<MiniLoader/>:<Table
-        columns={columns || columnsLocal}
-        dataSource={dataSource || dataLocal}
-        pagination={pagination}
-        className="w-full bg-white dark:bg-transparent overflow-auto"
-      />}
+      {false ? (
+        <MiniLoader />
+      ) : (
+        <Table
+          columns={columns || columnsLocal}
+          dataSource={dataSource || dataLocal}
+          pagination={pagination}
+          className="w-full bg-white dark:bg-transparent overflow-auto"
+        />
+      )}
       <style>{`
         .dark .ant-table {
           background: transparent !important;
