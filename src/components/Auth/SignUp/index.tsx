@@ -6,8 +6,9 @@ import SignUPForm from "../SignUpForm";
 import WelcomePage from "../WelcomePage";
 import { Steps } from "antd";
 import OnBoardingForm from "../OnBoardingForm";
-import { postAuthAPI } from "../../../api";
+import { API } from "../../../api";
 import { END_POINT } from "../../../api/UrlProvider";
+import { LocalStorage } from "../../../utils/localStorage";
 
 const items = [
   {
@@ -33,115 +34,107 @@ export default function SignUp() {
     currency: "INR",
     countryCode: "+91",
     mobileNumber: "",
-    industry:""
+    industry: "",
   });
 
   const [isFinalStep, setIsFinalStep] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleOnBoardingData = async (data: any) => {
+  const handleOnBoardingData = async (formData: any) => {
     setIsLoading(true);
     try {
       // Format the data according to the API payload structure
       const payload = {
-        company: {
+        companyData: {
           name: signUpData.companyName,
           industry: "Software industry", // You might want to add this to your form
-          address: "", // You might want to add this to your form
-          phone: data.countryCode + data.mobileNumber,
+          phone: formData.countryCode + formData.mobileNumber,
           email: signUpData.email,
           settings: {
-            timezone: data.timezone,
-            currency: data.currency,
+            timezone: formData.timezone,
+            currency: formData.currency,
             language: "en", // Default language
           },
         },
-        user: {
-          name: data.adminName,
+        userData: {
+          name: formData.adminName,
           email: signUpData.email,
           password: signUpData.password,
-          phone: data.countryCode + data.mobileNumber,
+          phone: formData.countryCode + formData.mobileNumber,
         },
       };
 
-      const response = await postAuthAPI(
-        payload,
-        END_POINT.SIGNUP,
-        "",
-        navigate
-      );
+      const { data, error } = await API.postAuthAPI(payload, END_POINT.SIGNUP);
 
-      console.log({ response });
-
-      if (response.error) {
-        toast.error(response.error || "Signup failed. Please try again.");
-        return;
-      }
+      if (error && !data) throw Error(error);
 
       // Handle successful signup
       toast.success("Account created successfully!");
+      LocalStorage.setStringData("token", data.data.token);
+      LocalStorage.setStringData("user", JSON.stringify(data.data.user));
       navigate("/");
     } catch (error: any) {
-      toast.error(error.message || "Something went wrong. Please try again.");
+      toast.error(error || "Signup failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div
-      className={`m-auto flex h-screen w-full overflow-auto md:items-center md:justify-center ${
-        isFinalStep ? "max-w-md" : "md:max-w-xl xl:max-w-4xl"
-      }`}
-    >
-      <div className="flex w-full flex-col justify-center gap-5 bg-transparent">
-        {isFinalStep && (
-          <div className="w-full rounded-md bg-transparent px-5 py-3 shadow-card xl:bg-gray-dark">
-            <Steps current={1} items={items} />
-          </div>
-        )}
-
-        <div className="flex items-center bg-transparent shadow-1 shadow-card xl:bg-gray-dark">
-          {!isFinalStep ? (
-            <div className="w-full p-5 xl:w-1/2 xl:p-9.5 xl:pr-0">
-              <GoogleSigninButton text="Sign up" />
-
-              <div className="my-6 flex items-center justify-center">
-                <span className="block h-px w-full bg-stroke dark:bg-dark-3"></span>
-                <div className="block w-full min-w-fit bg-white px-3 text-center font-medium dark:bg-gray-dark">
-                  Or sign up with email
-                </div>
-                <span className="block h-px w-full bg-stroke dark:bg-dark-3"></span>
-              </div>
-
-              <SignUPForm
-                initialValue={signUpData}
-                setSignUpData={setSignUpData}
-                setIsFinalStep={setIsFinalStep}
-              />
-              <div className="mt-6 text-center">
-                <p>
-                  Already have an account?{" "}
-                  <Link to="/login" className="text-primary">
-                    Sign In
-                  </Link>
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="xl:p-9.5">
-              <OnBoardingForm
-                setOnBoardingData={handleOnBoardingData}
-                setIsFinalStep={setIsFinalStep}
-                initialValue={onBoardingData}
-                isLoading={isLoading}
-              />
+    <div className="linePattern_Container dark overflow-auto p-5 md:p-0">
+      <div
+        className={`m-auto flex h-screen w-full overflow-auto md:items-center md:justify-center ${
+          isFinalStep ? "max-w-md" : "md:max-w-xl xl:max-w-4xl"
+        }`}
+      >
+        <div className="flex w-full flex-col justify-center gap-5 bg-transparent">
+          {isFinalStep && (
+            <div className="w-full rounded-md bg-transparent px-5 py-3 shadow-card xl:bg-gray-dark">
+              <Steps current={1} items={items} />
             </div>
           )}
-          {!isFinalStep && <WelcomePage />}
+
+          <div className="flex items-center bg-transparent shadow-1 shadow-card xl:bg-gray-dark">
+            {!isFinalStep ? (
+              <div className="w-full p-5 xl:w-1/2 xl:p-9.5 xl:pr-0">
+                <GoogleSigninButton text="Sign up" />
+
+                <div className="my-6 flex items-center justify-center">
+                  <span className="block h-px w-full bg-stroke dark:bg-dark-3"></span>
+                  <div className="block w-full min-w-fit bg-white px-3 text-center font-medium dark:bg-gray-dark">
+                    Or sign up with email
+                  </div>
+                  <span className="block h-px w-full bg-stroke dark:bg-dark-3"></span>
+                </div>
+
+                <SignUPForm
+                  initialValue={signUpData}
+                  setSignUpData={setSignUpData}
+                  setIsFinalStep={setIsFinalStep}
+                />
+                <div className="mt-6 text-center">
+                  <p>
+                    Already have an account?{" "}
+                    <Link to="/login" className="text-primary">
+                      Sign In
+                    </Link>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="xl:p-9.5">
+                <OnBoardingForm
+                  setOnBoardingData={handleOnBoardingData}
+                  setIsFinalStep={setIsFinalStep}
+                  initialValue={onBoardingData}
+                  isLoading={isLoading}
+                />
+              </div>
+            )}
+            {!isFinalStep && <WelcomePage />}
+          </div>
         </div>
-      </div>
-      <style>{`
+        <style>{`
           // Basic dark mode styles for Steps
           .dark .ant-steps .ant-steps-item-title {
             color: rgba(255, 255, 255, 0.85) !important;
@@ -223,6 +216,7 @@ export default function SignUp() {
             color: rgba(255, 255, 255, 0.45) !important;
           }
         `}</style>
+      </div>
     </div>
   );
 }

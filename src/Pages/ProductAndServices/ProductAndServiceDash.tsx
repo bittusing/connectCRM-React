@@ -78,7 +78,7 @@ const ProductAndServiceDash = () => {
 
   const handleEdit = (key: any, updatedItem: any) => {
     setData(
-      data.map((item) => (item.key === key ? { ...updatedItem, key } : item)),
+      data.map((item) => (item.key === key ? { ...updatedItem, key } : item))
     );
   };
 
@@ -89,23 +89,25 @@ const ProductAndServiceDash = () => {
   const handleUpdate = (key: string, status: boolean) => {
     setData(
       data.map((item) =>
-        item.key === key ? { ...item, onDashboard: !status } : item,
-      ),
+        item.key === key ? { ...item, onDashboard: !status } : item
+      )
     );
   };
 
   return (
-    <DynamicDataManagement
-      title="Product and Service"
-      fields={fields}
-      columns={columns}
-      data={data}
-      onAdd={handleAdd}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      onUpdate={handleUpdate}
-      customClasses="p-6 shadow-md dark:bg-gray-800"
-    />
+    <div className="mx-auto max-w-7xl">
+      <DynamicDataManagement
+        title="Product and Service"
+        fields={fields}
+        columns={columns}
+        data={data}
+        onAdd={handleAdd}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onUpdate={handleUpdate}
+        customClasses="p-6 shadow-md dark:bg-gray-800"
+      />
+    </div>
   );
 };
 

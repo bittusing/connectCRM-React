@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputGroup from "../FormElements/InputGroup";
 import SelectGroupOne from "../FormElements/SelectGroup/SelectGroupOne";
-import { getIndustriesByCategory, getIndustryCategories, INDUSTRY_TYPES } from "../../utils/Constants/UsefullJSON";
+import { getIndustriesByCategory, getIndustryCategories } from "../../utils/Constants/UsefullJSON";
 
 // Common timezones array
 const timezones = [
@@ -96,7 +96,6 @@ export default function OnBoardingForm({
     initialValues: initialValue,
     validationSchema,
     onSubmit: (values, { setSubmitting }) => {
-      console.log("Form values:", values);
       setOnBoardingData(values);
       setIsFinalStep(true);
       setSubmitting(false);

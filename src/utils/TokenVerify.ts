@@ -13,6 +13,7 @@ export const isTokenValid = (token: string | null): boolean => {
 
   try {
     const decoded = jwtDecode<TokenPayload>(token);
+    console.log({ decoded });
 
     // Check if token is expired
     const currentTime = Math.floor(Date.now() / 1000);
