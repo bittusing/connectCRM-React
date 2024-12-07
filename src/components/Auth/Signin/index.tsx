@@ -6,7 +6,7 @@ import WelcomePage from "../WelcomePage";
 
 export default function Signin() {
   return (
-    <>
+    <div className="linePattern_Container dark overflow-auto p-5 md:p-0">
       <div className="m-auto flex h-screen w-full overflow-auto md:max-w-xl md:items-center md:justify-center xl:max-w-4xl">
         <div className="flex w-full items-center bg-transparent shadow-1 shadow-card xl:bg-gray-dark">
           {" "}
@@ -37,6 +37,6 @@ export default function Signin() {
           <WelcomePage />
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-import ProductAndServicesPage from "../app/products-service/page";
 import CalendarBox from "../components/CalenderBox/CalenderBox";
 import ApiIntegeration from "../Pages/ApiIntegeration/ApiIntegeration";
 import EmployeeList from "../Pages/CallManage/EmployeeList";
@@ -8,6 +7,7 @@ import AllLeads from "../Pages/Leads/AllLeads";
 import FollowupLeads from "../Pages/Leads/FollowupLeads";
 import ImportLeads from "../Pages/Leads/ImportLeads";
 import LeadAction from "../Pages/Leads/LeadAction";
+import ProductAndServiceDash from "../Pages/ProductAndServices/ProductAndServiceDash";
 import CallReport from "../Pages/Reports/CallReport";
 import ManageReports from "../Pages/Reports/ManageReports";
 import Settings from "../Pages/Settings/Settings";
@@ -59,7 +59,7 @@ const navRoutes = [
   },
   {
     path: "products-service",
-    component: ProductAndServicesPage,
+    component: ProductAndServiceDash,
   },
   {
     path: "settings",

@@ -5,6 +5,7 @@ import { END_POINT } from "../../api/UrlProvider";
 import { toast } from "react-toastify";
 import { FaRegEye } from "react-icons/fa6";
 import { IoEyeOffOutline } from "react-icons/io5";
+import { LocalStorage } from "../../utils/localStorage";
 
 const SigninWithPassword = () => {
   const navigate = useNavigate();
@@ -35,26 +36,18 @@ const SigninWithPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await API.postAuthAPI(
-        formData,
-        END_POINT.LOGIN,
-        "",
-        navigate
-      );
-      console.log({ response });
+      const { data, error } = await API.postAuthAPI(formData, END_POINT.LOGIN);
 
-      if (response.data) {
-        // Store token and user data
-        // LocalStorage.setStringData('token', response.data.token);
-        // LocalStorage.setStringData('user', JSON.stringify(response.data.user));
+      if (error && !data) throw Error(error);
+      const user = data.data.user;
+      LocalStorage.setStringData("token", data.data.token);
+      LocalStorage.setStringData("user", JSON.stringify(user));
 
-        toast.success("Login successful!");
-        navigate("/"); // Redirect to dashboard
-      } else if (response.error) {
-        toast.error("Login failed. Please check your credentials.");
-      }
-    } catch (error) {
-      toast.error("An error occurred. Please try again.");
+      toast.success(`Welcome back ${user?.name}!`);
+      navigate("/"); // Redirect to dashboard
+    } catch (error: any) {
+      localStorage.clear()
+      toast.error(error || "Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
     }
@@ -82,28 +75,27 @@ const SigninWithPassword = () => {
           Password
         </label>
         <div className="relative">
-
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          placeholder="Enter your password"
-          value={formData.password}
-          onChange={handleChange}
-          className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-          required
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full  rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            required
           />
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className="absolute right-4.5 top-1/2 -translate-y-1/2 focus:outline-none"
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-4.5 top-1/2 -translate-y-1/2 focus:outline-none"
           >
-          {!showPassword ? (
-            <IoEyeOffOutline className="h-5 w-5 text-[#6b7280]" />
-          ) : (
-            <FaRegEye className="h-5 w-5 text-[#6b7280]" />
-          )}
-        </button>
-          </div>
+            {!showPassword ? (
+              <IoEyeOffOutline className="h-5 w-5 text-[#6b7280]" />
+            ) : (
+              <FaRegEye className="h-5 w-5 text-[#6b7280]" />
+            )}
+          </button>
+        </div>
       </div>
 
       <div className="mb-6 flex items-center justify-between gap-2 py-2">
@@ -117,7 +109,9 @@ const SigninWithPassword = () => {
             id="remember"
             className="peer sr-only"
             checked={data.remember}
-            onChange={(e) => setData(prev => ({ ...prev, remember: e.target.checked }))}
+            onChange={(e) =>
+              setData((prev) => ({ ...prev, remember: e.target.checked }))
+            }
           />
           <span
             className={`mr-2.5 inline-flex h-5.5 w-5.5 items-center justify-center rounded-md border border-stroke bg-white text-white text-opacity-0 peer-checked:border-primary peer-checked:bg-primary peer-checked:text-opacity-100 dark:border-stroke-dark dark:bg-white/5 ${
