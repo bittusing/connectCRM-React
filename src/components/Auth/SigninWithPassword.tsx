@@ -37,16 +37,16 @@ const SigninWithPassword = () => {
 
     try {
       const { data, error } = await API.postAuthAPI(formData, END_POINT.LOGIN);
-
-      if (error && !data) throw Error(error);
-      const user = data.data.user;
-      LocalStorage.setStringData("token", data.data.token);
+      if (error || !data) throw Error(error);
+      const user = data.user;
+      LocalStorage.setStringData("refreshToken", data.refreshToken);
+      LocalStorage.setStringData("accessToken", data.token);
       LocalStorage.setStringData("user", JSON.stringify(user));
 
       toast.success(`Welcome back ${user?.name}!`);
       navigate("/"); // Redirect to dashboard
     } catch (error: any) {
-      localStorage.clear()
+      localStorage.clear();
       toast.error(error || "Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);

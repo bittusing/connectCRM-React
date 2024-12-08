@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "antd";
-import { EyeFilled, EditFilled, EyeInvisibleFilled } from "@ant-design/icons";
+import {
+  EyeFilled,
+  EditFilled,
+  EyeInvisibleFilled,
+  DeleteFilled,
+} from "@ant-design/icons";
 import InputGroup from "../../components/FormElements/InputGroup";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import CustomAntdTable from "../Tables/CustomAntdTable";
@@ -21,6 +26,7 @@ interface DynamicDataManagementProps {
   onDelete?: (key: string) => void;
   onUpdate: (key: string, status: boolean) => void;
   customClasses?: string;
+  isLoading?: boolean;
 }
 
 const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
@@ -33,6 +39,7 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
   onDelete = () => {},
   onUpdate,
   customClasses = "",
+  isLoading = false,
 }) => {
   const [formData, setFormData] = useState<any>({});
   const [editingKey, setEditingKey] = useState<string | null>(null);
@@ -95,22 +102,30 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
     key: "action",
     render: (_: any, record: any) => (
       <span>
-        <Tooltip title="Do you want to use this fields in your CRM ? If yes choose open-eye icon. ">
+        <Tooltip title="Do you want to use this entry in your CRM ? If yes choose open-eye icon. ">
           <Button
-            icon={record.onDashboard ? <EyeFilled /> : <EyeInvisibleFilled />}
-            onClick={() => handleUpdate(record.key, record.onDashboard)}
-            className="mr-2 text-red-500"
+            icon={record.isActive ? <EyeFilled /> : <EyeInvisibleFilled />}
+            onClick={() => handleUpdate(record.key, record.isActive)}
+            className="mr-2 text-orange dark:bg-transparent"
           />
         </Tooltip>
-        <Tooltip title="Use this button to Edit this fields.">
+        <Tooltip title="Use this button to Edit this endtry.">
           <Button
             icon={<EditFilled />}
             onClick={() => handleEdit(record.key)}
-            className="text-blue-500"
+            className="mr-2 text-blue-500 dark:bg-transparent"
           />
         </Tooltip>
+        {/* <Tooltip title="Use this button to Delete this entry.">
+          <Button
+            icon={<DeleteFilled />}
+            onClick={() => onDelete(record.key)}
+            className="text-red-500"
+          />
+        </Tooltip> */}
       </span>
     ),
+    width: 150,
   };
 
   const tableColumns = [...columns, actionColumn];
@@ -153,6 +168,7 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
         dataSource={data}
         pagination={false}
         className="w-full"
+        isLoading={isLoading}
       />
     </div>
   );

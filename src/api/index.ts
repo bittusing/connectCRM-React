@@ -5,68 +5,61 @@ import { BASE_URL } from "./UrlProvider";
 import { LocalStorage } from "../utils/localStorage";
 import { toast } from "react-toastify";
 import { ApiResponse, ApiConfig, ApiMethods } from "../types/api";
+import { getAuthHeader } from "../utils/TokenVerify";
+import { handleApiError } from "../utils/handleApiError";
 
 export const getAuthAPI = async <T>(
   endPoint: string,
-  Token: string = "",
-  navigate?: NavigateFunction,
+  tokenRequired: boolean = false,
+  // Token: string = "",
+  // navigate?: NavigateFunction,
   params: Record<string, any> = {}
 ): Promise<ApiResponse<T>> => {
+  const header = tokenRequired ? await getAuthHeader() : "";
   const config: ApiConfig = {
     method: "get",
     url: `${BASE_URL}${endPoint}`,
     headers: {
       "Content-Type": "application/json",
       timeout: 10000,
-      Authorization: Token || "",
+      Authorization: header,
     },
     params,
   };
 
   try {
     const response = await axios.request<T>(config);
-    return { data: response?.data };
+    const { data, message, error }: any = response?.data;
+    return { data, message, error };
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 401) {
-      console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      navigate?.("/");
-    }
-    return { error: axiosError.message };
+    return handleApiError(error);
   }
 };
 
 export const postAuthAPI = async <T>(
   body: any,
   endPoint: string,
-  Token: string = "",
-//   navigate: NavigateFunction | null = null
+  tokenRequired: boolean = false
+  //   navigate: NavigateFunction | null = null
 ): Promise<ApiResponse<T>> => {
+  const header = tokenRequired ? await getAuthHeader() : "";
   const config: ApiConfig = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${BASE_URL}${endPoint}`,
     headers: {
       "Content-Type": "application/json",
-      Authorization: Token || "",
+      Authorization: header,
     },
     data: JSON.stringify(body),
   };
 
   try {
     const response = await axios.request<T>(config);
-    return { data: response?.data };
+    const { data, message, error }: any = response?.data;
+    return { data, message, error };
   } catch (error) {
-    const axiosError = error as AxiosError<{ message: string }>;
-    console.log(error);
-    if (axiosError.response?.status === 401) {
-      console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      window.location.href = "/login";
-    }
-    toast.error(axiosError.response?.data?.message);
-    return { error: axiosError.message || "" };
+    return handleApiError(error);
   }
 };
 
@@ -89,47 +82,37 @@ export const postAuthAPI1 = async <T>(
 
   try {
     const response = await axios.request<T>(config);
-    return { data: response?.data };
+    const { data, message, error }: any = response?.data;
+    return { data, message, error };
   } catch (error) {
-    const axiosError = error as AxiosError<{ data: string }>;
-    console.log(error);
-    if (axiosError.response?.status === 401) {
-      console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      navigate?.("/");
-    }
-    toast.error(axiosError.response?.data?.data);
-    return { error: axiosError.message };
+    return handleApiError(error);
   }
 };
 
 export const DeleteAuthAPI = async <T>(
   id: string | number,
   endPoint: string,
-  Token: string = "",
-  navigate?: NavigateFunction
+  tokenRequired: boolean = false
+  // Token: string = "",
+  // navigate?: NavigateFunction
 ): Promise<ApiResponse<T>> => {
+  const header = tokenRequired ? await getAuthHeader() : "";
   const config: ApiConfig = {
     method: "delete",
     maxBodyLength: Infinity,
     url: `${BASE_URL}${endPoint}/${id}`,
     headers: {
-      Authorization: Token || "",
+      Authorization: header,
     },
     data: "",
   };
 
   try {
     const response = await axios.request<T>(config);
-    return { data: response?.data };
+    const { data, message, error }: any = response?.data;
+    return { data, message, error };
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 401) {
-      console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      navigate?.("/");
-    }
-    return { error: axiosError.message };
+    return handleApiError(error);
   }
 };
 
@@ -137,9 +120,11 @@ export const updateAuthAPI = async <T>(
   body: any,
   id: string | number | null,
   endPoint: string,
-  Token: string = "",
-  navigate?: NavigateFunction
+  tokenRequired: boolean = false
+  // Token: string = "",
+  // navigate?: NavigateFunction
 ): Promise<ApiResponse<T>> => {
+  const header = tokenRequired ? await getAuthHeader() : "";
   const config: ApiConfig = {
     method: "put",
     maxBodyLength: Infinity,
@@ -147,22 +132,17 @@ export const updateAuthAPI = async <T>(
       id !== null ? `${BASE_URL}${endPoint}/${id}` : `${BASE_URL}${endPoint}`,
     headers: {
       "Content-Type": "application/json",
-      Authorization: Token || "",
+      Authorization: header,
     },
     data: JSON.stringify(body),
   };
 
   try {
     const response = await axios.request<T>(config);
-    return { data: response?.data };
+    const { data, message, error }: any = response?.data;
+    return { data, message, error };
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 401) {
-      console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      navigate?.("/");
-    }
-    return { error: axiosError.message };
+    return handleApiError(error);
   }
 };
 
@@ -189,17 +169,10 @@ export const PutAuthAPI = async <T>(
 
   try {
     const response = await axios.request<T>(config);
-    return { data: response?.data };
+    const { data, message, error }: any = response?.data;
+    return { data, message, error };
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 401) {
-      console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      navigate?.("/");
-    } else {
-      alert("error.response && error.response.status === 401");
-    }
-    return { error: axiosError.message };
+    return handleApiError(error);
   }
 };
 

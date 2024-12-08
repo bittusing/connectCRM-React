@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 export const handleLogout = () => {
   try {
-    localStorage.removeItem("token");
+    localStorage.removeItem('accessToken');
     localStorage.removeItem("user");
     toast.success("Logout successfully");
     window.location.href = "/login";

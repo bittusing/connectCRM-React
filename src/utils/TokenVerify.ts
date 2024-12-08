@@ -1,4 +1,6 @@
 import { jwtDecode } from "jwt-decode";
+import { postAuthAPI } from "../api";
+import { END_POINT } from "../api/UrlProvider";
 
 interface TokenPayload {
   _id?: string;
@@ -13,8 +15,6 @@ export const isTokenValid = (token: string | null): boolean => {
 
   try {
     const decoded = jwtDecode<TokenPayload>(token);
-    console.log({ decoded });
-
     // Check if token is expired
     const currentTime = Math.floor(Date.now() / 1000);
     if (decoded.exp < currentTime) {
@@ -30,4 +30,64 @@ export const isTokenValid = (token: string | null): boolean => {
   } catch (error) {
     return false;
   }
+};
+
+export const getValidToken = async () => {
+  // export const getValidToken = async (): Promise<string | null> => {
+  try {
+    // Get current access token from localStorage
+    const accessToken = localStorage.getItem("accessToken");
+
+    // Check if current token is valid
+    if (!accessToken || !isTokenValid(accessToken)) {
+      // No refresh token available, user needs to login again
+      localStorage.clear();
+      window.location.href = "/login";
+      return null;
+    }
+
+    return accessToken;
+
+    // If token is invalid, try to refresh
+    // const refreshToken = localStorage.getItem('refreshToken');
+
+    // if (!refreshToken) {
+    //   // No refresh token available, user needs to login again
+    //   localStorage.clear();
+    //   window.location.href = '/login';
+    //   return null;
+    // }
+
+    // Make refresh token API call
+    // const response = await postAuthAPI(
+    //   { refreshToken },
+    //   END_POINT.REFRESH_TOKEN
+    // );
+
+    // if (response.error) {
+    //   // Refresh token is invalid or expired
+    //   localStorage.clear();
+    //   window.location.href = '/login';
+    //   return null;
+    // }
+
+    // Store new tokens
+    // const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
+    // localStorage.setItem('accessToken', newAccessToken);
+    // localStorage.setItem('refreshToken', newRefreshToken);
+
+    // return newAccessToken;
+  } catch (error) {
+    // Handle any unexpected errors
+    console.error("Error in getValidToken:", error);
+    localStorage.clear();
+    window.location.href = "/login";
+    return null;
+  }
+};
+
+// Optional: Helper function to use in API calls
+export const getAuthHeader = async () => {
+  const token = await getValidToken();
+  return token ? `${token}` : "";
 };

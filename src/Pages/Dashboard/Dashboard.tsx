@@ -10,28 +10,7 @@ import UniversalLoader from "../../components/CommonUI/Loader";
 
 export default function Dashboard() {
   //   const navigate = useNavigate();
-  const [loaderTime, setLoaderTime] = useState(true);
-  //   const [loginState, setLoginState] = useState(false);
-  //   useEffect(() => {
-  //     const authenticated = islogined();
-  //     if (!authenticated) {
-  //       navigate("/login");
-  //     }
-  //     setLoginState(true);
-  //   }, []);
-
-  //   if (!loginState)
-  //     return (
-  //       <div className="w-full h-screen flex justify-center items-center">
-  //         <Spin size="large" />
-  //       </div>
-  //     );
-  useEffect(() => {
-    setTimeout(() => {
-      setLoaderTime(false);
-    }, 2800);
-  }, []);
-  if (loaderTime) return <UniversalLoader />;
+ 
 
   return (
     <>
