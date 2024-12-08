@@ -3,6 +3,7 @@ export interface EndPointType {
   LOGIN: string;
   SIGNUP: string;
   USER_REGISTER: string;
+  PRODUCT_SERVICE: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;

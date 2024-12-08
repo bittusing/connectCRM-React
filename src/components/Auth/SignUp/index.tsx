@@ -66,12 +66,13 @@ export default function SignUp() {
 
       const { data, error } = await API.postAuthAPI(payload, END_POINT.SIGNUP);
 
-      if (error && !data) throw Error(error);
+      if (error || !data) throw Error(error);
 
       // Handle successful signup
       toast.success("Account created successfully!");
-      LocalStorage.setStringData('accessToken', data.data.token);
-      LocalStorage.setStringData("user", JSON.stringify(data.data.user));
+      LocalStorage.setStringData("refreshToken", data.refreshToken);
+      LocalStorage.setStringData("accessToken", data.token);
+      LocalStorage.setStringData("user", JSON.stringify(data.user));
       navigate("/");
     } catch (error: any) {
       toast.error(error || "Signup failed. Please try again.");

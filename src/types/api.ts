@@ -5,6 +5,7 @@ import { AxiosResponse } from "axios";
 export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
+  message?: string;
 }
 
 export interface ApiConfig {
@@ -23,8 +24,9 @@ export interface ApiConfig {
 export interface ApiMethods {
   getAuthAPI: <T = any>(
     endPoint: string,
-    Token?: string,
-    navigate?: NavigateFunction,
+    tokenRequired?: boolean,
+    // Token?: string,
+    // navigate?: NavigateFunction,
     params?: Record<string, any>
   ) => Promise<ApiResponse<T>>;
 
@@ -45,16 +47,19 @@ export interface ApiMethods {
   DeleteAuthAPI: <T = any>(
     id: string | number,
     endPoint: string,
-    Token?: string,
-    navigate?: NavigateFunction
+    tokenRequired: boolean
+    // Token?: string,
+    // navigate?: NavigateFunction
   ) => Promise<ApiResponse<T>>;
 
   updateAuthAPI: <T = any>(
     body: any,
     id: string | number | null,
     endPoint: string,
-    Token?: string,
-    navigate?: NavigateFunction
+    tokenRequired?: boolean
+
+    // Token?: string,
+    // navigate?: NavigateFunction
   ) => Promise<ApiResponse<T>>;
 
   PutAuthAPI: <T = any>(

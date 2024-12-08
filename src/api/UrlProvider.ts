@@ -20,6 +20,7 @@ export const END_POINT: EndPointType = {
   LOGIN: "signin",
   SIGNUP: "register",
   USER_REGISTER: "register/users-register",
+  PRODUCT_SERVICE: "product-service",
   Funnel: "survey",
   Crefunel: "survey",
   SubscrPlane: "v1/subscription",

@@ -87,7 +87,12 @@ const dataLocal = [
     status: "Pending",
   },
 ];
-const CustomAntdTable = ({ columns, dataSource, pagination = false }: any) => {
+const CustomAntdTable = ({
+  columns,
+  dataSource,
+  pagination = false,
+  isLoading = false,
+}: any) => {
   return (
     <div>
       {false ? (
@@ -97,6 +102,7 @@ const CustomAntdTable = ({ columns, dataSource, pagination = false }: any) => {
           columns={columns || columnsLocal}
           dataSource={dataSource || dataLocal}
           pagination={pagination}
+          loading={isLoading}
           className="w-full bg-white dark:bg-transparent overflow-auto"
         />
       )}
