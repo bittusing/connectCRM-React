@@ -9,8 +9,32 @@ import SignUp from "./components/Auth/SignUp";
 import Signin from "./components/Auth/Signin";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import UniversalLoader from "./components/CommonUI/Loader";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [loaderTime, setLoaderTime] = useState(true); 
+  //   const [loginState, setLoginState] = useState(false);
+  //   useEffect(() => {
+  //     const authenticated = islogined();
+  //     if (!authenticated) {
+  //       navigate("/login");
+  //     }
+  //     setLoginState(true);
+  //   }, []);
+
+  //   if (!loginState)
+  //     return (
+  //       <div className="w-full h-screen flex justify-center items-center">
+  //         <Spin size="large" />
+  //       </div>
+  //     );
+  useEffect(() => {
+    setTimeout(() => {
+      setLoaderTime(false);
+    }, 2800);
+  }, []);
+  if (loaderTime) return <UniversalLoader />;
   return (
     <>
       <ToastContainer

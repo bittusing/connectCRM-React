@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { Button, Input } from "antd";
+import { Button, Input, Switch } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
 import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
 import ButtonDefault from "../../../components/Buttons/ButtonDefault";
 import SelectGroupOne from "../../../components/FormElements/SelectGroup/SelectGroupOne";
 import InputGroup from "../../../components/FormElements/InputGroup";
+import { postAuthAPI } from "../../../api";
+import { END_POINT } from "../../../api/UrlProvider";
+import SwitcherTwo from "../../../components/FormElements/Switchers/SwitcherTwo";
 
 interface User {
   key: string;
@@ -16,15 +20,49 @@ interface User {
   assignTeamLeader: string;
 }
 
+interface FormData {
+  userName: string;
+  email: string;
+  mobile: string;
+  password: string;
+  isActive: string;
+  userType: string;
+}
+
 export default function DepartmentSetting() {
-  const [formData, setFormData] = useState({
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
     userName: "",
-    email: "admin@gmail.com",
+    email: "",
     mobile: "",
-    password: "•••••••",
-    status: "",
+    password: "",
+    isActive: "active",
     userType: "",
   });
+
+  const validateForm = () => {
+    if (!formData.userName.trim()) {
+      toast.error("Please enter user name");
+      return false;
+    }
+    if (!formData.email.trim()) {
+      toast.error("Please enter email");
+      return false;
+    }
+    if (!formData.mobile.trim()) {
+      toast.error("Please enter mobile number");
+      return false;
+    }
+    if (!formData.password.trim()) {
+      toast.error("Please enter password");
+      return false;
+    }
+    if (!formData.userType) {
+      toast.error("Please select user type");
+      return false;
+    }
+    return true;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -41,9 +79,49 @@ export default function DepartmentSetting() {
     }));
   };
 
-  const handleAdd = () => {
-    console.log("Adding new user:", formData);
-    // Implement your add user logic here
+  const handleAdd = async () => {
+    if (!validateForm()) return;
+
+    try {
+      setIsLoading(true);
+      // Format the payload according to the API requirements
+      const payload = {
+        name: formData.userName,
+        email: formData.email,
+        phone: formData.mobile,
+        password: formData.password,
+        role: formData.userType,
+      };
+
+      const { data, error } = await postAuthAPI(
+        payload,
+        END_POINT.USER_REGISTER,
+        true
+      );
+
+      if (error && !data) throw Error(error);
+
+      console.log({ data });
+
+      toast.success("User registered successfully!");
+
+      // Reset form
+      setFormData({
+        userName: "",
+        email: "",
+        mobile: "",
+        password: "",
+        isActive: "active",
+        userType: "",
+      });
+
+      // Refresh table data here if needed
+      // fetchUsers(); TODO
+    } catch (error: any) {
+      toast.error(error.message || "Failed to register user");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const columns = [
@@ -84,18 +162,20 @@ export default function DepartmentSetting() {
       dataIndex: "key",
       key: "action",
       render: (key: string) => (
-        <span>
-          <Button
+        <div className="flex justify-start items-center gap-2 ">
+          {/* <Button
             icon={<DeleteOutlined />}
             className="mr-2 bg-red-500 text-white"
             onClick={() => handleDelete(key)}
-          />
+          /> */}
+          {/* <Switch defaultChecked /> */}
+          <SwitcherTwo id={key} />
           <Button
             icon={<EditOutlined />}
             className="bg-primary text-white"
             onClick={() => handleEdit(key)}
           />
-        </span>
+        </div>
       ),
     },
   ];
@@ -157,6 +237,7 @@ export default function DepartmentSetting() {
     console.log("Edit user with key:", key);
     // Implement edit logic
   };
+
   return (
     <div className="w-full">
       <div className="mb-4 grid grid-cols-4 gap-4">
@@ -168,11 +249,13 @@ export default function DepartmentSetting() {
           value={formData.userName}
           onChange={handleInputChange}
         />
-        <Input
-          placeholder="admin@gmail.com"
+        <InputGroup
+          label=""
+          name="email"
+          type="email"
+          placeholder="Email"
           value={formData.email}
-          disabled
-          className="bg-blue-50 dark:bg-gray-700"
+          onChange={handleInputChange}
         />
         <InputGroup
           label=""
@@ -182,11 +265,13 @@ export default function DepartmentSetting() {
           value={formData.mobile}
           onChange={handleInputChange}
         />
-        <Input
-          placeholder="•••••••"
+        <InputGroup
+          label=""
+          name="password"
+          type="text"
+          placeholder="Password"
           value={formData.password}
-          disabled
-          className="bg-blue-50 dark:bg-gray-700"
+          onChange={handleInputChange}
         />
       </div>
 
@@ -197,19 +282,22 @@ export default function DepartmentSetting() {
             { value: "active", label: "Active" },
             { value: "inactive", label: "Inactive" },
           ]}
-          setSelectedOption={(value) => handleSelectChange("status", value)}
+          selectedOption={formData.isActive}
+          setSelectedOption={(value) => handleSelectChange("isActive", value)}
         />
         <SelectGroupOne
           label=""
           options={[
-            { value: "admin", label: "Admin" },
-            { value: "user", label: "User" },
+            { value: "Team Admin", label: "Team Admin" },
+            { value: "User", label: "User" },
           ]}
+          selectedOption={formData.userType}
           setSelectedOption={(value) => handleSelectChange("userType", value)}
         />
         <ButtonDefault
-          label="Add"
+          label={isLoading ? "Adding..." : "Add"}
           onClick={handleAdd}
+          disabled={isLoading}
         />
       </div>
 

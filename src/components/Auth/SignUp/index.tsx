@@ -70,7 +70,7 @@ export default function SignUp() {
 
       // Handle successful signup
       toast.success("Account created successfully!");
-      LocalStorage.setStringData("token", data.data.token);
+      LocalStorage.setStringData('accessToken', data.data.token);
       LocalStorage.setStringData("user", JSON.stringify(data.data.user));
       navigate("/");
     } catch (error: any) {

@@ -40,7 +40,7 @@ const SigninWithPassword = () => {
 
       if (error && !data) throw Error(error);
       const user = data.data.user;
-      LocalStorage.setStringData("token", data.data.token);
+      LocalStorage.setStringData('accessToken', data.data.token);
       LocalStorage.setStringData("user", JSON.stringify(user));
 
       toast.success(`Welcome back ${user?.name}!`);

@@ -3,7 +3,7 @@ import { isTokenValid } from "../../utils/TokenVerify";
 
 export const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   //   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('accessToken');
   const location = useLocation();
   const validtoken = isTokenValid(token);
   

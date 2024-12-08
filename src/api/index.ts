@@ -5,6 +5,7 @@ import { BASE_URL } from "./UrlProvider";
 import { LocalStorage } from "../utils/localStorage";
 import { toast } from "react-toastify";
 import { ApiResponse, ApiConfig, ApiMethods } from "../types/api";
+import { getAuthHeader } from "../utils/TokenVerify";
 
 export const getAuthAPI = async <T>(
   endPoint: string,
@@ -40,16 +41,17 @@ export const getAuthAPI = async <T>(
 export const postAuthAPI = async <T>(
   body: any,
   endPoint: string,
-  Token: string = "",
-//   navigate: NavigateFunction | null = null
+  tokenRequired: boolean = false
+  //   navigate: NavigateFunction | null = null
 ): Promise<ApiResponse<T>> => {
+  const header = tokenRequired ? await getAuthHeader() : "";
   const config: ApiConfig = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${BASE_URL}${endPoint}`,
     headers: {
       "Content-Type": "application/json",
-      Authorization: Token || "",
+      Authorization: header,
     },
     data: JSON.stringify(body),
   };
@@ -62,8 +64,9 @@ export const postAuthAPI = async <T>(
     console.log(error);
     if (axiosError.response?.status === 401) {
       console.error("Error 401: Unauthorized");
-      LocalStorage.ClearStorage();
-      window.location.href = "/login";
+      toast.error("Error 401: Unauthorized");
+    //   LocalStorage.ClearStorage();
+    //   window.location.href = "/login";
     }
     toast.error(axiosError.response?.data?.message);
     return { error: axiosError.message || "" };
