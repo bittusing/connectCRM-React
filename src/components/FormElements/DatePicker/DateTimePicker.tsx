@@ -4,9 +4,16 @@ import flatpickr from "flatpickr";
 interface DatePickerOneProps {
   label: string;
   onChange: (selectedDates: Date[], dateStr: string) => void;
+  enableTime?: boolean;
+  defaultValue?: string;
 }
 
-const DateTimePicker: React.FC<DatePickerOneProps> = ({ label, onChange }) => {
+const DateTimePicker: React.FC<DatePickerOneProps> = ({
+  label,
+  onChange,
+  enableTime = false,
+  defaultValue,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -15,10 +22,11 @@ const DateTimePicker: React.FC<DatePickerOneProps> = ({ label, onChange }) => {
         mode: "single",
         static: true,
         monthSelectorType: "static",
-        enableTime: true,
-        minDate: "today",
+        enableTime,
+        // minDate: "today",
         dateFormat: "M j, Y H:i",
         time_24hr: true,
+        defaultDate: defaultValue, // Set the default value
         prevArrow:
           '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
         nextArrow:
@@ -42,10 +50,11 @@ const DateTimePicker: React.FC<DatePickerOneProps> = ({ label, onChange }) => {
         </label>
       )}
       <div className="relative">
-        <input
+      <input
           ref={inputRef}
           className="form-datepicker w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
           placeholder="mm/dd/yyyy"
+          defaultValue={defaultValue} // Set default input value
           data-class="flatpickr-right"
         />
 

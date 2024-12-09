@@ -7,6 +7,8 @@ export interface EndPointType {
   LEAD_SOURCES: string;
   LEAD_STATUS: string;
   LOST_REASON: string;
+  GENERAL_DATA: string;
+  EMPLOYEE_REPORT: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;

@@ -11,9 +11,10 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import UniversalLoader from "./components/CommonUI/Loader";
 import { useEffect, useState } from "react";
+import { fetchGeneralData } from "./api/commonAPI";
 
 export default function App() {
-  const [loaderTime, setLoaderTime] = useState(true); 
+  const [loaderTime, setLoaderTime] = useState(true);
   //   const [loginState, setLoginState] = useState(false);
   //   useEffect(() => {
   //     const authenticated = islogined();
@@ -33,6 +34,7 @@ export default function App() {
     setTimeout(() => {
       setLoaderTime(false);
     }, 2800);
+    fetchGeneralData();
   }, []);
   if (loaderTime) return <UniversalLoader />;
   return (

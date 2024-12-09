@@ -1,115 +1,130 @@
+import { useMemo } from "react";
 import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import useScreenHook from "../../../hooks/useScreenHook";
+import { Spin } from "antd";
 
-const data = [
-  { type: "Miss Call", count: 9 },
-  { type: "Not Connected Call", count: 33 },
-  { type: "Connected Calls", count: 182 },
-  { type: "Rejected", count: 9 },
-  { type: "Working Hours", count: "00:38:17" },
-];
-export default function Summary() {
+interface SummaryProps {
+  data?: {
+    callType: Array<{
+      calltype: string;
+      calls: number;
+      duration: string;
+    }>;
+    stats: {
+      missCall: number;
+      notConnectedCall: number;
+      connectedCalls: number;
+      rejected: number;
+      workingHours: string;
+    };
+  };
+  isLoading?: boolean;
+}
+
+export default function Summary({ data, isLoading }: SummaryProps) {
   const { deviceType } = useScreenHook();
+
   const summaryColumns = [
     {
       title: "Call Type",
       dataIndex: "callType",
       key: "callType",
-      render: (text: any) => (
-        <span style={{ color: returnColorCode(text) }}>{text}</span>
+      render: (text: string) => (
+        <span style={{ color: returnColorCode(text) }}>
+          {text.charAt(0).toUpperCase() + text.slice(1)}
+        </span>
       ),
     },
     { title: "Calls", dataIndex: "calls", key: "calls" },
     { title: "Duration", dataIndex: "duration", key: "duration" },
   ];
 
-  const summaryData = [
-    { key: "1", callType: "Incoming", calls: 27, duration: "00:08:45" },
-    { key: "2", callType: "Outgoing", calls: 205, duration: "01:27:45" },
-    { key: "3", callType: "Missed", calls: 9, duration: "-" },
-    { key: "4", callType: "Rejected", calls: 9, duration: "-" },
-    { key: "5", callType: "Total", calls: 241, duration: "01:36:10" },
-  ];
+  const summaryData = useMemo(() => {
+    if (!data?.callType) return [];
+    return data.callType.map((item, index) => ({
+      key: index.toString(),
+      callType: item.calltype,
+      calls: item.calls,
+      duration: item.duration,
+    }));
+  }, [data]);
 
-  const donutChartData = [74, 64, 103, 1];
-  const donutChartLabels = [
-    "Incoming Call",
-    "Outgoing Call",
-    "Missed Call",
-    "Rejected Call",
-  ];
-  const donutChartColors = ["#10b981", "#3b82f6", "#fbbf24", "#ec4899"];
+  const statsData = useMemo(() => {
+    if (!data?.stats) return [];
+    return [
+      { type: "Miss Call", count: data.stats.missCall },
+      { type: "Not Connected Call", count: data.stats.notConnectedCall },
+      { type: "Connected Calls", count: data.stats.connectedCalls },
+      { type: "Rejected", count: data.stats.rejected },
+      { type: "Working Hours", count: data.stats.workingHours },
+    ];
+  }, [data]);
+
+  const chartData = useMemo(() => {
+    if (!data?.callType) return { series: [], labels: [] };
+    const filtered = data.callType.filter((item) => item.calltype !== "total");
+    return {
+      series: filtered.map((item) => item.calls),
+      labels: filtered.map(
+        (item) =>
+          `${
+            item.calltype.charAt(0).toUpperCase() + item.calltype.slice(1)
+          } Call`
+      ),
+    };
+  }, [data]);
 
   const donutChartOptions: ApexOptions = {
-    chart: {
-      type: "donut",
-    },
-    labels: donutChartLabels,
-    colors: donutChartColors,
+    chart: { type: "donut" },
+    labels: chartData.labels,
+    colors: ["#10b981", "#3b82f6", "#fbbf24", "#ec4899", "#e74acb"],
     legend: {
-      show: true,
-      position: "right", // Change legend position to right
+      position: "right",
       fontSize: deviceType === "mobile" ? "7px" : "14px",
       fontFamily: "Helvetica, Arial, sans-serif",
       fontWeight: 400,
-      itemMargin: {
-        horizontal: 5,
-        vertical: 2,
-      },
+      itemMargin: { horizontal: 5, vertical: 2 },
     },
     plotOptions: {
       pie: {
-        donut: {
-          size: "65%",
-        },
+        donut: { size: "65%" },
       },
     },
     dataLabels: {
       enabled: true,
-      formatter: function (val: number) {
-        return val.toFixed(0) + "%";
-      },
-      //   style: {
-      //     fontSize: "16px",
-      //     fontFamily: "Helvetica, Arial, sans-serif",
-      //     fontWeight: "bold",
-      //     colors: ["#fff", "#10b981"], // Set data label color to white
-      //   },
-      // dropShadow: {
-      //   enabled: false,
-      //   color: '#000',
-      //   top: 1,
-      //   left: 1,
-      //   blur: 1,
-      //   opacity: 0.45
-      // }
+      formatter: (val: number) => val.toFixed(0) + "%",
     },
     responsive: [
       {
         breakpoint: 480,
         options: {
-          chart: {
-            width: "100%",
-          },
+          chart: { width: "100%" },
         },
       },
     ],
   };
 
   const returnColorCode = (type: string) => {
-    switch (type) {
-      case "Incoming":
-        return "#10b981";
-      case "Outgoing":
-        return "#3b82f6";
-      case "Missed":
-        return "#fbbf24";
-      case "Rejected":
-        return "#ec4899";
-    }
+    const colors = {
+      incoming: "#10b981",
+      outgoing: "#3b82f6",
+      missed: "#fbbf24",
+      rejected: "#ec4899",
+      unknown: "#e74acb",
+    };
+    return colors[type.toLowerCase()] || "#000000";
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[400px]">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center gap-3 lg:flex-row lg:gap-0">
       <div className="w-full max-w-[560px] pr-4">
@@ -120,25 +135,27 @@ export default function Summary() {
         />
       </div>
       <div className="flex w-full min-w-[167px] flex-wrap gap-3 lg:w-auto">
-        {data?.map((item) => (
+        {statsData.map((item) => (
           <div
-            key={item.type + item.count}
+            key={item.type}
             className="flex w-full max-w-[159px] flex-col justify-center bg-gray-100 p-2 px-4 dark:bg-gray-7 sm:max-w-[200px]"
           >
             <span className="text-gray-6 dark:text-gray-5">{item.type}</span>
-            <span className="t font-semibold text-dark dark:text-white">
+            <span className="font-semibold text-dark dark:text-white">
               {item.count}
             </span>
           </div>
         ))}
       </div>
       <div className="w-full">
-        <ReactApexChart
-          options={donutChartOptions}
-          series={donutChartData}
-          type="donut"
-          height={350}
-        />
+        {parseInt(data?.stats?.workingHours || "0") ? (
+          <ReactApexChart
+            options={donutChartOptions}
+            series={chartData.series}
+            type="donut"
+            height={350}
+          />
+        ) : null}
       </div>
     </div>
   );
