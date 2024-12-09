@@ -106,15 +106,23 @@ export default function Summary({ data, isLoading }: SummaryProps) {
     ],
   };
 
-  const returnColorCode = (type: string) => {
-    const colors = {
+  const returnColorCode = (type: string): string => {
+    const colors: {
+      [key in
+        | "incoming"
+        | "outgoing"
+        | "missed"
+        | "rejected"
+        | "unknown"]: string;
+    } = {
       incoming: "#10b981",
       outgoing: "#3b82f6",
       missed: "#fbbf24",
       rejected: "#ec4899",
       unknown: "#e74acb",
     };
-    return colors[type.toLowerCase()] || "#000000";
+
+    return colors[type.toLowerCase() as keyof typeof colors] || "#000000";
   };
 
   if (isLoading) {
