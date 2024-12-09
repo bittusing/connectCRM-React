@@ -6,6 +6,7 @@ interface DatePickerOneProps {
   onChange: (selectedDates: Date[], dateStr: string) => void;
   enableTime?: boolean;
   defaultValue?: string;
+  customClassName?: string;
 }
 
 const DateTimePicker: React.FC<DatePickerOneProps> = ({
@@ -13,6 +14,7 @@ const DateTimePicker: React.FC<DatePickerOneProps> = ({
   onChange,
   enableTime = false,
   defaultValue,
+  customClassName = "",
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -49,8 +51,8 @@ const DateTimePicker: React.FC<DatePickerOneProps> = ({
           {label}
         </label>
       )}
-      <div className="relative">
-      <input
+      <div className={"relative" + customClassName}>
+        <input
           ref={inputRef}
           className="form-datepicker w-full rounded-[7px] border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal outline-none transition focus:border-primary active:border-primary dark:border-dark-3 dark:bg-dark-2 dark:focus:border-primary"
           placeholder="mm/dd/yyyy"

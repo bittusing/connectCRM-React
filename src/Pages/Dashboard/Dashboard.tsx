@@ -3,6 +3,7 @@ import DefaultLayout from "../../layouts/DefaultLayout";
 // import { islogined } from "../../utils/loginHandler";
 import { Outlet } from "react-router-dom";
 import UniversalLoader from "../../components/CommonUI/Loader";
+import { fetchGeneralData } from "../../api/commonAPI";
 // import Footer from "../../components/common/footer/Footer";
 // import Sidebar from "../../components/common/sidebar/Sidebar";
 // import ResponsiveSidebar from "../../components/mobileUI/ResponsiveSidebar";
@@ -10,7 +11,9 @@ import UniversalLoader from "../../components/CommonUI/Loader";
 
 export default function Dashboard() {
   //   const navigate = useNavigate();
- 
+  useEffect(() => {
+    fetchGeneralData();
+  }, []);
 
   return (
     <>
