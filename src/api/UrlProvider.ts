@@ -26,6 +26,7 @@ export const END_POINT: EndPointType = {
   LOST_REASON: "lost-reason",
   GENERAL_DATA: "lead-types",
   EMPLOYEE_REPORT: "call-report",
+  LEADS_DATA: "lead",
   Funnel: "survey",
   Crefunel: "survey",
   SubscrPlane: "v1/subscription",

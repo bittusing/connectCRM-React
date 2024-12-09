@@ -29,8 +29,8 @@ export const getAuthAPI = async <T>(
 
   try {
     const response = await axios.request<T>(config);
-    const { data, message, error }: any = response?.data;
-    return { data, message, error };
+    const { data, message, error, options }: any = response?.data;
+    return { data, message, error, options };
   } catch (error) {
     return handleApiError(error);
   }
