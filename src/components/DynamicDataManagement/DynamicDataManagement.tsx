@@ -61,6 +61,14 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
     }));
   };
 
+  const handleColorInputChange = (color: any) => {
+    const { name, value } = color;
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [name]: value.toHexString(),
+    }));
+  };
+
   const handleSubmit = () => {
     setSectionOpen(false);
     if (editingKey) {
@@ -153,6 +161,8 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
               placeholder={field.placeholder || field.label}
               value={formData[field.name]}
               onChange={handleInputChange}
+              colorValue={formData[field.name]}
+              colorOnChange={handleColorInputChange}
               customClasses="w-full"
             />
           ))}

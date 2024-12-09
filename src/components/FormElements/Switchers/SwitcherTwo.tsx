@@ -1,7 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const SwitcherTwo = ({id}:{id:string}) => {
-  const [enabled, setEnabled] = useState(false);
+const SwitcherTwo = ({
+  id,
+  defaultChecked,
+  onChange = () => {},
+}: {
+  id: string;
+  defaultChecked?: boolean;
+  onChange?: any;
+}) => {
+  const [enabled, setEnabled] = useState(defaultChecked);
 
   return (
     <div>
@@ -16,12 +24,14 @@ const SwitcherTwo = ({id}:{id:string}) => {
             className="sr-only"
             onChange={() => {
               setEnabled(!enabled);
+              onChange(id, !enabled);
             }}
           />
           <div className="h-5 w-14 rounded-full bg-gray-3 dark:bg-[#5A616B]"></div>
           <div
             className={`dot shadow-switch-2 absolute -top-1 left-0 h-7 w-7 rounded-full bg-white transition ${
-              enabled && "!right-0 !translate-x-full !bg-primary dark:!bg-green-light"
+              enabled &&
+              "!right-0 !translate-x-full !bg-primary dark:!bg-green-light"
             }`}
           ></div>
         </div>

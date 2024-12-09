@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DynamicDataManagement from "../../../components/DynamicDataManagement/DynamicDataManagement";
+import { API } from "../../../api";
+import { END_POINT } from "../../../api/UrlProvider";
+import { toast } from "react-toastify";
 
-const dataInitial: {
+interface LostReason {
   key: string;
   reason: string;
-}[] = [
-  { key: crypto.randomUUID(), reason: "Not Interested " },
-  { key: crypto.randomUUID(), reason: "No Team " },
-  { key: crypto.randomUUID(), reason: "Not Business " },
-];
+  isActive?: boolean;
+  order?: number;
+}
 
 export default function LostReasonFieldsCRM() {
+  const [data, setData] = useState<LostReason[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const fields = [
     {
       name: "reason",
@@ -32,29 +36,121 @@ export default function LostReasonFieldsCRM() {
       key: "reason",
     },
   ];
-  const [data, setData] = useState(dataInitial);
 
-  const handleAdd = (newItem: any) => {
-    setData([...data, { ...newItem, key: crypto.randomUUID() }]);
+  const fetchLostReasons = async () => {
+    try {
+      setIsLoading(true);
+      const { data: response, error } = await API.getAuthAPI(
+        END_POINT.LOST_REASON,
+        true
+      );
+
+      if (error) return;
+
+      if (response) {
+        const transformedData: LostReason[] = response.map((item: any) => ({
+          key: item._id,
+          reason: item.reason,
+          isActive: item.isActive,
+          order: item.order,
+        }));
+        setData(transformedData);
+      }
+    } catch (error: any) {
+      console.error(error.message || "Failed to fetch lost reasons");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleEdit = (key: any, updatedItem: any) => {
-    setData(
-      data.map((item) => (item.key === key ? { ...updatedItem, key } : item)),
-    );
+  useEffect(() => {
+    fetchLostReasons();
+  }, []);
+
+  const handleAdd = async (newItem: any) => {
+    try {
+      setIsLoading(true);
+      const payload = {
+        reason: newItem.reason,
+      };
+
+      const { error } = await API.postAuthAPI(payload, END_POINT.LOST_REASON, true);
+
+      if (error) return;
+
+      toast.success("Lost reason added successfully!");
+      fetchLostReasons();
+    } catch (error: any) {
+      console.error(error.message || "Failed to add lost reason");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDelete = (key: string) => {
-    setData(data.filter((item) => item.key !== key));
+  const handleEdit = async (key: string, updatedItem: any) => {
+    try {
+      setIsLoading(true);
+      const payload = {
+        reason: updatedItem.reason,
+      };
+
+      const { error } = await API.updateAuthAPI(
+        payload,
+        key,
+        END_POINT.LOST_REASON,
+        true
+      );
+
+      if (error) return;
+
+      toast.success("Lost reason updated successfully!");
+      fetchLostReasons();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update lost reason");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleUpdate = (key: string, status: boolean) => {
-    setData(
-      data.map((item) =>
-        item.key === key ? { ...item, onDashboard: !status } : item,
-      ),
-    );
+  const handleDelete = async (key: string) => {
+    try {
+      setIsLoading(true);
+      const { error } = await API.DeleteAuthAPI(key, END_POINT.LOST_REASON, true);
+
+      if (error) return;
+
+      toast.success("Lost reason deleted successfully!");
+      fetchLostReasons();
+    } catch (error: any) {
+      console.error(error.message || "Failed to delete lost reason");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleUpdate = async (key: string, status: boolean) => {
+    try {
+      setIsLoading(true);
+      const payload = {
+        isActive: !status,
+      };
+
+      const { error } = await API.updateAuthAPI(
+        payload,
+        key,
+        END_POINT.LOST_REASON,
+        true
+      );
+
+      if (error) return;
+      fetchLostReasons();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update status");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <DynamicDataManagement
       title="Lost Reasons List"
@@ -65,6 +161,7 @@ export default function LostReasonFieldsCRM() {
       onEdit={handleEdit}
       onDelete={handleDelete}
       onUpdate={handleUpdate}
+      isLoading={isLoading}
     />
   );
 }

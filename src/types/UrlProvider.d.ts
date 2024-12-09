@@ -4,6 +4,11 @@ export interface EndPointType {
   SIGNUP: string;
   USER_REGISTER: string;
   PRODUCT_SERVICE: string;
+  LEAD_SOURCES: string;
+  LEAD_STATUS: string;
+  LOST_REASON: string;
+  GENERAL_DATA: string;
+  EMPLOYEE_REPORT: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;
