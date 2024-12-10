@@ -14,6 +14,8 @@ interface InputGroupProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   colorOnChange?: any;
   colorMode?: "single" | "gradient" | ("single" | "gradient")[];
+  maxLength?: number;
+  pattern?: string;
 }
 
 const InputGroup: React.FC<InputGroupProps> = ({
@@ -30,6 +32,8 @@ const InputGroup: React.FC<InputGroupProps> = ({
   colorOnChange = () => {},
   colorValue,
   colorMode = "single",
+  maxLength,
+  pattern = "",
 }) => {
   return (
     <>
@@ -48,6 +52,8 @@ const InputGroup: React.FC<InputGroupProps> = ({
             disabled={disabled}
             placeholder={placeholder}
             value={value}
+            maxLength={maxLength}
+            pattern={pattern}
             onChange={onChange}
             required={required}
             readOnly={readOnly}

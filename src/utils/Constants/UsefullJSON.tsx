@@ -68,6 +68,22 @@ const AGEND_NAMES = [
   },
 ]
 
+const serviceOptions = [
+  { value: "Bhutani", label: "Bhutani" },
+  { value: "Delhi NCR", label: "Delhi NCR" },
+  { value: "Mumbai", label: "Mumbai" },
+  { value: "Chennai", label: "Chennai" },
+  { value: "Kolkata", label: "Kolkata" },
+  { value: "Fairfox", label: "Fairfox" },
+];
+
+const leadSourceOptions = [
+  { value: "Just Dial", label: "Just Dial" },
+  { value: "Website", label: "Website" },
+  { value: "Referral", label: "Referral" },
+  { value: "Other", label: "Other" },
+];
+
 interface IndustryOption {
   value: string;
   label: string;
@@ -162,4 +178,4 @@ export const getIndustryLabel = (value: string): string => {
   return industry ? industry.label : "";
 };
 
-export { leadStatus, lostReasonOptions, AGEND_NAMES, INDUSTRY_TYPES };
+export { leadStatus, lostReasonOptions, AGEND_NAMES, INDUSTRY_TYPES, serviceOptions, leadSourceOptions };

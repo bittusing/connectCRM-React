@@ -1,159 +1,290 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import InputGroup from "../../components/FormElements/InputGroup";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
+import {
+  getStoredProductsServices,
+  getStoredSources,
+} from "../../api/commonAPI";
+
+interface LeadData {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  contactNumber: string;
+  leadSource: { _id: string; name: string };
+  productService: { _id: string; name: string };
+  assignedAgent: { _id: string; name: string };
+  leadStatus: { _id: string; name: string };
+  companyName: string;
+  website: string;
+  alternatePhone: string;
+  leadCost: number;
+  position?: string;
+}
+
+interface AllDetailsFieldsProps {
+  leadData?: LeadData;
+  onUpdate: (data: any) => Promise<void>;
+}
 
 const serviceOptions = [
-  {
-    value: "Bhutani",
-    label: "Bhutani",
-  },
-  {
-    value: "Delhi NCR",
-    label: "Delhi NCR",
-  },
-  {
-    value: "Mumbai",
-    label: "Mumbai",
-  },
-  {
-    value: "Chennai",
-    label: "Chennai",
-  },
-  {
-    value: "Kolkata",
-    label: "Kolkata",
-  },
-  {
-    value: "Fairfox",
-    label: "Fairfox",
-  },
+  { value: "Bhutani", label: "Bhutani" },
+  { value: "Delhi NCR", label: "Delhi NCR" },
+  { value: "Mumbai", label: "Mumbai" },
+  { value: "Chennai", label: "Chennai" },
+  { value: "Kolkata", label: "Kolkata" },
+  { value: "Fairfox", label: "Fairfox" },
 ];
 
-const AllDetailsFields: React.FC = () => {
+const leadSourceOptions = [
+  { value: "Just Dial", label: "Just Dial" },
+  { value: "Website", label: "Website" },
+  { value: "Referral", label: "Referral" },
+  { value: "Other", label: "Other" },
+];
+
+const AllDetailsFields: React.FC<AllDetailsFieldsProps> = ({
+  leadData,
+  onUpdate,
+}) => {
+  const serviceList = getStoredProductsServices(true);
+  const sourceLis = getStoredSources(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "dfdsf",
-    emailId: "tinnting@gmail.com",
+    firstName: "",
+    lastName: "",
+    email: "",
     companyName: "",
     website: "",
-    service: "Fairfox",
-    contactNo: "3432423424",
-    alternativeNo: "",
-    position: "",
-    leadSource: "Just Dial",
+    productService: "",
+    productServiceName: "",
+    contactNumber: "",
+    alternatePhone: "",
+    leadSource: "",
+    leadSourceName: "",
     leadCost: "",
+    // position: "",
   });
+
+  useEffect(() => {
+    if (leadData) {
+      setFormData({
+        firstName: leadData.firstName || "",
+        lastName: leadData.lastName || "",
+        email: leadData.email || "",
+        companyName: leadData.companyName || "",
+        website: leadData.website || "",
+        productService: leadData.productService._id || "",
+        productServiceName: leadData.productService.name || "",
+        contactNumber: leadData.contactNumber || "",
+        alternatePhone: leadData.alternatePhone || "",
+        leadSource: leadData.leadSource._id || "",
+        leadSourceName: leadData.leadSource.name || "",
+        leadCost: leadData.leadCost?.toString() || "",
+        // position: leadData.position || "",
+      });
+    }
+  }, [leadData]);
+
+  const validateForm = () => {
+    const errors: string[] = [];
+
+    if (!formData.firstName.trim()) errors.push("First name is required");
+    if (!formData.lastName.trim()) errors.push("Last name is required");
+    if (!formData.email.trim()) errors.push("Email is required");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push("Please enter a valid email address");
+    }
+    if (!formData.contactNumber.trim())
+      errors.push("Contact number is required");
+    if (!/^\d{10}$/.test(formData.contactNumber)) {
+      errors.push("Contact number must be 10 digits");
+    }
+    if (formData.alternatePhone && !/^\d{10}$/.test(formData.alternatePhone)) {
+      errors.push("Alternate phone number must be 10 digits");
+    }
+    if (!formData.leadSource) errors.push("Lead source is required");
+    if (!formData.productService) errors.push("Service is required");
+    if (formData.leadCost && isNaN(Number(formData.leadCost))) {
+      errors.push("Lead cost must be a valid number");
+    }
+
+    if (errors.length > 0) {
+      errors.forEach((error) => toast.error(error));
+      return false;
+    }
+    return true;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
-  const handleSelectChange = (name: string, value: string | number) => {
-    setFormData((prevData) => ({
-      ...prevData,
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
-  const handleSubmit = () => {
-    console.log("Form data:", formData);
-    // Here you would typically send the data to your backend
+  const handleSubmit = async () => {
+    try {
+      if (!validateForm()) return;
+
+      setIsLoading(true);
+      const updatePayload = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        contactNumber: formData.contactNumber,
+        leadSource: formData.leadSource,
+        productService: formData.productService,
+        companyName: formData.companyName,
+        website: formData.website,
+        alternatePhone: formData.alternatePhone,
+        leadCost: Number(formData.leadCost) || 0,
+        // position: formData.position,
+      };
+
+      await onUpdate(updatePayload);
+      toast.success("Details updated successfully");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update details");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Mock options for the lead source dropdown
-  const leadSourceOptions = [
-    { value: "Just Dial", label: "Just Dial" },
-    { value: "Website", label: "Website" },
-    { value: "Referral", label: "Referral" },
-    { value: "Other", label: "Other" },
-  ];
   return (
     <div className="rounded-lg bg-white dark:bg-gray-dark dark:text-white">
-      <div className="mb-8 flex flex-col sm:flex-row w-full justify-between gap-4 sm:gap-8">
+      <div className="mb-8 flex w-full flex-col sm:flex-row justify-between gap-4 sm:gap-8">
         <div className="flex w-full flex-col gap-4 sm:border-r-2 sm:pr-8 border-r-0 pr-0 text-dark dark:text-white">
-          {/* left Fields  */}
+          {/* Left Fields */}
           <InputGroup
-            label="Full Name"
-            name="fullName"
+            label="First Name"
+            name="firstName"
             type="text"
-            value={formData.fullName}
+            value={formData.firstName}
             onChange={handleInputChange}
+            required
+            placeholder="Enter first name"
           />
+
+          <InputGroup
+            label="Last Name"
+            name="lastName"
+            type="text"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            required
+            placeholder="Enter last name"
+          />
+
           <InputGroup
             label="Company Name"
             name="companyName"
             type="text"
             value={formData.companyName}
             onChange={handleInputChange}
+            placeholder="Enter company name"
           />
+
           <SelectGroupOne
             label="Service"
-            options={serviceOptions}
-            setSelectedOption={(value) => handleSelectChange("service", value)}
+            options={serviceList}
+            selectedOption={formData.productServiceName}
+            setSelectedOption={(value) =>
+              handleSelectChange("productService", value)
+            }
+            required
           />
+
           <InputGroup
-            label="Alternative No"
-            name="alternativeNo"
+            label="Alternative Phone"
+            name="alternatePhone"
             type="tel"
-            value={formData.alternativeNo}
+            value={formData.alternatePhone}
             onChange={handleInputChange}
+            placeholder="Enter alternative phone"
+            maxLength={10}
           />
+
           <SelectGroupOne
             label="Lead Source"
-            options={leadSourceOptions}
+            options={sourceLis}
+            selectedOption={formData.leadSourceName}
             setSelectedOption={(value) =>
               handleSelectChange("leadSource", value)
             }
+            required
           />
         </div>
-        {/* Right Fields  */}
+
+        {/* Right Fields */}
         <div className="flex w-full flex-col gap-4">
           <InputGroup
-            label="Email Id"
-            name="emailId"
+            label="Email"
+            name="email"
             type="email"
-            value={formData.emailId}
+            value={formData.email}
             onChange={handleInputChange}
+            required
+            placeholder="Enter email address"
           />
+
           <InputGroup
             label="Website"
             name="website"
             type="text"
             value={formData.website}
             onChange={handleInputChange}
+            placeholder="Enter website URL"
           />
+
           <InputGroup
-            label="Contact No"
-            name="contactNo"
+            label="Contact Number"
+            name="contactNumber"
             type="tel"
-            value={formData.contactNo}
+            value={formData.contactNumber}
             onChange={handleInputChange}
+            required
+            placeholder="Enter contact number"
+            maxLength={10}
           />
-          <InputGroup
+
+          {/* <InputGroup
             label="Position"
             name="position"
             type="text"
             value={formData.position}
             onChange={handleInputChange}
-          />
+            placeholder="Enter position"
+          /> */}
+
           <InputGroup
             label="Lead Cost"
             name="leadCost"
-            type="text"
+            type="number"
             value={formData.leadCost}
             onChange={handleInputChange}
+            placeholder="Enter lead cost"
           />
         </div>
       </div>
-      <div className="flex w-full justify-center ">
+
+      <div className="flex w-full justify-center">
         <ButtonDefault
           onClick={handleSubmit}
-          label="Submit"
+          label={isLoading ? "Updating..." : "Update Details"}
           variant="primary"
+          disabled={isLoading}
         />
       </div>
     </div>

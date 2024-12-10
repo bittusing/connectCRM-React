@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const MiniLoader = () => {
   return (
-    <div className="w-full flex flex-col gap-9 justify-center items-center">
+    <div className="w-full h-full flex flex-col gap-9 justify-center items-center">
       <StyledWrapper>
         <div className="loader" />
       </StyledWrapper>
