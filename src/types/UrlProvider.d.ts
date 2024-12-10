@@ -10,6 +10,7 @@ export interface EndPointType {
   GENERAL_DATA: string;
   EMPLOYEE_REPORT: string;
   LEADS_DATA: string;
+  LEADS_FOLLOWUP_DATA: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;
@@ -26,7 +27,6 @@ export interface EndPointType {
   UserapiA: string;
   UserapiS: string;
   Rsetpas: string;
-
   Videoapi: string;
   Tages: string;
   Setintags: string;

@@ -27,6 +27,7 @@ export const END_POINT: EndPointType = {
   GENERAL_DATA: "lead-types",
   EMPLOYEE_REPORT: "call-report",
   LEADS_DATA: "lead",
+  LEADS_FOLLOWUP_DATA: "lead/follow-up",
   Funnel: "survey",
   Crefunel: "survey",
   SubscrPlane: "v1/subscription",

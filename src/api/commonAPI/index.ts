@@ -1,3 +1,9 @@
+import {
+  AGEND_NAMES,
+  leadSourceOptions,
+  leadStatus,
+  serviceOptions,
+} from "../../utils/Constants/UsefullJSON";
 import { API } from "../index";
 import { END_POINT } from "../UrlProvider";
 import { toast } from "react-toastify";
@@ -47,30 +53,57 @@ export const fetchGeneralData = async (): Promise<void> => {
 };
 
 // Helper functions to get data from localStorage
-export const getStoredStatus = (): any[] => {
+export const getStoredStatus = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_status");
-    return data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : leadStatus;
+    const transformedData = parsedData?.map((item: any) => ({
+      value: item._id,
+      label: item.name,
+    }));
+    if (!forSelectOptions) {
+      return data ? JSON.parse(data) : [];
+    } else {
+      return transformedData;
+    }
   } catch (error) {
     console.error("Error parsing status data:", error);
     return [];
   }
 };
 
-export const getStoredSources = (): any[] => {
+export const getStoredSources = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_sources");
-    return data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : leadSourceOptions;
+    const transformedData = parsedData?.map((item: any) => ({
+      value: item._id,
+      label: item.name,
+    }));
+    if (!forSelectOptions) {
+      return data ? JSON.parse(data) : [];
+    } else {
+      return transformedData;
+    }
   } catch (error) {
     console.error("Error parsing sources data:", error);
     return [];
   }
 };
 
-export const getStoredAgents = (): any[] => {
+export const getStoredAgents = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_agents");
-    return data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : AGEND_NAMES;
+    const transformedData = parsedData?.map((item: any) => ({
+      value: item._id,
+      label: item.name,
+    }));
+    if (!forSelectOptions) {
+      return data ? JSON.parse(data) : [];
+    } else {
+      return transformedData;
+    }
   } catch (error) {
     console.error("Error parsing agents data:", error);
     toast.error("Error parsing agents data");
@@ -78,20 +111,38 @@ export const getStoredAgents = (): any[] => {
   }
 };
 
-export const getStoredProductsServices = (): any[] => {
+export const getStoredProductsServices = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_products_services");
-    return data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : serviceOptions;
+    const transformedData = parsedData?.map((item: any) => ({
+      value: item._id,
+      label: item.name,
+    }));
+    if (!forSelectOptions) {
+      return data ? JSON.parse(data) : [];
+    } else {
+      return transformedData;
+    }
   } catch (error) {
     console.error("Error parsing products services data:", error);
     return [];
   }
 };
 
-export const getStoredCountries = (): any[] => {
+export const getStoredCountries = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_countries");
-    return data ? JSON.parse(data) : [];
+    const parsedData = data ? JSON.parse(data) : serviceOptions;
+    const transformedData = parsedData?.map((item: any) => ({
+      value: item._id,
+      label: item.name,
+    }));
+    if (!forSelectOptions) {
+      return data ? JSON.parse(data) : [];
+    } else {
+      return transformedData;
+    }
   } catch (error) {
     console.error("Error parsing countries data:", error);
     return [];

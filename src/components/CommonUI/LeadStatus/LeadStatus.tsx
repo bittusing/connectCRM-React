@@ -1,12 +1,19 @@
 import InputGroup from "../../FormElements/InputGroup";
 import SelectGroupOne from "../../FormElements/SelectGroup/SelectGroupOne";
-import { leadStatus, lostReasonOptions } from "../../../utils/Constants/UsefullJSON";
+import {
+  leadStatus,
+  lostReasonOptions,
+} from "../../../utils/Constants/UsefullJSON";
+import { getStoredStatus } from "../../../api/commonAPI";
 
 export default function LeadStatusUI({
   handleInputChange,
-  handleSelectChange,
+  handleSelectChange=()=>{},
   formData,
+  defaultValue,
 }: any) {
+  const leadStatusList = getStoredStatus(true);
+  const lostReasonList = getStoredStatus(true);
   const renderHiddenField = (fieldName: string) => {
     switch (fieldName) {
       case "Won":
@@ -39,8 +46,10 @@ export default function LeadStatusUI({
     <>
       <SelectGroupOne
         label="Lead status"
-        options={leadStatus}
+        options={leadStatusList}
+        // setSelectedOption={(value) => handleSelectChange(value)}
         setSelectedOption={(value) => handleSelectChange("status", value)}
+        selectedOption={defaultValue}
       />
       {renderHiddenField(formData?.status)}
     </>

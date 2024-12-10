@@ -24,7 +24,7 @@ interface SelectProps {
 }
 
 const SelectGroupOne = ({
-  customClasses,
+  customClasses = "",
   wrapperClasses,
   label,
   required,
@@ -35,21 +35,28 @@ const SelectGroupOne = ({
   placeholder = "",
   isGrouped = false,
 }: SelectProps) => {
-  const [selectedOptionLocal, setSelectedOptionLocal] = useState<string>(selectedOption);
+  const [selectedOptionLocal, setSelectedOptionLocal] =
+    useState<string>(selectedOption);
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
 
+  console.log({ selectedOption });
+
   useEffect(() => {
     setSelectedOption(selectedOptionLocal);
   }, [selectedOptionLocal]);
 
   // Helper function to check if an option is a group
-  const isOptionGroup = (option: Option | OptionGroup): option is OptionGroup => {
-    return 'options' in option;
-  };  
+  const isOptionGroup = (
+    option: Option | OptionGroup
+  ): option is OptionGroup => {
+    return "options" in option;
+  };
+
+  console.log({ options });
 
   return (
     <div className={`w-full ${wrapperClasses}`}>
@@ -78,48 +85,47 @@ const SelectGroupOne = ({
               {placeholder}
             </option>
           )}
-          
-          {isGrouped ? (
-            // Render grouped options
-            options.map((group, groupIndex) => {
-              if (isOptionGroup(group)) {
-                return (
-                  <optgroup 
-                    key={`group-${groupIndex}`} 
-                    label={group.label}
-                    className="font-medium bg-gray-100 dark:bg-dark-3"
-                  >
-                    {group.options.map((option) => (
-                      <option
-                        key={option.value}
-                        value={option.value}
-                        className="bg-white dark:bg-dark-2 py-2"
-                      >
-                        {option.label}
-                      </option>
-                    ))}
-                  </optgroup>
-                );
-              }
-              return null;
-            })
-          ) : (
-            // Render flat options
-            options.map((option) => {
-              if (!isOptionGroup(option)) {
-                return (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                    className="py-2"
-                  >
-                    {option.label}
-                  </option>
-                );
-              }
-              return null;
-            })
-          )}
+
+          {isGrouped
+            ? // Render grouped options
+              options.map((group, groupIndex) => {
+                if (isOptionGroup(group)) {
+                  return (
+                    <optgroup
+                      key={`group-${groupIndex}`}
+                      label={group.label}
+                      className="font-medium bg-gray-100 dark:bg-dark-3"
+                    >
+                      {group.options.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                          className="bg-white dark:bg-dark-2 py-2"
+                        >
+                          {option.label}
+                        </option>
+                      ))}
+                    </optgroup>
+                  );
+                }
+                return null;
+              })
+            : // Render flat options
+              options.map((option) => {
+                if (!isOptionGroup(option)) {
+                  return (
+                    <option
+                      key={option.value}
+                      value={option.value}
+                      className="py-2"
+                      selected={option.value === selectedOption}
+                    >
+                      {option.label}
+                    </option>
+                  );
+                }
+                return null;
+              })}
         </select>
 
         <span className="absolute right-4 top-1/2 z-30 -translate-y-1/2">
