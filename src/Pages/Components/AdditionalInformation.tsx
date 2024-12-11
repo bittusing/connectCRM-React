@@ -3,6 +3,8 @@ import { toast } from "react-toastify";
 import InputGroup from "../../components/FormElements/InputGroup";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
+import { getStoredCountries } from "../../api/commonAPI";
+import { API } from "../../api";
 
 interface LeadData {
   _id: string;
@@ -16,31 +18,23 @@ interface LeadData {
 interface AdditionalInformationProps {
   leadData?: LeadData;
   onUpdate: (data: any) => Promise<void>;
+  leadStatus?: string;
 }
 
-const countryOptions = [
-  { value: "India", label: "India" },
-  { value: "Thailand", label: "Thailand" },
-  { value: "United States", label: "United States" },
-  { value: "United Kingdom", label: "United Kingdom" },
-  { value: "Canada", label: "Canada" },
-];
+interface StateOption {
+  value: string;
+  label: string;
+}
 
-const stateOptions = [
-  { value: "Haryana", label: "Haryana" },
-  { value: "Uttar Pradesh", label: "Uttar Pradesh" },
-  { value: "Delhi", label: "Delhi" },
-  { value: "Maharashtra", label: "Maharashtra" },
-  { value: "Karnataka", label: "Karnataka" },
-  { value: "Tamil Nadu", label: "Tamil Nadu" },
-  { value: "Gujarat", label: "Gujarat" },
-];
-
-const AdditionalInformation: React.FC<AdditionalInformationProps> = ({ 
-  leadData, 
-  onUpdate 
+const AdditionalInformation: React.FC<AdditionalInformationProps> = ({
+  leadData,
+  onUpdate,
+  leadStatus,
 }) => {
+  const countryOptions = getStoredCountries(true);
+
   const [isLoading, setIsLoading] = useState(false);
+  const [stateOptions, setStateOptions] = useState<StateOption[]>([]);
   const [formData, setFormData] = useState({
     country: "",
     fullAddress: "",
@@ -61,6 +55,35 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({
     }
   }, [leadData]);
 
+  const fetchStates = async (countryCode: string) => {
+    try {
+      const response = await API.getAuthAPI(
+        `locations/states/${countryCode}`,
+        true
+      );
+
+      if (response.error) throw new Error(response.error);
+
+      const states = response.data.map(
+        (state: { name: string; _id: string }) => ({
+          value: state._id,
+          label: state.name,
+        })
+      );
+
+      setStateOptions(states);
+    } catch (error: any) {
+      console.error(error.message || "Failed to fetch states");
+      setStateOptions([]);
+    }
+  };
+
+  useEffect(() => {
+    if (formData.country) {
+      fetchStates(formData.country);
+    }
+  }, [formData.country]);
+
   const validateForm = () => {
     const errors: string[] = [];
 
@@ -74,7 +97,7 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({
     }
 
     if (errors.length > 0) {
-      errors.forEach(error => toast.error(error));
+      errors.forEach((error) => toast.error(error));
       return false;
     }
     return true;
@@ -82,16 +105,18 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
+      // Reset state when country changes
+      ...(name === "country" ? { state: "" } : {}),
     }));
   };
 
@@ -106,12 +131,13 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({
         state: formData.state,
         pinCode: formData.pinCode,
         city: formData.city,
+        leadStatus,
+        comment: "System Comment: Additional details updated!",
       };
 
       await onUpdate(updatePayload);
-      toast.success("Address details updated successfully");
     } catch (error: any) {
-      toast.error(error.message || "Failed to update address details");
+      console.error(error.message || "Failed to update address details");
     } finally {
       setIsLoading(false);
     }
@@ -155,6 +181,7 @@ const AdditionalInformation: React.FC<AdditionalInformationProps> = ({
             selectedOption={formData.state}
             setSelectedOption={(value) => handleSelectChange("state", value)}
             required
+            // isLoading={stateOptions.length === 0}
           />
         </div>
 

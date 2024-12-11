@@ -94,7 +94,7 @@ const LeadAction: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await API.getAuthAPI(`lead/${leadId}`, true);
-      if (response.error) throw new Error(response.error);
+      if (response.error) return;
 
       const { leadDetails } = response.data;
       setLeadData(leadDetails);
@@ -108,7 +108,7 @@ const LeadAction: React.FC = () => {
         assignedAgent: leadDetails.lead.assignedAgent._id || "",
       });
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch lead details");
+      console.error(error.message || "Failed to fetch lead details");
     } finally {
       setIsLoading(false);
     }
@@ -131,13 +131,12 @@ const LeadAction: React.FC = () => {
         true
       );
 
-      if (response.error) throw new Error(response.error);
+      if (response.error) return;
 
       toast.success(response.message || "Lead updated successfully");
       fetchLeadData(); // Refresh data after update
     } catch (error: any) {
-      toast.error(error.message || "Failed to update lead");
-      throw error; // Re-throw to handle in child components
+      console.error(error.message || "Failed to update lead");
     } finally {
       setIsUpdating(false);
     }
@@ -261,6 +260,7 @@ const LeadAction: React.FC = () => {
         <AllDetailsFields
           leadData={leadData?.lead}
           onUpdate={handleUpdateLead}
+          leadStatus={formData.status}
         />
       ),
     },
@@ -270,6 +270,7 @@ const LeadAction: React.FC = () => {
         <AdditionalInformation
           leadData={leadData?.lead}
           onUpdate={handleUpdateLead}
+          leadStatus={formData.status}
         />
       ),
     },

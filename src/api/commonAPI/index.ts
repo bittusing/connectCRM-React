@@ -1,8 +1,9 @@
 import {
-  AGEND_NAMES,
-  leadSourceOptions,
-  leadStatus,
-  serviceOptions,
+  AGEND_NAMESNewFormat,
+  countryOptions,
+  leadSourceOptionsNewFormat,
+  leadStatusNewFormat,
+  serviceOptionsNewFormat,
 } from "../../utils/Constants/UsefullJSON";
 import { API } from "../index";
 import { END_POINT } from "../UrlProvider";
@@ -56,7 +57,7 @@ export const fetchGeneralData = async (): Promise<void> => {
 export const getStoredStatus = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_status");
-    const parsedData = data ? JSON.parse(data) : leadStatus;
+    const parsedData = data ? JSON.parse(data) : leadStatusNewFormat;
     const transformedData = parsedData?.map((item: any) => ({
       value: item._id,
       label: item.name,
@@ -75,7 +76,7 @@ export const getStoredStatus = (forSelectOptions = false): any[] => {
 export const getStoredSources = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_sources");
-    const parsedData = data ? JSON.parse(data) : leadSourceOptions;
+    const parsedData = data ? JSON.parse(data) : leadSourceOptionsNewFormat;
     const transformedData = parsedData?.map((item: any) => ({
       value: item._id,
       label: item.name,
@@ -94,7 +95,7 @@ export const getStoredSources = (forSelectOptions = false): any[] => {
 export const getStoredAgents = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_agents");
-    const parsedData = data ? JSON.parse(data) : AGEND_NAMES;
+    const parsedData = data ? JSON.parse(data) : AGEND_NAMESNewFormat;
     const transformedData = parsedData?.map((item: any) => ({
       value: item._id,
       label: item.name,
@@ -114,7 +115,7 @@ export const getStoredAgents = (forSelectOptions = false): any[] => {
 export const getStoredProductsServices = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_products_services");
-    const parsedData = data ? JSON.parse(data) : serviceOptions;
+    const parsedData = data ? JSON.parse(data) : serviceOptionsNewFormat;
     const transformedData = parsedData?.map((item: any) => ({
       value: item._id,
       label: item.name,
@@ -133,9 +134,9 @@ export const getStoredProductsServices = (forSelectOptions = false): any[] => {
 export const getStoredCountries = (forSelectOptions = false): any[] => {
   try {
     const data = localStorage.getItem("crm_countries");
-    const parsedData = data ? JSON.parse(data) : serviceOptions;
+    const parsedData = data ? JSON.parse(data) : countryOptions;
     const transformedData = parsedData?.map((item: any) => ({
-      value: item._id,
+      value: item.isoCode,
       label: item.name,
     }));
     if (!forSelectOptions) {

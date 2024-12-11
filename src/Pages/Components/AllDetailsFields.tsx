@@ -28,27 +28,13 @@ interface LeadData {
 interface AllDetailsFieldsProps {
   leadData?: LeadData;
   onUpdate: (data: any) => Promise<void>;
+  leadStatus: string;
 }
-
-const serviceOptions = [
-  { value: "Bhutani", label: "Bhutani" },
-  { value: "Delhi NCR", label: "Delhi NCR" },
-  { value: "Mumbai", label: "Mumbai" },
-  { value: "Chennai", label: "Chennai" },
-  { value: "Kolkata", label: "Kolkata" },
-  { value: "Fairfox", label: "Fairfox" },
-];
-
-const leadSourceOptions = [
-  { value: "Just Dial", label: "Just Dial" },
-  { value: "Website", label: "Website" },
-  { value: "Referral", label: "Referral" },
-  { value: "Other", label: "Other" },
-];
 
 const AllDetailsFields: React.FC<AllDetailsFieldsProps> = ({
   leadData,
   onUpdate,
+  leadStatus = "",
 }) => {
   const serviceList = getStoredProductsServices(true);
   const sourceLis = getStoredSources(true);
@@ -150,13 +136,14 @@ const AllDetailsFields: React.FC<AllDetailsFieldsProps> = ({
         website: formData.website,
         alternatePhone: formData.alternatePhone,
         leadCost: Number(formData.leadCost) || 0,
+        leadStatus,
+        comment: "System Comment: Details update",
         // position: formData.position,
       };
 
       await onUpdate(updatePayload);
-      toast.success("Details updated successfully");
     } catch (error: any) {
-      toast.error(error.message || "Failed to update details");
+      console.error(error.message || "Failed to update details");
     } finally {
       setIsLoading(false);
     }
