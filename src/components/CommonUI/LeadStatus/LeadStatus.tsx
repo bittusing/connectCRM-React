@@ -8,9 +8,10 @@ import { getStoredStatus } from "../../../api/commonAPI";
 
 export default function LeadStatusUI({
   handleInputChange,
-  handleSelectChange=()=>{},
+  handleSelectChange = () => {},
   formData,
   defaultValue,
+  statusFieldName = "status",
 }: any) {
   const leadStatusList = getStoredStatus(true);
   const lostReasonList = getStoredStatus(true);
@@ -48,7 +49,9 @@ export default function LeadStatusUI({
         label="Lead status"
         options={leadStatusList}
         // setSelectedOption={(value) => handleSelectChange(value)}
-        setSelectedOption={(value) => handleSelectChange("status", value)}
+        setSelectedOption={(value) =>
+          handleSelectChange(statusFieldName, value)
+        }
         selectedOption={defaultValue}
       />
       {renderHiddenField(formData?.status)}
