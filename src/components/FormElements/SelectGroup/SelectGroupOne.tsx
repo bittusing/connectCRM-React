@@ -43,8 +43,6 @@ const SelectGroupOne = ({
     setIsOptionSelected(true);
   };
 
-  console.log({ selectedOption });
-
   useEffect(() => {
     setSelectedOption(selectedOptionLocal);
   }, [selectedOptionLocal]);
@@ -55,8 +53,6 @@ const SelectGroupOne = ({
   ): option is OptionGroup => {
     return "options" in option;
   };
-
-  console.log({ options });
 
   return (
     <div className={`w-full ${wrapperClasses}`}>
@@ -101,6 +97,7 @@ const SelectGroupOne = ({
                           key={option.value}
                           value={option.value}
                           className="bg-white dark:bg-dark-2 py-2"
+                          selected={option.value === selectedOption}
                         >
                           {option.label}
                         </option>
