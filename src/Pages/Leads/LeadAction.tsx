@@ -333,6 +333,7 @@ const LeadAction: React.FC = () => {
             label="Followup"
             onChange={handleDateChange}
             defaultValue={formData.followup}
+            enableTime
           />
 
           <div>

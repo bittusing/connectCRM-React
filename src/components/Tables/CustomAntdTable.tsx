@@ -93,6 +93,8 @@ const CustomAntdTable = ({
   dataSource,
   pagination = false,
   isLoading = false,
+  rowClassName = () => {},
+  onRow,
 }: any) => {
   return (
     <div>
@@ -106,6 +108,8 @@ const CustomAntdTable = ({
           loading={isLoading}
           className="w-full bg-white dark:bg-transparent overflow-auto"
           bordered
+          rowClassName={rowClassName}
+          onRow={onRow}
         />
       )}
       <style>{`
