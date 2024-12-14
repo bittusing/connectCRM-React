@@ -114,9 +114,15 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
       <span>
         <Tooltip title="Do you want to use this entry in your CRM ? If yes choose open-eye icon. ">
           <Button
-            icon={record.isActive ? <EyeFilled /> : <EyeInvisibleFilled className="text-red"/>}
+            icon={
+              record.isActive ? (
+                <EyeFilled />
+              ) : (
+                <EyeInvisibleFilled className="text-red" />
+              )
+            }
             onClick={() => onSoftDelete(record.key, record.isActive)}
-            className="mr-2 text-green-light dark:bg-transparent disabled:bg-white"
+            className="mr-2 text-green-light dark:bg-transparent dark:disabled:text-gray"
             disabled={record.lossStatus || record.wonStatus}
           />
         </Tooltip>
@@ -183,6 +189,8 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
         className="w-full"
         isLoading={isLoading}
       />
+
+      
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button, Tooltip } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
 import CheckboxTwo from "../../components/FormElements/Checkboxes/CheckboxTwo";
 import LeadsTableHeader from "./LeadsTableHeader";
@@ -198,15 +198,15 @@ const AllLeads = () => {
           <div className="flex space-x-2">
             <Link to={`/leads/${record.key}`}>
               <Button
-                icon={<EditOutlined />}
-                className="bg-primary text-white"
+                icon={<EditFilled />}
+                className="bg-transparent text-primary dark:text-blue-400"
               />
             </Link>
             {record?.statusData?.name && (
               <Tooltip title={`Stands for : ${record?.statusData?.name}`}>
                 <Button
                   icon={record?.statusData?.name[0]}
-                  className={`text-sm text-white`}
+                  className={`text-sm font-semibold text-white`}
                   style={{
                     background: record?.statusData?.color
                       ? record?.statusData?.color
