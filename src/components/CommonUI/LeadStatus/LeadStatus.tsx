@@ -1,10 +1,7 @@
 import InputGroup from "../../FormElements/InputGroup";
 import SelectGroupOne from "../../FormElements/SelectGroup/SelectGroupOne";
-import {
-  leadStatus,
-  lostReasonOptions,
-} from "../../../utils/Constants/UsefullJSON";
 import { getStoredStatus } from "../../../api/commonAPI";
+import { useEffect, useState } from "react";
 
 export default function LeadStatusUI({
   handleInputChange,
@@ -14,35 +11,49 @@ export default function LeadStatusUI({
   statusFieldName = "status",
 }: any) {
   const leadStatusList = getStoredStatus(true);
+  const leadStatusListRaw = getStoredStatus();
   const lostReasonList = getStoredStatus(true);
-  const renderHiddenField = (fieldName: string) => {
-    switch (fieldName) {
-      case "Won":
-        return (
-          <InputGroup
-            label="Won amount"
-            name="wonAmount"
-            type="number"
-            value={formData.wonAmount}
-            onChange={handleInputChange}
-            required
-          />
-        );
-      case "Lost":
-        return (
-          <SelectGroupOne
-            label="Lost Reason"
-            required
-            options={lostReasonOptions}
-            setSelectedOption={(value) =>
-              handleSelectChange("lostReason", value)
-            }
-          />
-        );
-      default:
-        return null;
+  const [statusIds, setStatusIds] = useState({
+    lostStatusId: "",
+    wonStatusId: "",
+  });
+
+  const findLostWonStatusId = () => {
+    const statusId = leadStatusListRaw.find((status) => status.lossStatus);
+    const wonStatusId = leadStatusListRaw.find((status) => status.wonStatus);
+    setStatusIds({
+      lostStatusId: statusId?._id,
+      wonStatusId: wonStatusId?._id,
+    });
+  };
+
+  const renderHiddenField = (fieldName: any) => {
+    if (fieldName === statusIds.wonStatusId) {
+      return (
+        <InputGroup
+          label="Won amount in INR"
+          name="wonAmount"
+          type="number"
+          value={formData.wonAmount}
+          onChange={handleInputChange}
+          required
+        />
+      );
+    } else if (fieldName === statusIds.lostStatusId) {
+      return (
+        <SelectGroupOne
+          label="Lost Reason"
+          required
+          options={lostReasonList}
+          setSelectedOption={(value) => handleSelectChange("lostReason", value)}
+        />
+      );
     }
   };
+
+  useEffect(() => {
+    findLostWonStatusId();
+  }, []);
   return (
     <>
       <SelectGroupOne
