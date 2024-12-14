@@ -318,6 +318,7 @@ const LeadAction: React.FC = () => {
         <div className="flex w-full flex-col gap-4">
           <LeadStatusUI
             handleInputChange={handleInputChange}
+            handleSelectChange={handleSelectChange}
             formData={formData}
             defaultValue={formData.status}
           />

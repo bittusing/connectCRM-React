@@ -1,5 +1,3 @@
-import React from "react";
-import { FaBuilding } from "react-icons/fa";
 import CompanyInfoCard from "./Cards/CompanyInfo";
 import ContactInfoCard from "./Cards/ContactInfo";
 import SystemSettingsCard from "./Cards/SystemSettings";

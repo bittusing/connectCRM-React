@@ -116,7 +116,7 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
           <Button
             icon={record.isActive ? <EyeFilled /> : <EyeInvisibleFilled className="text-red"/>}
             onClick={() => onSoftDelete(record.key, record.isActive)}
-            className="mr-2 text-green-light dark:bg-transparent"
+            className="mr-2 text-green-light dark:bg-transparent disabled:bg-white"
             disabled={record.lossStatus || record.wonStatus}
           />
         </Tooltip>
