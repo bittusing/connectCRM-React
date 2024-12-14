@@ -105,6 +105,7 @@ const CustomAntdTable = ({
           pagination={pagination}
           loading={isLoading}
           className="w-full bg-white dark:bg-transparent overflow-auto"
+          bordered
         />
       )}
       <style>{`

@@ -5,11 +5,13 @@ const CheckboxTwo = ({
   id = "",
   onChange = () => {},
   checked = false,
+  idForAPI = "",
 }: {
   label?: string;
   id: string;
   onChange?: (value: { value: string; isChecked: boolean }) => void;
   checked?: boolean;
+  idForAPI?: string;
 }) => {
   return (
     <div>
@@ -24,13 +26,16 @@ const CheckboxTwo = ({
             className="sr-only"
             checked={checked}
             onChange={() => {
-              onChange({ value: id, isChecked: !checked });
+              onChange({
+                value: idForAPI ? idForAPI : id,
+                isChecked: !checked,
+              });
             }}
           />
           <div
             className={`mr-2 flex h-5 w-5 items-center justify-center rounded border ${
-              checked 
-                ? "border-primary bg-gray-2 dark:bg-transparent" 
+              checked
+                ? "border-primary bg-gray-2 dark:bg-transparent"
                 : "border border-dark-5 dark:border-dark-6"
             }`}
           >

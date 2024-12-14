@@ -24,6 +24,7 @@ interface DynamicDataManagementProps {
   onAdd: (newItem: any) => void;
   onEdit: (key: string, updatedItem: any) => void;
   onDelete?: (key: string) => void;
+  onSoftDelete?: (key: string, status: boolean) => void;
   onUpdate: (key: string, status: boolean) => void;
   customClasses?: string;
   isLoading?: boolean;
@@ -37,6 +38,7 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
   onAdd,
   onEdit,
   onDelete = () => {},
+  onSoftDelete = () => {},
   onUpdate,
   customClasses = "",
   isLoading = false,
@@ -112,9 +114,10 @@ const DynamicDataManagement: React.FC<DynamicDataManagementProps> = ({
       <span>
         <Tooltip title="Do you want to use this entry in your CRM ? If yes choose open-eye icon. ">
           <Button
-            icon={record.isActive ? <EyeFilled /> : <EyeInvisibleFilled />}
-            onClick={() => handleUpdate(record.key, record.isActive)}
-            className="mr-2 text-orange dark:bg-transparent"
+            icon={record.isActive ? <EyeFilled /> : <EyeInvisibleFilled className="text-red"/>}
+            onClick={() => onSoftDelete(record.key, record.isActive)}
+            className="mr-2 text-green-light dark:bg-transparent"
+            disabled={record.lossStatus || record.wonStatus}
           />
         </Tooltip>
         <Tooltip title="Use this button to Edit this endtry.">

@@ -4,10 +4,12 @@ const SwitcherTwo = ({
   id,
   defaultChecked,
   onChange = () => {},
+  idForAPI = "",
 }: {
   id: string;
   defaultChecked?: boolean;
   onChange?: any;
+  idForAPI?: string;
 }) => {
   const [enabled, setEnabled] = useState(defaultChecked);
 
@@ -23,8 +25,8 @@ const SwitcherTwo = ({
             type="checkbox"
             className="sr-only"
             onChange={() => {
+              onChange(idForAPI ? idForAPI : id, !enabled);
               setEnabled(!enabled);
-              onChange(id, !enabled);
             }}
           />
           <div className="h-5 w-14 rounded-full bg-gray-3 dark:bg-[#5A616B]"></div>
