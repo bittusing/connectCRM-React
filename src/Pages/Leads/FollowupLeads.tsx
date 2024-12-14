@@ -2,10 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button, Tooltip } from "antd";
 import {
-  ClockCircleFilled,
   EditFilled,
-  EditOutlined,
-  WarningFilled,
 } from "@ant-design/icons";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
 import CheckboxTwo from "../../components/FormElements/Checkboxes/CheckboxTwo";
@@ -13,6 +10,8 @@ import LeadsTableHeader from "./LeadsTableHeader";
 import { API } from "../../api";
 import { END_POINT } from "../../api/UrlProvider";
 import { debounce } from "lodash";
+import { toast } from "react-toastify";
+import QuickEditModal from "../../components/Modals/QuickEdit";
 
 interface Lead {
   key: string;
@@ -22,6 +21,8 @@ interface Lead {
   agent: string;
   followUpDate: any;
   statusData: any;
+  leadWonAmount: number;
+  addCalender: boolean;
 }
 
 interface APILead {
@@ -33,6 +34,8 @@ interface APILead {
   assignedAgent: { name: string } | null;
   followUpDate: any;
   leadStatus: any;
+  leadWonAmount: number;
+  addCalender: boolean;
 }
 
 const isWithinNext24Hours = (date: Date): boolean => {
@@ -65,11 +68,16 @@ const FollowupLeads = () => {
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [isQuickEditOpen, setIsQuickEditOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
     total: 0,
   });
+
+  console.log({ selectedLead });
 
   const transformLeadData = (apiLeads: APILead[]): Lead[] => {
     return apiLeads.map((lead) => ({
@@ -81,6 +89,8 @@ const FollowupLeads = () => {
       followUpDate: new Date(lead.followUpDate),
       // followUpDate: new Date(lead.followUpDate).toLocaleString(),
       statusData: lead.leadStatus || {},
+      leadWonAmount: lead.leadWonAmount,
+      addCalender: lead.addCalender,
     }));
   };
 
@@ -138,6 +148,29 @@ const FollowupLeads = () => {
   const handleSearch = (value: string) => {
     setSearchTerm(value);
     debouncedSearch(value);
+  };
+
+  const handleQuickUpdate = async (updateData: any) => {
+    if (!selectedLead) return;
+
+    try {
+      setIsUpdating(true);
+      const response = await API.updateAuthAPI(
+        updateData,
+        selectedLead.key,
+        "lead",
+        true
+      );
+
+      if (response.error) return;
+      toast.success("Lead updated successfully");
+      setIsQuickEditOpen(false);
+      fetchLeads(); // Refresh the leads list
+    } catch (error: any) {
+      console.error(error.message || "Failed to update lead");
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   // Handle select all checkbox
@@ -218,91 +251,6 @@ const FollowupLeads = () => {
         const isMissed = isWithinPast24Hours(date);
 
         return (
-          // <div className={`flex items-center gap-2`}>
-          //   <span>{formattedDate}</span>
-          //   {(isUpcoming || isMissed) && (
-          //     <span className={`h-2 w-2 rounded-full ${isUpcoming ? 'bg-green-400' : 'bg-red-400'} animate-pulse`} />
-          //   )}
-          // </div>
-
-          //   <div className="flex items-center gap-2">
-          //   <span>{formattedDate}</span>
-          //   {isUpcoming && (
-          //     <div className="flex items-center px-2 py-0.5 bg-green-50 rounded-md">
-          //       <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1" />
-          //       <span className="text-xs text-green-700">Priority</span>
-          //     </div>
-          //   )}
-          //   {isMissed && (
-          //     <div className="flex items-center px-2 py-0.5 bg-red-50 rounded-md">
-          //       <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-1" />
-          //       <span className="text-xs text-red-700">Attention</span>
-          //     </div>
-          //   )}
-          // </div>
-
-          // <div className="flex items-center gap-2">
-          //   <span>{formattedDate}</span>
-          //   {(isUpcoming || isMissed) && (
-          //     <div className="relative w-6 h-6">
-          //       <div
-          //         className={`absolute inset-0 rounded-full ${
-          //           isUpcoming
-          //             ? "border-2 border-green-500"
-          //             : "border-2 border-red-500"
-          //         }`}
-          //       />
-          //       <div className="absolute inset-1 flex items-center justify-center text-xs">
-          //         {isUpcoming ? "24" : "!"}
-          //       </div>
-          //     </div>
-          //   )}
-          // </div>
-
-          // <tr className={`
-          //   ${isUpcoming ? 'border-l-4 border-green-500' : ''}
-          //   ${isMissed ? 'border-l-4 border-red-500' : ''}
-          // `}>
-
-          // <div className="flex items-center gap-2">
-          //   <span>{formattedDate}</span>
-          //   {(isUpcoming || isMissed) && (
-          //     <div className="flex items-center gap-1">
-          //       <div
-          //         className={`h-2 w-2 rounded-full ${
-          //           isUpcoming ? "bg-green-500" : "bg-red-500"
-          //         }`}
-          //       />
-          //       <div
-          //         className={`h-1 w-8 ${
-          //           isUpcoming ? "bg-green-200" : "bg-red-200"
-          //         }`}
-          //       />
-          //       <div
-          //         className={`text-xs ${
-          //           isUpcoming ? "text-green-600" : "text-red-600"
-          //         }`}
-          //       >
-          //         {isUpcoming ? "24h" : "Due"}
-          //       </div>
-          //     </div>
-          //   )}
-          // </div>
-
-          // <div className="flex items-center gap-2">
-          //   <span>{formattedDate}</span>
-          //   {isUpcoming && (
-          //     <span className="text-xs text-green-600">
-          //       (In )
-          //     </span>
-          //   )}
-          //   {isMissed && (
-          //     <span className="text-xs text-red-600">
-          //       (Overdue by )
-          //     </span>
-          //   )}
-          // </div>
-
           <div className="flex items-center gap-2">
             <span>{formattedDate}</span>
             {isUpcoming && (
@@ -330,6 +278,16 @@ const FollowupLeads = () => {
               className="bg-transparent text-primary dark:text-blue-400"
             />
           </Link>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedLead(record);
+              setIsQuickEditOpen(true);
+            }}
+            className="bg-primary text-white hover:bg-primary/90"
+          >
+            Quick Edit
+          </Button>
           {record?.statusData?.name && (
             <Tooltip title={`Stands for : ${record?.statusData?.name}`}>
               <Button
@@ -339,6 +297,11 @@ const FollowupLeads = () => {
                   background: record?.statusData?.color
                     ? record?.statusData?.color
                     : "green",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedLead(record);
+                  setIsQuickEditOpen(true);
                 }}
               />
             </Tooltip>
@@ -385,14 +348,6 @@ const FollowupLeads = () => {
           pageSizeOptions: ["10", "20", "50", "100"],
           showSizeChanger: true,
         }}
-        // rowClassName={(record: any, value: any) => {
-        //   const formattedDate = record.followUpDate.toLocaleString();
-        //   const isUpcoming = isWithinNext24Hours(record.followUpDate);
-        //   const isMissed = isWithinPast24Hours(record.followUpDate);
-        //   console.log({ record, value });
-        //   return "";
-        // }}
-
         rowClassName={(record: Lead) => {
           if (isWithinNext24Hours(record.followUpDate)) {
             return "bg-green-50 hover:bg-green-100 transition-colors duration-200 animate-in-range";
@@ -410,6 +365,24 @@ const FollowupLeads = () => {
         })}
         isLoading={loading}
       />
+      {selectedLead && (
+        <QuickEditModal
+          isOpen={isQuickEditOpen}
+          onClose={() => {
+            setIsQuickEditOpen(false);
+            setSelectedLead(null);
+          }}
+          onSubmit={handleQuickUpdate}
+          initialData={{
+            id: selectedLead.key,
+            status: selectedLead.statusData?._id || "",
+            followUpDate: selectedLead.followUpDate,
+            leadWonAmount: selectedLead.leadWonAmount,
+            addCalender: selectedLead.addCalender, // You might want to get this from your lead data
+          }}
+          isLoading={isUpdating}
+        />
+      )}
 
       <style>{`
         /* Dark mode styles */

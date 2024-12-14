@@ -1,11 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import ClickOutside from "../ClickOutside";
 import { handleLogout } from "../../utils/handleLogOut";
+interface UserData {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  companyCode: string;
+  role: string;
+  isEmailVerified: boolean;
+  isMobileVerified: boolean;
+  bio: string;
+  profilePic: string;
+  company: {
+    id: string;
+    name: string;
+    code: string;
+    subscription: {
+      plan: string;
+      startDate: string;
+      endDate: string;
+      status: string;
+      features: string[];
+    };
+  };
+}
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const [userData, setUserData] = useState<UserData | null>(null);
+
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      try {
+        const data = JSON.parse(userStr);
+        setUserData(data);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, []);
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -40,7 +78,7 @@ const DropdownUser = () => {
         </span>
 
         <span className="flex items-center gap-2 font-medium text-dark dark:text-dark-6">
-          <span className="hidden lg:block">Jhon Smith</span>
+          <span className="hidden lg:block">{userData?.name}</span>
 
           <svg
             className={`fill-current duration-200 ease-in ${
@@ -97,15 +135,15 @@ const DropdownUser = () => {
 
             <span className="block">
               <span className="block font-medium text-dark dark:text-white">
-                Jhon Smith
+                {userData?.name}
               </span>
               <span className="block font-medium text-dark-5 dark:text-dark-6">
-                jonson@nextadmin.com
+                {userData?.email}
               </span>
             </span>
           </div>
           <ul className="flex flex-col gap-1 border-y-[0.5px] border-stroke p-2.5 dark:border-dark-3">
-            {/* <li>
+            <li>
               <Link
                 to="/profile"
                 className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
@@ -133,11 +171,11 @@ const DropdownUser = () => {
                 </svg>
                 View profile
               </Link>
-            </li> */}
+            </li>
 
             <li>
               <Link
-                to="/pages/settings"
+                to="/profile/settings"
                 className="flex w-full items-center gap-2.5 rounded-[7px] p-2.5 text-sm font-medium text-dark-4 duration-300 ease-in-out hover:bg-gray-2 hover:text-dark dark:text-dark-6 dark:hover:bg-dark-3 dark:hover:text-white lg:text-base"
               >
                 <svg

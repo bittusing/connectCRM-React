@@ -1,12 +1,16 @@
 import CalendarBox from "../components/CalenderBox/CalenderBox";
+import ProfileBox from "../components/ProfileBox";
+import SettingBoxes from "../components/SettingBoxes";
 import ApiIntegeration from "../Pages/ApiIntegeration/ApiIntegeration";
 import EmployeeList from "../Pages/CallManage/EmployeeList";
 import EmployeeReport from "../Pages/CallManage/EmployeeReport";
 import AddLeads from "../Pages/Leads/AddLeads";
 import AllLeads from "../Pages/Leads/AllLeads";
 import FollowupLeads from "../Pages/Leads/FollowupLeads";
+import ImportedLeads from "../Pages/Leads/ImportedLeads";
 import ImportLeads from "../Pages/Leads/ImportLeads";
 import LeadAction from "../Pages/Leads/LeadAction";
+import OutsourcedLeads from "../Pages/Leads/OutsourcedLeads";
 import ProductAndServiceDash from "../Pages/ProductAndServices/ProductAndServiceDash";
 import CallReport from "../Pages/Reports/CallReport";
 import ManageReports from "../Pages/Reports/ManageReports";
@@ -42,6 +46,14 @@ const navRoutes = [
     component: FollowupLeads,
   },
   {
+    path: "/leads/imported-leads",
+    component: ImportedLeads,
+  },
+  {
+    path: "/leads/outsourced-leads",
+    component: OutsourcedLeads,
+  },
+  {
     path: "/leads/:leadId",
     component: LeadAction,
   },
@@ -64,6 +76,14 @@ const navRoutes = [
   {
     path: "settings",
     component: Settings,
+  },
+  {
+    path: "profile/settings",
+    component: SettingBoxes,
+  },
+  {
+    path: "profile",
+    component: ProfileBox,
   },
 ];
 
