@@ -48,32 +48,61 @@ export default function StatusFieldsCRM() {
     type: "won" | "lost",
     checked: boolean
   ) => {
-    // If trying to uncheck the only checked item
-    const currentCheckedItem = data.find((item) =>
-      type === "won" ? item.wonStatus : item.lossStatus
-    );
+    // Get the current row
+    const currentRow = data.find((item) => item.key === key);
+    if (!currentRow) return;
 
-    if (!checked && currentCheckedItem?.key === key) {
+    // If trying to uncheck the only checked item of this type across all rows
+    const totalCheckedOfType = data.filter((item) =>
+      type === "won" ? item.wonStatus : item.lossStatus
+    ).length;
+
+    if (
+      !checked &&
+      totalCheckedOfType === 1 &&
+      (type === "won" ? currentRow.wonStatus : currentRow.lossStatus)
+    ) {
       setShowWarningModal(true);
       return;
     }
 
     try {
-      const payload = {
-        [type === "won" ? "wonStatus" : "lossStatus"]: checked,
-      };
+      const payload: { wonStatus?: boolean; lossStatus?: boolean } = {};
 
-      // First, uncheck the currently checked item if exists
-      if (checked && currentCheckedItem) {
-        await API.updateAuthAPI(
-          { [type === "won" ? "wonStatus" : "lossStatus"]: false },
-          currentCheckedItem.key,
-          END_POINT.LEAD_STATUS,
-          true
-        );
+      // If checking a box, ensure the opposite status is unchecked
+      if (checked) {
+        if (type === "won") {
+          payload.wonStatus = true;
+          payload.lossStatus = false; // Ensure lost is unchecked
+        } else {
+          payload.lossStatus = true;
+          payload.wonStatus = false; // Ensure won is unchecked
+        }
+      } else {
+        // If unchecking, just uncheck the current type
+        payload[type === "won" ? "wonStatus" : "lossStatus"] = false;
       }
 
-      // Then set the new checked item
+      // Find previous checked item of the same type (if checking a new item)
+      if (checked) {
+        const previousChecked = data.find(
+          (item) =>
+            item.key !== key &&
+            (type === "won" ? item.wonStatus : item.lossStatus)
+        );
+
+        // Uncheck the previous item if it exists
+        if (previousChecked) {
+          await API.updateAuthAPI(
+            { [type === "won" ? "wonStatus" : "lossStatus"]: false },
+            previousChecked.key,
+            END_POINT.LEAD_STATUS,
+            true
+          );
+        }
+      }
+
+      // Update the current item
       const { error } = await API.updateAuthAPI(
         payload,
         key,
@@ -108,13 +137,13 @@ export default function StatusFieldsCRM() {
           <Tooltip
             title={`Color "${record.color}" associated with "${record.status}" status field. You can change the color by clicking on edit button.`}
           >
-            <ColorPicker value={record.color} />
+            <ColorPicker value={record.color} open={false} />
           </Tooltip>
         );
       },
     },
     {
-      title: "Choose for",
+      title: "Select for",
       children: [
         {
           title: "Dashboard",
@@ -172,16 +201,23 @@ export default function StatusFieldsCRM() {
       ),
     },
     {
-      title: "Treat as",
+      title: "Treat it as",
       children: [
         {
           title: "Won",
           dataIndex: "key",
           key: "won",
           render: (key: string, record: StatusField) => (
-            <Tooltip title="Mark as won status">
+            <Tooltip
+              title={
+                record.lossStatus
+                  ? "Disabled, since already marked as LOST!"
+                  : "Mark as WON status"
+              }
+            >
               <Checkbox
                 checked={record.wonStatus}
+                disabled={record.lossStatus}
                 onChange={(e) =>
                   handleCheckboxChange(key, "won", e.target.checked)
                 }
@@ -194,9 +230,16 @@ export default function StatusFieldsCRM() {
           dataIndex: "key",
           key: "lost",
           render: (key: string, record: StatusField) => (
-            <Tooltip title="Mark as lost status">
+            <Tooltip
+              title={
+                record.wonStatus
+                  ? "Disabled, since already marked as WON!"
+                  : "Mark as LOST status"
+              }
+            >
               <Checkbox
                 checked={record.lossStatus}
+                disabled={record.wonStatus}
                 onChange={(e) =>
                   handleCheckboxChange(key, "lost", e.target.checked)
                 }

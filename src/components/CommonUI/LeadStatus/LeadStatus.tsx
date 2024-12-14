@@ -1,6 +1,6 @@
 import InputGroup from "../../FormElements/InputGroup";
 import SelectGroupOne from "../../FormElements/SelectGroup/SelectGroupOne";
-import { getStoredStatus } from "../../../api/commonAPI";
+import { getStoredLostReason, getStoredStatus } from "../../../api/commonAPI";
 import { useEffect, useState } from "react";
 
 export default function LeadStatusUI({
@@ -12,7 +12,7 @@ export default function LeadStatusUI({
 }: any) {
   const leadStatusList = getStoredStatus(true);
   const leadStatusListRaw = getStoredStatus();
-  const lostReasonList = getStoredStatus(true);
+  const lostReasonList = getStoredLostReason(true);
   const [statusIds, setStatusIds] = useState({
     lostStatusId: "",
     wonStatusId: "",
@@ -32,9 +32,9 @@ export default function LeadStatusUI({
       return (
         <InputGroup
           label="Won amount in INR"
-          name="wonAmount"
+          name="leadWonAmount"
           type="number"
-          value={formData.wonAmount}
+          value={formData.leadWonAmount}
           onChange={handleInputChange}
           required
         />
@@ -45,7 +45,9 @@ export default function LeadStatusUI({
           label="Lost Reason"
           required
           options={lostReasonList}
-          setSelectedOption={(value) => handleSelectChange("lostReason", value)}
+          setSelectedOption={(value) =>
+            handleSelectChange("leadLostReasonId", value)
+          }
         />
       );
     }

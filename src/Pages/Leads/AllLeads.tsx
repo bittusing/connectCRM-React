@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
 import CheckboxTwo from "../../components/FormElements/Checkboxes/CheckboxTwo";
@@ -51,6 +51,7 @@ const AllLeads = () => {
       agent: lead.assignedAgent?.name || "-",
       status: lead.leadStatus?.name || "-",
       service: lead.productService?.name || "-",
+      statusData: lead.leadStatus || {},
     }));
   };
 
@@ -112,24 +113,23 @@ const AllLeads = () => {
   // Handle select all checkbox
   const handleSelectAll = ({ isChecked }: { isChecked: boolean }) => {
     if (isChecked) {
-      const visibleKeys = leads.map(lead => lead.key);
-      setSelectedRowKeys(prevSelected => {
+      const visibleKeys = leads.map((lead) => lead.key);
+      setSelectedRowKeys((prevSelected) => {
         const uniqueKeys = new Set([...prevSelected, ...visibleKeys]);
         return Array.from(uniqueKeys);
       });
     } else {
-      const visibleKeys = new Set(leads.map(lead => lead.key));
-      setSelectedRowKeys(prevSelected => 
-        prevSelected.filter(key => !visibleKeys.has(key))
+      const visibleKeys = new Set(leads.map((lead) => lead.key));
+      setSelectedRowKeys((prevSelected) =>
+        prevSelected.filter((key) => !visibleKeys.has(key))
       );
     }
   };
 
   const areAllVisibleRowsSelected = () => {
     if (leads.length === 0) return false;
-    return leads.every(lead => selectedRowKeys.includes(lead.key));
+    return leads.every((lead) => selectedRowKeys.includes(lead.key));
   };
-
 
   const columns = [
     {
@@ -192,14 +192,32 @@ const AllLeads = () => {
     {
       title: "Action",
       key: "action",
-      render: (record: { key: string }) => (
-        <div className="flex space-x-2">
-          <Link to={`/leads/${record.key}`}>
-            <Button icon={<EditOutlined />} className="bg-primary text-white" />
-          </Link>
-          <Button icon="C" className="bg-green text-sm text-white" />
-        </div>
-      ),
+      render: (record: any) => {
+        console.log({ record });
+        return (
+          <div className="flex space-x-2">
+            <Link to={`/leads/${record.key}`}>
+              <Button
+                icon={<EditOutlined />}
+                className="bg-primary text-white"
+              />
+            </Link>
+            {record?.statusData?.name && (
+              <Tooltip title={`Stands for : ${record?.statusData?.name}`}>
+                <Button
+                  icon={record?.statusData?.name[0]}
+                  className={`text-sm text-white`}
+                  style={{
+                    background: record?.statusData?.color
+                      ? record?.statusData?.color
+                      : "green",
+                  }}
+                />
+              </Tooltip>
+            )}
+          </div>
+        );
+      },
     },
   ];
 
@@ -211,16 +229,15 @@ const AllLeads = () => {
     isChecked: boolean;
   }) => {
     if (isChecked) {
-      setSelectedRowKeys(prev => [...prev, value]);
+      setSelectedRowKeys((prev) => [...prev, value]);
     } else {
-      setSelectedRowKeys(prev => prev.filter(key => key !== value));
+      setSelectedRowKeys((prev) => prev.filter((key) => key !== value));
     }
   };
 
   useEffect(() => {
-    console.log('Selected rows:', selectedRowKeys);
+    console.log("Selected rows:", selectedRowKeys);
   }, [selectedRowKeys]);
-
 
   return (
     <div className="space-y-4">

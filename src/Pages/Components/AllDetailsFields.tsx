@@ -56,20 +56,20 @@ const AllDetailsFields: React.FC<AllDetailsFieldsProps> = ({
   });
 
   useEffect(() => {
-    if (leadData) {
+    if (leadData) {      
       setFormData({
-        firstName: leadData.firstName || "",
-        lastName: leadData.lastName || "",
-        email: leadData.email || "",
-        companyName: leadData.companyName || "",
-        website: leadData.website || "",
-        productService: leadData.productService._id || "",
-        productServiceName: leadData.productService.name || "",
-        contactNumber: leadData.contactNumber || "",
-        alternatePhone: leadData.alternatePhone || "",
-        leadSource: leadData.leadSource._id || "",
-        leadSourceName: leadData.leadSource.name || "",
-        leadCost: leadData.leadCost?.toString() || "",
+        firstName: leadData?.firstName || "",
+        lastName: leadData?.lastName || "",
+        email: leadData?.email || "",
+        companyName: leadData?.companyName || "",
+        website: leadData?.website || "",
+        productService: leadData?.productService?._id || "",
+        productServiceName: leadData?.productService?.name || "",
+        contactNumber: leadData?.contactNumber || "",
+        alternatePhone: leadData?.alternatePhone || "",
+        leadSource: leadData?.leadSource?._id || "",
+        leadSourceName: leadData?.leadSource?.name || "",
+        leadCost: leadData?.leadCost?.toString() || "",
         // position: leadData.position || "",
       });
     }
