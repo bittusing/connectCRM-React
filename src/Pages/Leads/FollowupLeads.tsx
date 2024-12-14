@@ -47,7 +47,7 @@ const FollowupLeads = () => {
       number: lead.contactNumber,
       leadSource: lead.leadSource?.name || "-",
       agent: lead.assignedAgent?.name || "-",
-      followUpDate: new Date(lead.followUpDate).toLocaleDateString(),
+      followUpDate: new Date(lead.followUpDate).toLocaleTimeString(),
     }));
   };
 

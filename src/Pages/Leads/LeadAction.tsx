@@ -88,6 +88,8 @@ const LeadAction: React.FC = () => {
     followup: "",
     comment: "",
     assignedAgent: "",
+    leadWonAmount: 0,
+    leadLostReasonId: "",
   });
 
   const fetchLeadData = async () => {
@@ -106,6 +108,8 @@ const LeadAction: React.FC = () => {
         followup: leadDetails.lead.followUpDate,
         comment: leadDetails.lead.comment || "",
         assignedAgent: leadDetails.lead.assignedAgent._id || "",
+        leadWonAmount: leadDetails.lead.leadWonAmount || 0,
+        leadLostReasonId: leadDetails.lead.leadLostReasonId || "",
       });
     } catch (error: any) {
       console.error(error.message || "Failed to fetch lead details");
@@ -180,6 +184,8 @@ const LeadAction: React.FC = () => {
       followUpDate: formData.followup,
       comment: formData.comment,
       assignedAgent: formData.assignedAgent,
+      leadWonAmount: formData.leadWonAmount,
+      leadLostReasonId: formData.leadLostReasonId || null,
     };
 
     await handleUpdateLead(updateData);
@@ -219,27 +225,27 @@ const LeadAction: React.FC = () => {
     ? [
         {
           fieldName: "Full Name",
-          fieldNameValue: `${leadData.lead.firstName} ${leadData.lead.lastName}`,
+          fieldNameValue: `${leadData.lead?.firstName} ${leadData.lead?.lastName}`,
         },
         {
           fieldName: "Email",
-          fieldNameValue: leadData.lead.email,
+          fieldNameValue: leadData.lead?.email,
         },
         {
           fieldName: "Contact Number",
-          fieldNameValue: leadData.lead.contactNumber,
+          fieldNameValue: leadData.lead?.contactNumber,
         },
         {
           fieldName: "Region",
-          fieldNameValue: `${leadData.lead.city}, ${leadData.lead.state}`,
+          fieldNameValue: `${leadData.lead?.city}, ${leadData.lead?.state}`,
         },
         {
           fieldName: "Lead Source",
-          fieldNameValue: leadData.lead.leadSource.name,
+          fieldNameValue: leadData.lead?.leadSource?.name,
         },
         {
           fieldName: "Service",
-          fieldNameValue: leadData.lead.productService.name,
+          fieldNameValue: leadData.lead?.productService?.name,
         },
       ]
     : [];

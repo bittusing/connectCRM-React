@@ -3,6 +3,7 @@ import {
   countryOptions,
   leadSourceOptionsNewFormat,
   leadStatusNewFormat,
+  lostReasonOptionsNewFormat,
   serviceOptionsNewFormat,
 } from "../../utils/Constants/UsefullJSON";
 import { API } from "../index";
@@ -32,6 +33,7 @@ export const fetchGeneralData = async (): Promise<void> => {
         sources = [],
         agents = [],
         productsServices = [],
+        leadLoseReason = [],
         countries = [],
       } = data;
 
@@ -39,6 +41,7 @@ export const fetchGeneralData = async (): Promise<void> => {
       localStorage.setItem("crm_status", JSON.stringify(status));
       localStorage.setItem("crm_sources", JSON.stringify(sources));
       localStorage.setItem("crm_agents", JSON.stringify(agents));
+      localStorage.setItem("crm_lostReason", JSON.stringify(leadLoseReason));
       localStorage.setItem(
         "crm_products_services",
         JSON.stringify(productsServices)
@@ -61,6 +64,25 @@ export const getStoredStatus = (forSelectOptions = false): any[] => {
     const transformedData = parsedData?.map((item: any) => ({
       value: item._id,
       label: item.name,
+    }));
+    if (!forSelectOptions) {
+      return data ? JSON.parse(data) : [];
+    } else {
+      return transformedData;
+    }
+  } catch (error) {
+    console.error("Error parsing status data:", error);
+    return [];
+  }
+};
+
+export const getStoredLostReason = (forSelectOptions = false): any[] => {
+  try {
+    const data = localStorage.getItem("crm_lostReason");
+    const parsedData = data ? JSON.parse(data) : lostReasonOptionsNewFormat;
+    const transformedData = parsedData?.map((item: any) => ({
+      value: item._id,
+      label: item.reason,
     }));
     if (!forSelectOptions) {
       return data ? JSON.parse(data) : [];
