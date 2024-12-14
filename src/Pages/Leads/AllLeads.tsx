@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { API } from "../../api";
 import { END_POINT } from "../../api/UrlProvider";
 import { debounce } from "lodash";
+import QuickEditModal from "../../components/Modals/QuickEdit";
+import { toast } from "react-toastify";
 
 interface Lead {
   key: string;
@@ -17,6 +19,10 @@ interface Lead {
   agent: string;
   status: string;
   service: string;
+  leadWonAmount: number;
+  addCalender: boolean;
+  followUpDate: any;
+  statusData: any;
 }
 
 interface APILead {
@@ -28,14 +34,20 @@ interface APILead {
   assignedAgent: { name: string } | null;
   leadStatus: { name: string } | null;
   productService: { name: string } | null;
+  leadWonAmount: number;
+  addCalender: boolean;
+  followUpDate: any;
 }
 
-const AllLeads = () => {
+const AllLeads = ({ derivativeEndpoint = "" }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(false);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [isQuickEditOpen, setIsQuickEditOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -52,7 +64,33 @@ const AllLeads = () => {
       status: lead.leadStatus?.name || "-",
       service: lead.productService?.name || "-",
       statusData: lead.leadStatus || {},
+      leadWonAmount: lead.leadWonAmount,
+      addCalender: lead.addCalender,
+      followUpDate: new Date(lead.followUpDate),
     }));
+  };
+
+  const handleQuickUpdate = async (updateData: any) => {
+    if (!selectedLead) return;
+
+    try {
+      setIsUpdating(true);
+      const response = await API.updateAuthAPI(
+        updateData,
+        selectedLead.key,
+        "lead",
+        true
+      );
+
+      if (response.error) return;
+      toast.success("Lead updated successfully");
+      setIsQuickEditOpen(false);
+      fetchLeads(); // Refresh the leads list
+    } catch (error: any) {
+      console.error(error.message || "Failed to update lead");
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const fetchLeads = async () => {
@@ -65,7 +103,7 @@ const AllLeads = () => {
       };
 
       const { data, error, options } = await API.getAuthAPI(
-        END_POINT.LEADS_DATA,
+        `${END_POINT.LEADS_DATA}${derivativeEndpoint}`,
         true,
         params
       );
@@ -202,6 +240,16 @@ const AllLeads = () => {
                 className="bg-transparent text-primary dark:text-blue-400"
               />
             </Link>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedLead(record);
+                setIsQuickEditOpen(true);
+              }}
+              className="bg-primary text-white hover:bg-primary/90"
+            >
+              Quick Edit
+            </Button>
             {record?.statusData?.name && (
               <Tooltip title={`Stands for : ${record?.statusData?.name}`}>
                 <Button
@@ -211,6 +259,11 @@ const AllLeads = () => {
                     background: record?.statusData?.color
                       ? record?.statusData?.color
                       : "green",
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedLead(record);
+                    setIsQuickEditOpen(true);
                   }}
                 />
               </Tooltip>
@@ -260,6 +313,25 @@ const AllLeads = () => {
         }}
         isLoading={loading}
       />
+
+      {selectedLead && (
+        <QuickEditModal
+          isOpen={isQuickEditOpen}
+          onClose={() => {
+            setIsQuickEditOpen(false);
+            setSelectedLead(null);
+          }}
+          onSubmit={handleQuickUpdate}
+          initialData={{
+            id: selectedLead.key,
+            status: selectedLead.statusData?._id || "",
+            followUpDate: selectedLead.followUpDate,
+            leadWonAmount: selectedLead.leadWonAmount,
+            addCalender: selectedLead.addCalender, // You might want to get this from your lead data
+          }}
+          isLoading={isUpdating}
+        />
+      )}
     </div>
   );
 };

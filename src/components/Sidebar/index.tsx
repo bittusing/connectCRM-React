@@ -50,6 +50,8 @@ const menuGroups = [
           { label: "Add Leads", route: "/leads/add" },
           { label: "All Leads", route: "/leads/all" },
           { label: "Follow Up Leads", route: "/leads/followup" },
+          { label: "Imported Leads", route: "/leads/imported-leads" },
+          { label: "Outsourced Leads", route: "/leads/outsourced-leads" },
         ],
       },
       {
