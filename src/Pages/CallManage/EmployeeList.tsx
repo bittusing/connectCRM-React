@@ -195,7 +195,7 @@ const EmployeeList: React.FC = () => {
         dataSource={data}
         pagination={false}
         className="w-full"
-        loading={isLoading}
+        isLoading={isLoading}
       />
     </div>
   );
