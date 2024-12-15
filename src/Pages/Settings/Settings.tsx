@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
     },
     { tabName: "Department", component: <DepartmentSetting /> },
     { tabName: "CRM Field", component:<CRMFields/>},
-    { tabName: "Subscription", component: <SubscriptionInfo /> },
+    // { tabName: "Subscription", component: <SubscriptionInfo /> },
     { tabName: "Storage Insights", component: <StorageInsights /> },
   ];
 

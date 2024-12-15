@@ -13,6 +13,7 @@ export interface EndPointType {
   LEADS_FOLLOWUP_DATA: string;
   CALL_LIST: string;
   PRODUCT_SALE_REPORT: string;
+  CALENDAR: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;

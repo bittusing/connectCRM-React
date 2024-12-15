@@ -1,67 +1,135 @@
-import React, { useState } from "react";
-import { Calendar, Badge, Popover } from "antd";
+import React, { useState, useEffect, useMemo } from "react";
+import { Calendar, Badge, Popover, Spin } from "antd";
 import type { Dayjs } from "dayjs";
 import type { BadgeProps } from "antd";
 import dayjs from "dayjs";
+import { API } from "../../api";
+import { END_POINT } from "../../api/UrlProvider";
+import { toast } from "react-toastify";
+import { FiClock, FiUser, FiUserCheck, FiMessageCircle } from "react-icons/fi";
+import { MdOutlineSupportAgent } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 interface CalendarEvent {
   type: BadgeProps["status"];
   content: string;
+  details?: {
+    id: string;
+    firstName: string;
+    assignedAgent: {
+      _id: string;
+      name: string;
+    };
+    followUpDate: string;
+    comment: string;
+  };
 }
 
-const getListData = (value: Dayjs): CalendarEvent[] => {
-  const listData: CalendarEvent[] = [];
-
-  // Add more events here
-  switch (value.date()) {
-    case 1:
-      listData.push(
-        { type: "warning", content: "Redesign Website" },
-        { type: "success", content: "Team Meeting" },
-      );
-      break;
-    case 10:
-      listData.push(
-        { type: "error", content: "Project Deadline" },
-        { type: "warning", content: "Review Meeting" },
-      );
-      break;
-    case 15:
-      listData.push(
-        { type: "success", content: "Product Launch" },
-        { type: "processing", content: "Client Call" },
-      );
-      break;
-    case 20:
-      listData.push(
-        { type: "warning", content: "Sprint Planning" },
-        { type: "error", content: "Reports Due" },
-      );
-      break;
-    case 25:
-      listData.push(
-        { type: "success", content: "App Design" },
-        { type: "warning", content: "QA Testing" },
-      );
-      break;
-  }
-
-  return listData;
-};
+interface CalendarData {
+  _id: string;
+  firstName: string;
+  assignedAgent: {
+    _id: string;
+    name: string;
+  };
+  followUpDate: string;
+  comment: string;
+  id: string;
+}
 
 const EventModal = ({ listData }: { listData: CalendarEvent[] }) => (
-  <ul className="events">
+  <div className="max-w-sm divide-y divide-gray-200 dark:divide-gray-700">
     {listData.map((item, index) => (
-      <li key={index + (item.type || "calenderEvent")}>
-        <Badge status={item.type} text={item.content} />
-      </li>
+      <div key={index} className="py-3 first:pt-0 last:pb-0">
+        <Link to={`/leads/${item.details?.id}`}>
+          <div className="flex items-center gap-2 mb-2">
+            <Badge status={item.type} />
+            <span className="font-medium text-base dark:text-white">
+              {item.content}
+            </span>
+          </div>
+          {item.details && (
+            <div className="space-y-2 ml-1">
+              <div className="flex items-center gap-2 text-sm dark:text-gray-300">
+                <FiUser className="text-primary" size={16} />
+                <span>{item.details.firstName}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm dark:text-gray-300">
+                <MdOutlineSupportAgent className="text-primary" size={16} />
+                <span>{item.details.assignedAgent.name}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm dark:text-gray-300">
+                <FiMessageCircle className="text-primary" size={16} />
+                <span>{item.details.comment}</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm dark:text-gray-300">
+                <FiClock className="text-primary" size={16} />
+                <span>{dayjs(item.details.followUpDate).format("HH:mm")}</span>
+              </div>
+            </div>
+          )}
+        </Link>
+      </div>
     ))}
-  </ul>
+  </div>
 );
 
 const CalendarBox: React.FC = () => {
-  const [value, setValue] = useState(() => dayjs(new Date()));
-  const [selectedValue, setSelectedValue] = useState(() => dayjs("2017-01-25"));
+  const [value, setValue] = useState(() => dayjs());
+  const [selectedValue, setSelectedValue] = useState(() => dayjs());
+  const [calendarData, setCalendarData] = useState<CalendarData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchCalendarData = async () => {
+    try {
+      setIsLoading(true);
+      const { data: response, error } = await API.getAuthAPI(
+        END_POINT.CALENDAR,
+        true
+      );
+
+      if (error) return;
+
+      if (response) {
+        setCalendarData(response);
+      }
+    } catch (error: any) {
+      console.error(error.message || "Failed to fetch calendar data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCalendarData();
+  }, []);
+
+  // Transform calendar data into a map of dates to events
+  const eventsByDate = useMemo(() => {
+    const events = new Map<string, CalendarEvent[]>();
+
+    calendarData.forEach((event) => {
+      const date = dayjs(event.followUpDate).format("YYYY-MM-DD");
+
+      if (!events.has(date)) {
+        events.set(date, []);
+      }
+
+      events.get(date)?.push({
+        type: "processing",
+        content: `${event.comment}`,
+        // content: `Follow-up with ${event.firstName}`,
+        details: event,
+      });
+    });
+
+    return events;
+  }, [calendarData]);
+
+  const getListData = (value: Dayjs): CalendarEvent[] => {
+    const dateStr = value.format("YYYY-MM-DD");
+    return eventsByDate.get(dateStr) || [];
+  };
 
   const onSelect = (newValue: Dayjs) => {
     setValue(newValue);
@@ -72,18 +140,28 @@ const CalendarBox: React.FC = () => {
     setValue(newValue);
   };
 
-  // Add cell render function to display events
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value);
+    if (listData.length === 0) return null;
+
     return (
       <Popover
         content={<EventModal listData={listData} />}
-        title={"Event details"}
-        trigger={[ "hover"]}
+        title={
+          <div className="font-medium text-lg pb-2 border-b dark:border-gray-700 dark:text-white">
+            Follow-up Details
+          </div>
+        }
+        trigger={["hover"]}
+        placement="right"
+        overlayClassName="calendar-popover"
       >
         <ul className="events">
           {listData.map((item, index) => (
-            <li key={index + (item.type || "calenderEvent")}>
+            <li
+              key={index}
+              className="overflow-hidden text-ellipsis whitespace-nowrap"
+            >
               <Badge status={item.type} text={item.content} />
             </li>
           ))}
@@ -92,18 +170,60 @@ const CalendarBox: React.FC = () => {
     );
   };
 
+  // const dateCellRender = (value: Dayjs) => {
+  //   const listData = getListData(value);
+  //   if (listData.length === 0) return null;
+
+  //   return (
+  //     <Popover
+  //       content={<EventModal listData={listData} />}
+  //       title={
+  //         <div className="font-medium text-lg pb-2 border-b dark:border-gray-700 dark:text-white">
+  //           Follow-up Details
+  //         </div>
+  //       }
+  //       trigger={["hover"]}
+  //       placement="right"
+  //       overlayClassName="calendar-popover"
+  //     >
+  //       <ul className="events">
+  //         {listData.map((item, index) => (
+  //           <li
+  //             key={index}
+  //             className="calendar-event-item flex items-center gap-1 px-1 py-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+  //           >
+  //             <Badge status={item.type} />
+  //             <span className="text-xs truncate dark:text-gray-300">
+  //               {item.content}
+  //             </span>
+  //           </li>
+  //         ))}
+  //       </ul>
+  //     </Popover>
+  //   );
+  // };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[600px] items-center justify-center bg-white dark:bg-gray-800 rounded-lg">
+        <Spin size="large" />
+      </div>
+    );
+  }
+
   return (
     <>
-      <Calendar
-        value={value}
-        onSelect={onSelect}
-        onPanelChange={onPanelChange}
-        cellRender={(current, info) => {
-          if (info.type === "date") return dateCellRender(current);
-          return info.originNode;
-        }}
-      />
-      <style>{`
+      <div className="custom-calendar-wrapper bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        <Calendar
+          value={value}
+          onSelect={onSelect}
+          onPanelChange={onPanelChange}
+          cellRender={(current, info) => {
+            if (info.type === "date") return dateCellRender(current);
+            return info.originNode;
+          }}
+        />
+        <style>{`
         .dark .ant-picker-calendar.ant-picker-calendar-full .ant-picker-panel {
           background: #122031 !important;
         }
@@ -246,10 +366,28 @@ const CalendarBox: React.FC = () => {
             0 3px 6px -4px rgb(255 243 243 / 12%),
             0 9px 28px 8px rgb(255 255 255 / 5%);
         }
+
         .dark .ant-popover .ant-popover-title {
           color: white !important;
         }
+
+         .calendar-popover .ant-popover-inner {
+
+          border-radius: 12px;
+
+          overflow: hidden;
+
+        }
+
+        .dark .calendar-popover .ant-popover-inner {
+
+          background: #1F2937;
+
+          border: 1px solid #374151;
+
+        }
       `}</style>
+      </div>
     </>
   );
 };

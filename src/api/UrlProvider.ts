@@ -30,6 +30,7 @@ export const END_POINT: EndPointType = {
   LEADS_FOLLOWUP_DATA: "lead/follow-up",
   CALL_LIST: "getCallList",
   PRODUCT_SALE_REPORT: "product-sale-report",
+  CALENDAR: "calendar",
   Funnel: "survey",
   Crefunel: "survey",
   SubscrPlane: "v1/subscription",
