@@ -1,16 +1,47 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, DatePicker } from "antd";
 import dayjs from "dayjs";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
+import { API } from "../../api";
+import { END_POINT } from "../../api/UrlProvider";
+import { toast } from "react-toastify";
+import {
+  getStoredAgents,
+  getStoredProductsServices,
+  getStoredSources,
+  getStoredStatus,
+} from "../../api/commonAPI";
 
 const { RangePicker } = DatePicker;
 
 interface SummaryCardProps {
   title: string;
   value: string | number;
+}
+
+interface ReportPayload {
+  assignedAgent?: string;
+  ProductService?: string;
+  leadSource?: string;
+  leadStatus?: string;
+  startDate: string;
+  endDate: string;
+}
+
+interface ReportResponse {
+  summary: {
+    total: number;
+    won: number;
+    amount: number;
+    ratio: string;
+  };
+  leads: Array<{
+    srNo: number;
+    clientName: string;
+    leadPrice: number;
+  }>;
 }
 
 const SummaryCard: React.FC<SummaryCardProps> = ({ title, value }) => (
@@ -22,28 +53,26 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value }) => (
   </Card>
 );
 
+const agentList = getStoredAgents(true);
+const serviceList = getStoredProductsServices(true);
+const sourceList = getStoredSources(true);
+const statusList = getStoredStatus(true);
+
 const ManageReports: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [reportData, setReportData] = useState<ReportResponse | null>(null);
+
+  // Get stored data for dropdowns
+
+  // Form state
+  const [selectedAgent, setSelectedAgent] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState("");
+  const [selectedSource, setSelectedSource] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [dateRange, setDateRange] = useState<[string, string]>([
-    "2024-05-01",
-    "2024-10-20",
+    dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+    dayjs().format("YYYY-MM-DD"),
   ]);
-
-  const handleDateRangeChange = (
-    _dates: any,
-    dateStrings: [string, string]
-  ) => {
-    setDateRange(dateStrings);
-  };
-
-  const handleSubmit = () => {
-    console.log("Submitting with current form data");
-    // Implement your submit logic here
-  };
-
-  // const handleRefresh = () => {
-  //   console.log("Refreshing data");
-  //   // Implement your refresh logic here
-  // };
 
   const columns = [
     {
@@ -66,88 +95,143 @@ const ManageReports: React.FC = () => {
     },
   ];
 
-  const data = [
-    { key: "1", srNo: 1, clientName: "Hritik roshan", leadPrice: 0 },
-    { key: "2", srNo: 2, clientName: "Ajay", leadPrice: 0 },
-    { key: "3", srNo: 3, clientName: "Sharukh khan", leadPrice: 0 },
-    { key: "4", srNo: 4, clientName: "Amir khan", leadPrice: 0 },
-  ];
+  // useEffect(() => {
+  //   if (
+  //     agentList.length &&
+  //     serviceList.length &&
+  //     sourceList.length &&
+  //     statusList.length
+  //   ) {
+  //     setSelectedAgent(agentList[0]?.value);
+  //     setSelectedProduct(serviceList[0]?.value);
+  //     setSelectedSource(sourceList[0]?.value);
+  //     setSelectedStatus(statusList[0]?.value);
+  //     // fetchReportData();
+  //   }
+  // }, []);
+
+  const handleDateRangeChange = (
+    _dates: any,
+    dateStrings: [string, string]
+  ) => {
+    setDateRange(dateStrings);
+  };
+
+  const fetchReportData = async () => {
+    try {
+      setIsLoading(true);
+
+      const payload: ReportPayload = {
+        assignedAgent: selectedAgent,
+        ProductService: selectedProduct,
+        leadSource: selectedSource,
+        leadStatus: selectedStatus,
+        startDate: dateRange[0],
+        endDate: dateRange[1],
+      };
+
+      const { data: response, error } = await API.postAuthAPI<ReportResponse>(
+        payload,
+        END_POINT.PRODUCT_SALE_REPORT,
+        true
+      );
+
+      if (error) throw new Error(error);
+
+      if (response) {
+        setReportData(response);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to fetch report data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    fetchReportData();
+  };
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-      {/* <h2 className="mb-6 text-2xl font-semibold text-gray-800 dark:text-white">
-        Income Report
-      </h2> */}
-
       <div className="mb-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
         <div className="col-span-1">
           <SelectGroupOne
-            options={[{ value: "Godrej", label: "Godrej" }]}
-            setSelectedOption={() => {}}
-            placeholder="Godrej"
-            // wrapperClasses="max-w-[146px] lg:max-w-none"
+            options={serviceList || []}
+            setSelectedOption={setSelectedProduct}
+            placeholder="Select Product"
+            selectedOption={selectedProduct}
+            allowClear
           />
         </div>
         <div className="col-span-1">
           <SelectGroupOne
-            options={[{ value: "Facebook", label: "Facebook" }]}
-            setSelectedOption={() => {}}
-            placeholder="Facebook"
-            // wrapperClasses="max-w-[146px] lg:max-w-none"
+            options={sourceList || []}
+            setSelectedOption={setSelectedSource}
+            placeholder="Select Source"
+            selectedOption={selectedSource}
+            allowClear
           />
         </div>
         <div className="col-span-1">
           <SelectGroupOne
-            options={[{ value: "Call Back", label: "Call Back" }]}
-            setSelectedOption={() => {}}
-            placeholder="Call Back"
-            // wrapperClasses="max-w-[146px] lg:max-w-none"
+            options={statusList || []}
+            setSelectedOption={setSelectedStatus}
+            placeholder="Select Status"
+            selectedOption={selectedStatus}
+            allowClear
           />
         </div>
         <div className="col-span-1">
           <SelectGroupOne
-            options={[{ value: "riya", label: "Riya" }]}
-            setSelectedOption={() => {}}
-            placeholder="User"
-            // wrapperClasses="max-w-[146px] lg:max-w-none"
+            options={agentList || []}
+            setSelectedOption={setSelectedAgent}
+            placeholder="Select User"
+            selectedOption={selectedAgent}
+            allowClear
           />
         </div>
         <div className="col-span-2 sm:col-span-1">
           <RangePicker
             value={[dayjs(dateRange[0]), dayjs(dateRange[1])]}
             onChange={handleDateRangeChange}
-            className="h-[50px] w-full  dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:max-w-none"
+            className="h-[50px] w-full dark:border-gray-600 dark:bg-gray-700 dark:text-white lg:max-w-none"
           />
         </div>
       </div>
       <div className="mb-2 flex justify-center">
         <ButtonDefault
-          label="Submit"
+          label={isLoading ? "Loading..." : "Submit"}
           customClasses="w-full md:w-auto"
           onClick={handleSubmit}
+          disabled={isLoading}
         />
       </div>
 
       <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         <div className="col-span-1">
-          <SummaryCard title="Total" value={4} />
+          <SummaryCard title="Total" value={reportData?.summary.total || 0} />
         </div>
         <div className="col-span-1">
-          <SummaryCard title="Won" value={0} />
+          <SummaryCard title="Won" value={reportData?.summary.won || 0} />
         </div>
         <div className="col-span-1">
-          <SummaryCard title="Ratio" value="0.00%" />
+          <SummaryCard
+            title="Ratio"
+            value={`${reportData?.summary.ratio || 0}%`}
+          />
         </div>
         <div className="col-span-1">
-          <SummaryCard title="Amount" value={0} />
+          <SummaryCard title="Amount" value={reportData?.summary.amount || 0} />
         </div>
       </div>
 
       <CustomAntdTable
         columns={columns}
-        dataSource={data}
+        dataSource={reportData?.leads || []}
+        loading={isLoading}
         pagination={{
-          total: data.length,
+          total: reportData?.leads?.length || 0,
           showSizeChanger: true,
           showQuickJumper: true,
           showTotal: (total: number, range: any) =>
@@ -191,7 +275,6 @@ const ManageReports: React.FC = () => {
         .dark .ant-picker-cell-selected .ant-picker-cell-inner {
           background-color: #1890ff !important;
         }
-
         .dark .ant-picker-footer,
         .dark .ant-picker-today-btn {
           color: white !important;

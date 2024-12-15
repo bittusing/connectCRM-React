@@ -11,6 +11,8 @@ export interface EndPointType {
   EMPLOYEE_REPORT: string;
   LEADS_DATA: string;
   LEADS_FOLLOWUP_DATA: string;
+  CALL_LIST: string;
+  PRODUCT_SALE_REPORT: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;
