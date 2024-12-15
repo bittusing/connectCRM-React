@@ -70,14 +70,14 @@ const SystemSettingsCard = () => {
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
-      
+
       // API Update
       const response = await updateSystemSettings(formData);
-  
+
       if (response.error) {
         throw new Error(response.error);
       }
-  
+
       // Local Storage Update
       const userStr = localStorage.getItem("user");
       if (userStr) {
@@ -86,12 +86,12 @@ const SystemSettingsCard = () => {
           ...userData,
           company: {
             ...userData.company,
-            settings: formData
-          }
+            settings: formData,
+          },
         };
         localStorage.setItem("user", JSON.stringify(updatedUserData));
       }
-  
+
       toast.success("System settings updated successfully");
       setIsEditing(false);
     } catch (error: any) {
@@ -106,7 +106,9 @@ const SystemSettingsCard = () => {
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
           <FaGlobeAmericas className="text-xl text-primary" />
-          <h2 className="text-xl font-semibold">System Settings</h2>
+          <h2 className="text-xl font-semibold dark:text-white">
+            System Settings
+          </h2>
         </div>
         {isEditing ? (
           <div className="flex gap-2">

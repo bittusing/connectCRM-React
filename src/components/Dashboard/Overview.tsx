@@ -140,7 +140,7 @@ const Overview: React.FC = () => {
         <ChartTwo />
         <DonutCharts />
         <div className="col-span-12 xl:col-span-7">
-          <CalendarBox />
+          <CalendarBox widgetModeOn/>
         </div>
         <div className="col-span-12 xl:col-span-12">
           <EmployeePerformance />

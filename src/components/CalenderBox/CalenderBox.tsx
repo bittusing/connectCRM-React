@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { FiClock, FiUser, FiUserCheck, FiMessageCircle } from "react-icons/fi";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { Link } from "react-router-dom";
+import Heading from "../CommonUI/Heading";
 
 interface CalendarEvent {
   type: BadgeProps["status"];
@@ -74,7 +75,7 @@ const EventModal = ({ listData }: { listData: CalendarEvent[] }) => (
   </div>
 );
 
-const CalendarBox: React.FC = () => {
+const CalendarBox = ({ widgetModeOn = false }: any) => {
   const [value, setValue] = useState(() => dayjs());
   const [selectedValue, setSelectedValue] = useState(() => dayjs());
   const [calendarData, setCalendarData] = useState<CalendarData[]>([]);
@@ -214,6 +215,13 @@ const CalendarBox: React.FC = () => {
   return (
     <>
       <div className="custom-calendar-wrapper bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+        {widgetModeOn ? (
+          <h4 className="text-body-2xlg font-bold text-dark dark:text-white mb-2">
+            Follow Up Calender
+          </h4>
+        ) : (
+          <Heading title="Follow Up Calender" />
+        )}
         <Calendar
           value={value}
           onSelect={onSelect}

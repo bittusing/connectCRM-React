@@ -13,6 +13,7 @@ import {
   getStoredSources,
   getStoredStatus,
 } from "../../api/commonAPI";
+import Heading from "../../components/CommonUI/Heading";
 
 const { RangePicker } = DatePicker;
 
@@ -154,6 +155,7 @@ const ManageReports: React.FC = () => {
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+      <Heading title="CRM Report"/>
       <div className="mb-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
         <div className="col-span-1">
           <SelectGroupOne

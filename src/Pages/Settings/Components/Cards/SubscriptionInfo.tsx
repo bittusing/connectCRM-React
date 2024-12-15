@@ -17,7 +17,7 @@ const SubscriptionCard = () => {
     startDate: "",
     endDate: "",
     status: "inactive",
-    features: []
+    features: [],
   });
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const SubscriptionCard = () => {
           startDate: subscription.startDate || "",
           endDate: subscription.endDate || "",
           status: subscription.status || "inactive",
-          features: subscription.features || []
+          features: subscription.features || [],
         });
       } catch (error) {
         console.error("Error loading subscription data:", error);
@@ -49,7 +49,7 @@ const SubscriptionCard = () => {
       return new Date(dateString).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
-        day: "numeric"
+        day: "numeric",
       });
     } catch (error) {
       return "-";
@@ -60,14 +60,23 @@ const SubscriptionCard = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <FaDollarSign className="text-xl text-primary" />
-        <h2 className="text-xl font-semibold">Subscription Details</h2>
+        <h2 className="text-xl font-semibold dark:text-white">
+          Subscription Details
+        </h2>
       </div>
 
       <InfoItem label="Current Plan" value={subscriptionData.plan} />
-      <InfoItem label="Start Date" value={formatDate(subscriptionData.startDate)} />
+      <InfoItem
+        label="Start Date"
+        value={formatDate(subscriptionData.startDate)}
+      />
       <InfoItem label="End Date" value={formatDate(subscriptionData.endDate)} />
-      <InfoItem label="Status" value={subscriptionData.status} isStatus={true} />
-      
+      <InfoItem
+        label="Status"
+        value={subscriptionData.status}
+        isStatus={true}
+      />
+
       {/* {subscriptionData.features && subscriptionData.features.length > 0 && (
         <div className="mt-4">
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Features</p>

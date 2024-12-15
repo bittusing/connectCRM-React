@@ -150,7 +150,7 @@ const ProfileBox = () => {
               {userData.role}{" "}
               <span className=" text-sm">@{userData.company.name}</span>
             </p>
-            <div className="mx-auto mb-5.5 mt-5 grid max-w-[370px] grid-cols-3 rounded-[5px] border border-stroke py-[9px] shadow-1 dark:border-dark-3 dark:bg-dark-2 dark:shadow-card">
+            {/* <div className="mx-auto mb-5.5 mt-5 grid max-w-[370px] grid-cols-3 rounded-[5px] border border-stroke py-[9px] shadow-1 dark:border-dark-3 dark:bg-dark-2 dark:shadow-card">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-dark-3 xsm:flex-row">
                 <span className="font-medium text-dark dark:text-white">
                   259
@@ -169,38 +169,38 @@ const ProfileBox = () => {
                 </span>
                 <span className="text-body-sm-sm">Following</span>
               </div>
-            </div>
+            </div> */}
 
-            <div className="mx-auto max-w-[720px]">
+            <div className="mx-auto mt-6 max-w-[720px]">
               <h4 className="font-medium text-dark dark:text-white">
                 About Me
               </h4>
-              <p className="mt-4">{userData.bio}</p>
+              <p className="mt-1">{userData.bio}</p>
             </div>
             <div className="flex justify-center gap-6 mt-6">
               <div>
-                <h4 className="mb-3 font-medium text-dark dark:text-white">
+                <h4 className="mb-1 font-medium text-dark dark:text-white">
                   Contact Information
                 </h4>
-                <div className="space-y-2 text-gray-600 dark:text-gray-400">
+                <div className="space-y-1 text-gray-600 dark:text-gray-400">
                   <p>{userData.email}</p>
                   <p>{userData.phone}</p>
                 </div>
               </div>
               <div>
-                <h4 className="mb-3 font-medium text-dark dark:text-white">
+                <h4 className="mb-1 font-medium text-dark dark:text-white">
                   Company Details
                 </h4>
-                <div className="space-y-2 text-gray-600 dark:text-gray-400">
+                <div className="space-y-1 text-gray-600 dark:text-gray-400">
                   <p>{userData?.company?.name}</p>
                   <p>{userData.companyCode}</p>
                 </div>
               </div>
               <div>
-                <h4 className="mb-3 font-medium text-dark dark:text-white">
+                <h4 className="mb-1 font-medium text-dark dark:text-white">
                   Subscription Details
                 </h4>
-                <div className="space-y-2 text-gray-600 dark:text-gray-400">
+                <div className="space-y-1 text-gray-600 dark:text-gray-400">
                   <p>Plan Name: {userData.company?.subscription?.plan}</p>
                   <p>Expires: {formatDate(userData.company?.subscription?.endDate)}</p>
                 </div>

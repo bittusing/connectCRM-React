@@ -28,7 +28,7 @@ const SelectGroupOne = ({
   return (
     <div className={`relative ${wrapperClasses}`}>
       {label && (
-        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-200">
+        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}

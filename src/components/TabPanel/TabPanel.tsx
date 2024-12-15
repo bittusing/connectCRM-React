@@ -2,8 +2,9 @@ import { Tabs } from "antd";
 const { TabPane } = Tabs;
 
 interface TabComponent {
-  tabName: string;
+  tabName: any;
   component: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 interface TabsInterface {
@@ -11,7 +12,10 @@ interface TabsInterface {
   type?: "line" | "card" | "editable-card";
   customClassName?: string;
   tabPosition?: "top" | "right" | "bottom" | "left";
-  defaultActiveKey: string;
+  defaultActiveKey?: string;
+  onChangeHandler?: any;
+  size?: "small" | "middle" | "large";
+  centered?: boolean;
 }
 
 export default function TabPanel({
@@ -20,17 +24,23 @@ export default function TabPanel({
   defaultActiveKey = "1",
   customClassName = "",
   tabPosition = "top",
+  size = "small",
+  centered = false,
+  onChangeHandler = () => {},
 }: TabsInterface) {
   return (
     <>
       <Tabs
         defaultActiveKey={defaultActiveKey}
         className={customClassName}
+        size={size}
         type={type}
         tabPosition={tabPosition}
+        onChange={onChangeHandler}
+        centered={centered}
       >
         {tabsData?.map((item: any, index: number) => (
-          <TabPane tab={item.tabName} key={index + 1}>
+          <TabPane tab={item.tabName} icon={item.icon} key={index + 1}>
             {item.component}
           </TabPane>
         ))}
@@ -73,6 +83,11 @@ export default function TabPanel({
         // .ant-tabs-bottom > div > .ant-tabs-nav::before {
         //   border-bottom: 1px solid grey;
         // }
+
+        .ant-tabs .ant-tabs-tab-btn{
+          display: flex;
+          align-items: center;
+        }
       `}</style>
     </>
   );
