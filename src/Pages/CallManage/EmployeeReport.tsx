@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import CallDetails from "./components/CallDetails";
 import AnalysisReport from "./components/AnalysisReport";
@@ -11,6 +11,16 @@ import { API } from "../../api";
 import { END_POINT } from "../../api/UrlProvider";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+
+interface CallListResponse {
+  calls: any[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+  };
+}
 
 interface CallReport {
   summary: {
@@ -27,12 +37,6 @@ interface CallReport {
       workingHours: string;
     };
   };
-  graphdata: Array<{
-    key: number;
-    value: number;
-    svg: { fill: string };
-    title: string;
-  }>;
   analysis: {
     mobileCallAnalysis: {
       topCaller: {
@@ -54,24 +58,6 @@ interface CallReport {
       totalDays: number;
     };
   };
-  employeeList: Array<{
-    employeeId: string;
-    userId: string;
-    user: string;
-    email: string;
-    phone: string;
-    role: string;
-    highestCalls: number;
-    totalDuration: string;
-    averageCallDuration: string;
-    callDetails: {
-      incoming: number;
-      outgoing: number;
-      missed: number;
-      rejected: number;
-      unknown: number;
-    };
-  }>;
 }
 
 const fromDateInitial = new Date(
@@ -84,41 +70,88 @@ const EmployeeReport: React.FC = () => {
     value: string;
     label: string;
   } | null>(null);
-  const [fromDate, setFromDate] = useState(fromDateInitial?.toISOString());
-  const [toDate, setToDate] = useState(new Date()?.toISOString());
+  const [fromDate, setFromDate] = useState(fromDateInitial);
+  const [toDate, setToDate] = useState(new Date());
   const [reportData, setReportData] = useState<CallReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [callListData, setCallListData] = useState<any[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [callListLoading, setCallListLoading] = useState(false);
+  const [activeEmployee, setActiveEmployee] = useState<{
+    value: string;
+    label: string;
+  } | null>({ value: "", label: "" });
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
 
   const employeeList = useMemo(() => getStoredAgents() || [], []);
 
-  useEffect(() => {
-    if (!employeeList.length) return;
-    const obj = employeeList.map((item) => ({
-      value: item._id,
-      label: item.name,
-    }));
-    setEmployee(obj);
-    setSelectedEmployee(obj[0]);
-    fetchReportData(true, obj[0].value);
-  }, [employeeList]);
+  const fetchCallList = useCallback(
+    async (
+      page: number,
+      pageSize: number,
+      search: string,
+      userId: string,
+      startDate: Date,
+      endDate: Date
+    ) => {
+      if (!userId) return;
+
+      try {
+        setCallListLoading(true);
+        const payload = {
+          userId,
+          startDate: dayjs(startDate).format("YYYY-MM-DD"),
+          endDate: dayjs(endDate).format("YYYY-MM-DD"),
+        };
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: pageSize.toString(),
+          ...(search && { search }),
+        });
+
+        const { data, error } = await API.postAuthAPI<CallListResponse>(
+          payload,
+          `${END_POINT.CALL_LIST}?${params.toString()}`,
+          true
+        );
+
+        if (error) throw new Error(error);
+        if (data) {
+          setCallListData(data.calls);
+          setPagination({
+            current: data.pagination.page,
+            pageSize: data.pagination.limit,
+            total: data.pagination.total,
+          });
+        }
+      } catch (error: any) {
+        console.error(error.message || "Failed to fetch call list");
+      } finally {
+        setCallListLoading(false);
+      }
+    },
+    []
+  );
 
   const fetchReportData = async (
     initialRender = false,
-    initialEmployee = 0
+    initialEmployee: { value: string; label: string }
   ) => {
     try {
       setIsLoading(true);
-      const payload = initialRender
-        ? {
-            userId: initialEmployee,
-            startDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-            endDate: new Date(),
-          }
-        : {
-            userId: selectedEmployee?.value,
-            startDate: fromDate,
-            endDate: toDate,
-          };
+      const currentUser = initialRender ? initialEmployee : selectedEmployee;
+
+      setActiveEmployee(currentUser);
+
+      const payload = {
+        userId: currentUser?.value,
+        startDate: dayjs(fromDate).format("YYYY-MM-DD"),
+        endDate: dayjs(toDate).format("YYYY-MM-DD"),
+      };
 
       const { data, error } = await API.postAuthAPI(
         payload,
@@ -129,24 +162,47 @@ const EmployeeReport: React.FC = () => {
       if (error) throw new Error(error);
 
       setReportData(data);
+
+      // Fetch call list with same parameters
+      if (currentUser?.value) {
+        fetchCallList(
+          1,
+          pagination.pageSize,
+          searchText,
+          currentUser?.value,
+          fromDate,
+          toDate
+        );
+      }
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch report data");
+      console.error(error.message || "Failed to fetch report data");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleEmployeeChange = (value: string) => {
-    const obj: any[] = employee.filter((item) => item.value === value);
+  useEffect(() => {
+    if (!employeeList.length) return;
+    const obj = employeeList.map((item) => ({
+      value: item._id,
+      label: item.name,
+    }));
+    setEmployee(obj);
     setSelectedEmployee(obj[0]);
+    fetchReportData(true, obj[0]);
+  }, [employeeList]);
+
+  const handleEmployeeChange = (value: string) => {
+    const obj = employee.find((item) => item.value === value);
+    setSelectedEmployee(obj || null);
   };
 
   const handleFromDateChange = (_selectedDates: Date[], dateStr: string) => {
-    setFromDate(dateStr);
+    setFromDate(new Date(dateStr));
   };
 
   const handleToDateChange = (_selectedDates: Date[], dateStr: string) => {
-    setToDate(dateStr);
+    setToDate(new Date(dateStr));
   };
 
   const handleApply = () => {
@@ -154,32 +210,89 @@ const EmployeeReport: React.FC = () => {
       toast.error("Please select an employee");
       return;
     }
-    fetchReportData();
+    fetchReportData(false, { value: "", label: "" });
   };
 
-  const tabsData = [
-    {
-      tabName: "Summary",
-      component: <Summary data={reportData?.summary} isLoading={isLoading} />,
+  const handleSearch = useCallback(
+    (value: string) => {
+      setSearchText(value);
+      if (selectedEmployee) {
+        fetchCallList(
+          1,
+          pagination.pageSize,
+          value,
+          selectedEmployee.value,
+          fromDate,
+          toDate
+        );
+      }
     },
-    {
-      tabName: "Analysis",
-      component: (
-        <AnalysisReport data={reportData?.analysis} isLoading={isLoading} />
-      ),
+    [selectedEmployee, fromDate, toDate, pagination.pageSize, fetchCallList]
+  );
+
+  const handleTableChange = useCallback(
+    (newPagination: any, pageSize: any) => {
+      if (selectedEmployee) {
+        fetchCallList(
+          newPagination,
+          pageSize,
+          searchText,
+          selectedEmployee.value,
+          fromDate,
+          toDate
+        );
+      }
     },
-    {
-      tabName: "Call Details",
-      component: <CallDetails />,
-    },
-  ];
+    [selectedEmployee, searchText, fromDate, toDate, fetchCallList]
+  );
+
+  const memoizedCallDetails = useMemo(
+    () => (
+      <CallDetails
+        data={callListData}
+        loading={callListLoading}
+        onSearch={handleSearch}
+        pagination={pagination}
+        onTableChange={handleTableChange}
+        searchText={searchText}
+      />
+    ),
+    [
+      callListData,
+      callListLoading,
+      handleSearch,
+      pagination,
+      handleTableChange,
+      searchText,
+    ]
+  );
+
+  const tabsData = useMemo(
+    () => [
+      {
+        tabName: "Summary",
+        component: <Summary data={reportData?.summary} isLoading={isLoading} />,
+      },
+      {
+        tabName: "Analysis",
+        component: (
+          <AnalysisReport data={reportData?.analysis} isLoading={isLoading} />
+        ),
+      },
+      {
+        tabName: "Call Details",
+        component: memoizedCallDetails,
+      },
+    ],
+    [reportData, isLoading, memoizedCallDetails]
+  );
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
       <h2 className="text-xl text-center font-semibold text-dark dark:text-white sm:text-2xl">
-        {selectedEmployee?.label}'s Report
+        {activeEmployee?.label ? `${activeEmployee?.label}'s Report` : "Report"}
       </h2>
-      <hr className="my-4"/>
+      <hr className="my-4" />
       <div className="mb-6 flex flex-wrap items-end gap-4">
         <div className="w-full lg:w-1/4">
           <SelectGroupOne
@@ -194,14 +307,14 @@ const EmployeeReport: React.FC = () => {
           <DateTimePicker
             label="From Date"
             onChange={handleFromDateChange}
-            defaultValue={fromDate}
+            defaultValue={fromDate.toISOString()}
           />
         </div>
         <div className="w-full lg:w-1/4">
           <DateTimePicker
             label="To Date"
             onChange={handleToDateChange}
-            defaultValue={toDate}
+            defaultValue={toDate.toISOString()}
           />
         </div>
         <ButtonDefault

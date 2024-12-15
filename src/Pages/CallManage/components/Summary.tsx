@@ -94,6 +94,13 @@ export default function Summary({ data, isLoading }: SummaryProps) {
     },
     dataLabels: {
       enabled: true,
+      // distributed:true,
+      style: {
+        // fontSize: "14px",
+        // fontFamily?: string
+        // fontWeight?: string | number
+        // colors: ["#ffffff","#ffffff","#ffffff","#ffffff","#ffffff"],
+      },
       formatter: (val: number) => val.toFixed(0) + "%",
     },
     responsive: [

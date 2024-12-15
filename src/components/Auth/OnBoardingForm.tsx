@@ -2,7 +2,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import InputGroup from "../FormElements/InputGroup";
 import SelectGroupOne from "../FormElements/SelectGroup/SelectGroupOne";
-import { getIndustriesByCategory, getIndustryCategories } from "../../utils/Constants/UsefullJSON";
+import {
+  getIndustriesByCategory,
+  getIndustryCategories,
+} from "../../utils/Constants/UsefullJSON";
 
 // Common timezones array
 const timezones = [
@@ -105,6 +108,7 @@ export default function OnBoardingForm({
   const categories = getIndustryCategories();
   const groupedOptions = categories.map((category) => ({
     label: category,
+    value: category,
     options: getIndustriesByCategory(category).map((industry) => ({
       value: industry.value,
       label: industry.label,
