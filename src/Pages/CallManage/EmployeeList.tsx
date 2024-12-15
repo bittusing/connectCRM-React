@@ -7,6 +7,7 @@ import { END_POINT } from "../../api/UrlProvider";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
+import Heading from "../../components/CommonUI/Heading";
 
 interface EmployeeData {
   key: string;
@@ -153,6 +154,8 @@ const EmployeeList: React.FC = () => {
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+      <Heading title="Employee List" />
+
       <div className="mb-6 flex flex-col gap-4 items-center justify-between sm:flex-row">
         <div className="flex flex-col w-full items-center gap-4 sm:flex-row">
           <div className="w-full lg:w-1/4">

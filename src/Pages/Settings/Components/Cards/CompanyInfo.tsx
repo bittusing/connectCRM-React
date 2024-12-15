@@ -103,7 +103,9 @@ const CompanyInfoCard = () => {
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
           <FaBuilding className="text-xl text-primary" />
-          <h2 className="text-xl font-semibold">Company Information</h2>
+          <h2 className="text-xl font-semibold dark:text-white">
+            Company Information
+          </h2>
         </div>
         {isEditing ? (
           <div className="flex gap-2">

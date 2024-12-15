@@ -4,6 +4,8 @@ import SettingBoxes from "../components/SettingBoxes";
 import ApiIntegeration from "../Pages/ApiIntegeration/ApiIntegeration";
 import EmployeeList from "../Pages/CallManage/EmployeeList";
 import EmployeeReport from "../Pages/CallManage/EmployeeReport";
+import ContactList from "../Pages/ContactsUpload/ContactList";
+import ContactUpload from "../Pages/ContactsUpload/ContactUpload";
 import AddLeads from "../Pages/Leads/AddLeads";
 import AllLeads from "../Pages/Leads/AllLeads";
 import FollowupLeads from "../Pages/Leads/FollowupLeads";
@@ -15,6 +17,10 @@ import ProductAndServiceDash from "../Pages/ProductAndServices/ProductAndService
 import CallReport from "../Pages/Reports/CallReport";
 import ManageReports from "../Pages/Reports/ManageReports";
 import Settings from "../Pages/Settings/Settings";
+import SMSCompose from "../Pages/SMS/SMSCompose";
+import SMSReport from "../Pages/SMS/SMSReport";
+import WhatsAppCompose from "../Pages/WhatsAppPanel/WhatsAppCompose";
+import WhatsAppReport from "../Pages/WhatsAppPanel/WhatsAppReport";
 
 const navRoutes = [
   {
@@ -84,6 +90,30 @@ const navRoutes = [
   {
     path: "profile",
     component: ProfileBox,
+  },
+  {
+    path: "/sms/compose",
+    component: SMSCompose,
+  },
+  {
+    path: "/sms/report",
+    component: SMSReport,
+  },
+  {
+    path: "/whatsapp/compose",
+    component: WhatsAppCompose,
+  },
+  {
+    path: "/whatsapp/report",
+    component: WhatsAppReport,
+  },
+  {
+    path: "/Upload-contacts",
+    component: ContactUpload,
+  },
+  {
+    path: "/Upload-contacts/:id",
+    component: ContactList,
   },
 ];
 

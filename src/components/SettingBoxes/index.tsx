@@ -88,6 +88,8 @@ const SettingBoxes = () => {
                         id="phoneNumber"
                         placeholder="+990 3343 7865"
                         defaultValue="+990 3343 7865"
+                        readOnly
+                        disabled
                       />
                     </div>
                   </div>
@@ -125,11 +127,13 @@ const SettingBoxes = () => {
                       id="emailAddress"
                       placeholder="devidjond45@gmail.com"
                       defaultValue="devidjond45@gmail.com"
+                      readOnly
+                      disabled
                     />
                   </div>
                 </div>
 
-                <div className="mb-5.5">
+                {/* <div className="mb-5.5">
                   <label
                     className="mb-3 block text-body-sm font-medium text-dark dark:text-white"
                     htmlFor="Username"
@@ -169,7 +173,7 @@ const SettingBoxes = () => {
                       defaultValue="devidjhon24"
                     />
                   </div>
-                </div>
+                </div> */}
 
                 <div className="mb-5.5">
                   <label
@@ -210,15 +214,13 @@ const SettingBoxes = () => {
                 </div>
 
                 <div className="flex justify-end gap-3">
-                  <button
-                    className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
-                    type="submit"
-                  >
+                  <button className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white">
                     Cancel
                   </button>
                   <button
                     className="flex justify-center rounded-[7px] bg-primary px-6 py-[7px] font-medium text-gray-2 hover:bg-opacity-90"
                     type="submit"
+                    disabled
                   >
                     Save
                   </button>
@@ -304,15 +306,13 @@ const SettingBoxes = () => {
                 </div>
 
                 <div className="flex justify-end gap-3">
-                  <button
-                    className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white"
-                    type="submit"
-                  >
+                  <button className="flex justify-center rounded-[7px] border border-stroke px-6 py-[7px] font-medium text-dark hover:shadow-1 dark:border-dark-3 dark:text-white">
                     Cancel
                   </button>
                   <button
                     className="flex items-center justify-center rounded-[7px] bg-primary px-6 py-[7px] font-medium text-gray-2 hover:bg-opacity-90"
                     type="submit"
+                    disabled
                   >
                     Save
                   </button>

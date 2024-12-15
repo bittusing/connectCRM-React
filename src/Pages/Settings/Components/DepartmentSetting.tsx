@@ -9,6 +9,7 @@ import InputGroup from "../../../components/FormElements/InputGroup";
 import { postAuthAPI } from "../../../api";
 import { END_POINT } from "../../../api/UrlProvider";
 import SwitcherTwo from "../../../components/FormElements/Switchers/SwitcherTwo";
+import Heading from "../../../components/CommonUI/Heading";
 
 interface User {
   key: string;
@@ -240,6 +241,8 @@ export default function DepartmentSetting() {
 
   return (
     <div className="w-full">
+      <Heading title="Manage Your Department" />
+
       <div className="mb-4 grid grid-cols-4 gap-4">
         <InputGroup
           label=""

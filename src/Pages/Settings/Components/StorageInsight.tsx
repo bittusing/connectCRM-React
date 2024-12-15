@@ -6,6 +6,7 @@ import SelectGroupOne from "../../../components/FormElements/SelectGroup/SelectG
 import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
 import DonutSlickDesign from "../../../components/Charts/DonutSlickDesign";
 import ButtonDefault from "../../../components/Buttons/ButtonDefault";
+import Heading from "../../../components/CommonUI/Heading";
 
 const StorageInsights = () => {
   const data = [
@@ -117,6 +118,7 @@ const StorageInsights = () => {
 
   return (
     <div className="mx-auto">
+      {/* <Heading title="Manage Storage" alignCenter /> */}
       <div className="-mt-6 mb-3 flex flex-col items-center gap-3 sm:flex-row sm:gap-0">
         {/* Storage Graph and Button Container */}
         <div className="flex w-full flex-col items-center justify-center">

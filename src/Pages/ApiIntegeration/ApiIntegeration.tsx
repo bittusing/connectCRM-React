@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CopyOutlined } from "@ant-design/icons";
 import TextAreaCustom from "../../components/FormElements/TextArea/TextAreaCustom";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
+import Heading from "../../components/CommonUI/Heading";
 
 export default function ApiIntegeration() {
   const [apiService, setApiService] = useState("housing");
@@ -11,7 +12,9 @@ export default function ApiIntegeration() {
     setApiService(value);
   };
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+    <div className="flex w-full flex-col items-start justify-center gap-3 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+      <Heading title="Integerate Lead Outsourcing Partner" />
+
       <div className="flex flex-col items-center gap-3 w-full sm:w-auto sm:flex-row ">
         <span className="sm:w-[347px] w-auto text-base font-semibold text-dark dark:text-white">
           Choose your API Service:
@@ -27,7 +30,9 @@ export default function ApiIntegeration() {
       </div>
       <div className="relative w-full">
         <CopyOutlined
-          className={`absolute right-[14px] top-[18px] ${curl ? "cursor-pointer" : "cursor-not-allowed opacity-50"}`}
+          className={`absolute right-[14px] top-[18px] ${
+            curl ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+          }`}
         />
         <TextAreaCustom
           rows={12}

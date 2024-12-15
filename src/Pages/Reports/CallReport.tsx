@@ -8,6 +8,7 @@ import { END_POINT } from "../../api/UrlProvider";
 import { toast } from "react-toastify";
 import { getStoredAgents } from "../../api/commonAPI";
 import dayjs from "dayjs";
+import Heading from "../../components/CommonUI/Heading";
 
 interface CallListResponse {
   calls: any[];
@@ -219,6 +220,7 @@ export default function CallReport() {
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+      <Heading title="Call Report" />
       <div className="mb-6 flex flex-wrap items-end gap-4">
         <div className="w-full lg:w-1/4">
           <SelectGroupOne
