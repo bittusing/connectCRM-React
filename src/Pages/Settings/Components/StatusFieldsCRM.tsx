@@ -114,7 +114,7 @@ export default function StatusFieldsCRM() {
 
       await fetchStatusFields();
     } catch (error: any) {
-      toast.error(error.message || "Failed to update status");
+      console.error(error.message || "Failed to update status");
     }
   };
 

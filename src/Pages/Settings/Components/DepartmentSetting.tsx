@@ -1,15 +1,26 @@
-import React, { useState } from "react";
-import { Button, Input, Switch } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import CustomAntdTable from "../../../components/Tables/CustomAntdTable";
 import ButtonDefault from "../../../components/Buttons/ButtonDefault";
 import SelectGroupOne from "../../../components/FormElements/SelectGroup/SelectGroupOne";
 import InputGroup from "../../../components/FormElements/InputGroup";
-import { postAuthAPI } from "../../../api";
+import { API } from "../../../api";
 import { END_POINT } from "../../../api/UrlProvider";
 import SwitcherTwo from "../../../components/FormElements/Switchers/SwitcherTwo";
 import Heading from "../../../components/CommonUI/Heading";
+
+interface ApiUser {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  phone: string;
+  isActive: boolean;
+  deleted: boolean;
+  createdAt: string;
+}
 
 interface User {
   key: string;
@@ -19,6 +30,7 @@ interface User {
   mobile: string;
   roll: string;
   assignTeamLeader: string;
+  isActive: boolean;
 }
 
 interface FormData {
@@ -32,6 +44,9 @@ interface FormData {
 
 export default function DepartmentSetting() {
   const [isLoading, setIsLoading] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
+  const [tableData, setTableData] = useState<User[]>([]);
+
   const [formData, setFormData] = useState<FormData>({
     userName: "",
     email: "",
@@ -40,6 +55,39 @@ export default function DepartmentSetting() {
     isActive: "active",
     userType: "",
   });
+
+  const fetchUsers = async () => {
+    try {
+      setTableLoading(true);
+      const { data, error } = await API.getAuthAPI(END_POINT.USERS, true);
+
+      if (error) throw new Error(error);
+
+      if (data) {
+        const transformedData: User[] = data.map(
+          (user: ApiUser, index: number) => ({
+            key: user._id,
+            sNo: index + 1,
+            userName: user.name,
+            email: user.email,
+            mobile: user.phone,
+            roll: user.role,
+            assignTeamLeader: "",
+            isActive: user.isActive,
+          })
+        );
+        setTableData(transformedData);
+      }
+    } catch (error: any) {
+      console.error(error.message || "Failed to fetch users");
+    } finally {
+      setTableLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const validateForm = () => {
     if (!formData.userName.trim()) {
@@ -85,7 +133,7 @@ export default function DepartmentSetting() {
 
     try {
       setIsLoading(true);
-      // Format the payload according to the API requirements
+
       const payload = {
         name: formData.userName,
         email: formData.email,
@@ -94,15 +142,13 @@ export default function DepartmentSetting() {
         role: formData.userType,
       };
 
-      const { data, error } = await postAuthAPI(
+      const { data, error } = await API.postAuthAPI(
         payload,
         END_POINT.USER_REGISTER,
         true
       );
 
       if (error && !data) throw Error(error);
-
-      console.log({ data });
 
       toast.success("User registered successfully!");
 
@@ -116,12 +162,32 @@ export default function DepartmentSetting() {
         userType: "",
       });
 
-      // Refresh table data here if needed
-      // fetchUsers(); TODO
+      // Refresh users list
+      fetchUsers();
     } catch (error: any) {
-      toast.error(error.message || "Failed to register user");
+      console.error(error.message || "Failed to register user");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (id: string, status: boolean) => {
+    try {
+      const { error } = await API.updateAuthAPI(
+        { isActive: status },
+        id,
+        END_POINT.USERS,
+        true
+      );
+
+      if (error) throw new Error(error);
+
+      toast.success(
+        `User ${status ? "activated" : "deactivated"} successfully`
+      );
+      fetchUsers();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update user status");
     }
   };
 
@@ -149,7 +215,7 @@ export default function DepartmentSetting() {
       key: "mobile",
     },
     {
-      title: "Roll",
+      title: "Role",
       dataIndex: "roll",
       key: "roll",
     },
@@ -162,15 +228,13 @@ export default function DepartmentSetting() {
       title: "Action",
       dataIndex: "key",
       key: "action",
-      render: (key: string) => (
-        <div className="flex justify-start items-center gap-2 ">
-          {/* <Button
-            icon={<DeleteOutlined />}
-            className="mr-2 bg-red-500 text-white"
-            onClick={() => handleDelete(key)}
-          /> */}
-          {/* <Switch defaultChecked /> */}
-          <SwitcherTwo id={key} />
+      render: (key: string, record: User) => (
+        <div className="flex justify-start items-center gap-2">
+          <SwitcherTwo
+            id={key}
+            defaultChecked={record.isActive}
+            onChange={(checked: boolean) => handleStatusChange(key, checked)}
+          />
           <Button
             icon={<EditOutlined />}
             className="bg-primary text-white"
@@ -180,59 +244,6 @@ export default function DepartmentSetting() {
       ),
     },
   ];
-
-  const data: User[] = [
-    {
-      key: "1",
-      sNo: 1,
-      userName: "Admin",
-      email: "admin@gmail.com",
-      mobile: "9565465665",
-      roll: "admin",
-      assignTeamLeader: "",
-    },
-    {
-      key: "2",
-      sNo: 2,
-      userName: "juhi",
-      email: "juhi@gmail.com",
-      mobile: "1232131321",
-      roll: "TeamLeader",
-      assignTeamLeader: "chirag",
-    },
-    {
-      key: "3",
-      sNo: 3,
-      userName: "riya",
-      email: "riya@gmail.com",
-      mobile: "2342342342",
-      roll: "user",
-      assignTeamLeader: "juhi",
-    },
-    {
-      key: "4",
-      sNo: 4,
-      userName: "chirag",
-      email: "chirag@gmail.com",
-      mobile: "1111111111",
-      roll: "GroupLeader",
-      assignTeamLeader: "juhi",
-    },
-    {
-      key: "5",
-      sNo: 5,
-      userName: "Anu",
-      email: "anu@gmail.com",
-      mobile: "2423423423",
-      roll: "TeamLeader",
-      assignTeamLeader: "chirag",
-    },
-  ];
-
-  const handleDelete = (key: string) => {
-    console.log("Delete user with key:", key);
-    // Implement delete logic
-  };
 
   const handleEdit = (key: string) => {
     console.log("Edit user with key:", key);
@@ -306,9 +317,14 @@ export default function DepartmentSetting() {
 
       <CustomAntdTable
         columns={columns}
-        dataSource={data}
-        pagination={false}
+        dataSource={tableData}
+        pagination={{
+          pageSize: 10,
+          showSizeChanger: true,
+          showQuickJumper: true,
+        }}
         className="w-full"
+        loading={tableLoading}
       />
     </div>
   );

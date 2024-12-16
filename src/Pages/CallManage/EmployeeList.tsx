@@ -122,7 +122,7 @@ const EmployeeList: React.FC = () => {
         setData(transformedData);
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch employee data");
+      console.error(error.message || "Failed to fetch employee data");
     } finally {
       setIsLoading(false);
     }

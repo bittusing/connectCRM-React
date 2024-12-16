@@ -46,7 +46,7 @@ const isWithinNext24Hours = (date: Date): boolean => {
 
 const isWithinPast24Hours = (date: Date): boolean => {
   const now = new Date();
-  const past = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const past = new Date(now.getTime() - 48 * 60 * 60 * 1000);
   return date < now && date >= past;
 };
 
@@ -76,8 +76,6 @@ const FollowupLeads = () => {
     pageSize: 10,
     total: 0,
   });
-
-  console.log({ selectedLead });
 
   const transformLeadData = (apiLeads: APILead[]): Lead[] => {
     return apiLeads.map((lead) => ({

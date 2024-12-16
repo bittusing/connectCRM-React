@@ -11,6 +11,7 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import UniversalLoader from "./components/CommonUI/Loader";
 import { useEffect, useState } from "react";
+import ForgotPassword from "./Pages/ForgotPassword/ForgotPassword";
 
 export default function App() {
   const [loaderTime, setLoaderTime] = useState(true);
@@ -54,9 +55,6 @@ export default function App() {
           {/* Define your routes here */}
           <Route
             path="/"
-            // element={
-            //     <Dashboard />
-            // }
             element={
               <PrivateRoute>
                 <Dashboard />
@@ -75,7 +73,7 @@ export default function App() {
           <Route path="/login" element={<Signin />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound text={"Not found 404"} />} />
-          {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           {/* <Route path="/reset-password" element={<ResetPassword />} />   */}
         </Routes>
       </Router>
