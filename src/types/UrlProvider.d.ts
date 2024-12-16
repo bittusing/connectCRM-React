@@ -14,6 +14,7 @@ export interface EndPointType {
   CALL_LIST: string;
   PRODUCT_SALE_REPORT: string;
   CALENDAR: string;
+  USERS: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;

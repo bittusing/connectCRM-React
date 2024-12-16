@@ -63,7 +63,7 @@ export default function AdditionalLeadDetails({ onDetailsChange, initialData = {
 
       setStateOptions(states);
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch states");
+      console.error(error.message || "Failed to fetch states");
       setStateOptions([]);
     } finally {
       setIsLoadingStates(false);

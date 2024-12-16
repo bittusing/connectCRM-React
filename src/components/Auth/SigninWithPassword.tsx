@@ -137,7 +137,7 @@ const SigninWithPassword = () => {
         </label>
 
         <Link
-          to="/auth/forgot-password"
+          to="/forgot-password"
           className="select-none font-satoshi text-base font-medium text-dark underline duration-300 hover:text-primary dark:text-white dark:hover:text-primary"
         >
           Forgot Password?

@@ -84,7 +84,7 @@ const ProductAndServiceDash = () => {
         setData(transformedData);
       }
     } catch (error: any) {
-      toast.error(error.message || "Failed to fetch product services");
+      console.error(error.message || "Failed to fetch product services");
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +158,7 @@ const ProductAndServiceDash = () => {
       toast.success("Product service deleted successfully!");
       fetchProductServices(); // Refresh the list
     } catch (error: any) {
-      toast.error(error.message || "Failed to delete product service");
+      console.error(error.message || "Failed to delete product service");
     }
   };
 
