@@ -1,11 +1,12 @@
 "use client";
 import GeneralSetting from "./Components/GeneralSetting";
 import DepartmentSetting from "./Components/DepartmentSetting";
-import SubscriptionInfo from "./Components/SubscriptionInfo";
+// import SubscriptionInfo from "./Components/SubscriptionInfo";
 import useScreenHook from "../../hooks/useScreenHook";
 import CRMFields from "./Components/CRMFields";
 import StorageInsights from "./Components/StorageInsight";
 import TabPanel from "../../components/TabPanel/TabPanel";
+import RolePermissions from "./Components/RolePermission";
 
 const Settings: React.FC = () => {
   const tabsData = [
@@ -14,8 +15,9 @@ const Settings: React.FC = () => {
       component: <GeneralSetting />,
     },
     { tabName: "Department", component: <DepartmentSetting /> },
-    { tabName: "CRM Field", component:<CRMFields/>},
+    { tabName: "CRM Field", component: <CRMFields /> },
     // { tabName: "Subscription", component: <SubscriptionInfo /> },
+    { tabName: "Permission Settings", component: <RolePermissions /> },
     { tabName: "Storage Insights", component: <StorageInsights /> },
   ];
 

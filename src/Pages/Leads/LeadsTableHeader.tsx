@@ -5,33 +5,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import AdvanceFilterUI from "../Components/AdvanceFilterUI";
 import useScreenHook from "../../hooks/useScreenHook";
 import SearchForm from "../../components/Header/SearchForm";
+import { getStoredAgents, getStoredStatus } from "../../api/commonAPI";
 
-const selectOptionsData = {
-  agents: {
-    label: "Assign to agents",
-    options: [
-      { label: "Shashank", value: 8948492799 },
-      { label: "Kiran", value: 9321220039 },
-      { label: "Abhilekh", value: 33098938928 },
-    ],
-  },
-  status: {
-    label: "Lead status",
-    options: [
-      { value: "Call Back", label: "Call Back" },
-      { value: "Call Back-Re-visit", label: "Call Back-Re-visit" },
-      { value: "Call Back-Schedule-visit", label: "Call Back-Schedule-visit" },
-      { value: "Call Back-Visit", label: "Call Back-Visit" },
-      { value: "Fake lead", label: "Fake lead" },
-      { value: "Lost", label: "Lost" },
-      { value: "Meeting", label: "Meeting" },
-      { value: "Not Attempt", label: "Not Attempt" },
-      { value: "Pending", label: "Pending" },
-      { value: "SMS & Whatsapp Shoots", label: "SMS & Whatsapp Shoots" },
-      { value: "Won", label: "Won" },
-    ],
-  },
-};
+const statusList = getStoredStatus(true);
+const agentList = getStoredAgents(true);
 
 export default function LeadsTableHeader({ handleSearch, searchTerm }: any) {
   const [formData, setFormData] = useState({
@@ -104,20 +81,24 @@ export default function LeadsTableHeader({ handleSearch, searchTerm }: any) {
   return (
     <>
       <div className="mb-4 hidden justify-between sm:flex">
-        <div className="hidden flex-col items-center justify-center gap-3 rounded-md border border-stroke bg-white px-6.5 py-2 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:flex">
+        <div className="hidden flex-col items-center justify-center gap-3 rounded-md border border-stroke bg-white p-3 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:flex min-w-[530px]">
           <span className="text-base font-medium text-dark dark:text-white">
             Bulk Action on selected rows
           </span>
-          <div className="flex space-x-2">
+          <div className="flex gap-2 w-full">
             <SelectGroupOne
-              options={selectOptionsData["status"].options}
+              options={statusList}
+              placeholder="Select Status"
               setSelectedOption={(value) => handleSelectChange("status", value)}
+              wrapperClasses="w-full"
             />
             <SelectGroupOne
-              options={selectOptionsData["agents"].options}
+              options={agentList}
+              placeholder="Select Employee"
               setSelectedOption={(value) => handleSelectChange("agents", value)}
+              wrapperClasses="w-full"
             />
-            <ButtonDefault label="Submit" variant="primary" fullWidth />
+            <ButtonDefault label="Submit" variant="primary" />
           </div>
         </div>
         <div className="hidden flex-col gap-2 sm:flex">
