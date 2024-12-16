@@ -20,7 +20,7 @@ export default function Heading({
       } dark:text-white sm:text-2xl ${marginBottom}`}
     >
       {title}
-      {baseLine && <hr className={baselineClassName} />}
+      {baseLine && <hr className={baselineClassName + "mt-1"} />}
     </h2>
   );
 }

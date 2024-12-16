@@ -17,7 +17,7 @@ interface SidebarProps {
   setSidebarOpen: (arg: boolean) => void;
 }
 
-const menuGroups = [
+export const menuGroups = [
   {
     name: "MAIN MENU",
     menuItems: [
