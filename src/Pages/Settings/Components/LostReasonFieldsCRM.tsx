@@ -128,6 +128,26 @@ export default function LostReasonFieldsCRM() {
     }
   };
 
+  const handleSoftDelete = async (key: string, currentStatus: boolean) => {
+    try {
+      setIsLoading(true);
+      const { error } = await API.DeleteAuthAPI(
+        key,
+        END_POINT.LOST_REASON,
+        true
+      );
+
+      if (error) return;
+
+      toast.success("Status field deleted successfully!");
+      fetchLostReasons();
+    } catch (error: any) {
+      console.error(error.message || "Failed to delete status field");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleUpdate = async (key: string, status: boolean) => {
     try {
       setIsLoading(true);
@@ -160,6 +180,7 @@ export default function LostReasonFieldsCRM() {
       onAdd={handleAdd}
       onEdit={handleEdit}
       onDelete={handleDelete}
+      onSoftDelete={handleSoftDelete}
       onUpdate={handleUpdate}
       isLoading={isLoading}
     />

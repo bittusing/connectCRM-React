@@ -84,6 +84,10 @@ const navRoutes = [
     component: Settings,
   },
   {
+    path: "settings/:id",
+    component: Settings,
+  },
+  {
     path: "profile/settings",
     component: SettingBoxes,
   },

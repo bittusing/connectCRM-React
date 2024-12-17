@@ -31,6 +31,7 @@ export const END_POINT: EndPointType = {
   CALL_LIST: "getCallList",
   PRODUCT_SALE_REPORT: "product-sale-report",
   CALENDAR: "calendar",
+  GET_CURL: "getCurlApi",
   USERS: "users",
   Funnel: "survey",
   Crefunel: "survey",

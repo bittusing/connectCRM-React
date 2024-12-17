@@ -131,8 +131,6 @@ export default function StatusFieldsCRM() {
       key: "color",
       minWidth: 50,
       render: (key: string, record: StatusField) => {
-        console.log(record.color);
-
         return (
           <Tooltip
             title={`Color "${record.color}" associated with "${record.status}" status field. You can change the color by clicking on edit button.`}

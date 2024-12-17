@@ -7,10 +7,9 @@ import useScreenHook from "../../hooks/useScreenHook";
 import SearchForm from "../../components/Header/SearchForm";
 import { getStoredAgents, getStoredStatus } from "../../api/commonAPI";
 
-const statusList = getStoredStatus(true);
-const agentList = getStoredAgents(true);
-
 export default function LeadsTableHeader({ handleSearch, searchTerm }: any) {
+  const statusList = getStoredStatus(true);
+  const agentList = getStoredAgents(true);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",

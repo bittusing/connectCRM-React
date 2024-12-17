@@ -3,12 +3,15 @@ import DynamicDataManagement from "../../../components/DynamicDataManagement/Dyn
 import { API } from "../../../api";
 import { END_POINT } from "../../../api/UrlProvider";
 import { toast } from "react-toastify";
+import SwitcherTwo from "../../../components/FormElements/Switchers/SwitcherTwo";
+import { Tooltip } from "antd";
 
 interface LeadSource {
   key: string;
   leadSourceName: string;
   isActive?: boolean;
   deleted?: boolean;
+  isApiRequired?: boolean;
 }
 
 const fields = [
@@ -16,20 +19,6 @@ const fields = [
     name: "leadSourceName",
     label: "Lead source name",
     type: "text",
-  },
-];
-
-const columns = [
-  {
-    title: "S.No",
-    dataIndex: "index",
-    key: "index",
-    render: (_text: any, _record: any, index: number) => index + 1,
-  },
-  {
-    title: "Lead source name",
-    dataIndex: "leadSourceName",
-    key: "leadSourceName",
   },
 ];
 
@@ -54,6 +43,7 @@ export default function LeadSourceFieldsCRM() {
           leadSourceName: item.name,
           isActive: item.isActive,
           deleted: item.deleted,
+          isApiRequired: item.isApiRequired,
         }));
         setData(transformedData);
       }
@@ -61,6 +51,68 @@ export default function LeadSourceFieldsCRM() {
       console.error(error.message || "Failed to fetch lead sources");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const columns = [
+    {
+      title: "S.No",
+      dataIndex: "index",
+      key: "index",
+      render: (_text: any, _record: any, index: number) => index + 1,
+    },
+    {
+      title: "Lead source name",
+      dataIndex: "leadSourceName",
+      key: "leadSourceName",
+    },
+    {
+      title: "API Integeration",
+      dataIndex: "isApiRequired",
+      key: "isApiRequired",
+      render: (value: any, record: any) => {
+        console.log({ record });
+
+        return (
+          <Tooltip title="Do you want to use this entry for API integeration ? If yes you can enable the toggle.">
+            <div className="flex justify-center">
+              <SwitcherTwo
+                id={`apiInit-${record.key}`}
+                idForAPI={record.key}
+                defaultChecked={value}
+                onChange={(key: string, value: boolean) =>
+                  handlePermissionChange(key, value, record.leadSourceName)
+                }
+              />
+            </div>
+          </Tooltip>
+        );
+      },
+    },
+  ];
+
+  const handlePermissionChange = async (
+    key: string,
+    currentStatus: boolean,
+    name: string
+  ) => {
+    try {
+      const payload = {
+        isApiRequired: currentStatus,
+        name: name,
+      };
+
+      const { error } = await API.updateAuthAPI(
+        payload,
+        key,
+        END_POINT.LEAD_SOURCES,
+        true
+      );
+
+      if (error) return;
+      fetchLeadSources();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update dashboard visibility");
     }
   };
 
@@ -137,6 +189,26 @@ export default function LeadSourceFieldsCRM() {
     }
   };
 
+  const handleSoftDelete = async (key: string, currentStatus: boolean) => {
+    try {
+      setIsLoading(true);
+      const { error } = await API.DeleteAuthAPI(
+        key,
+        END_POINT.LEAD_SOURCES,
+        true
+      );
+
+      if (error) return;
+
+      toast.success("Status field deleted successfully!");
+      fetchLeadSources();
+    } catch (error: any) {
+      console.error(error.message || "Failed to delete status field");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleUpdate = async (key: string, status: boolean) => {
     try {
       setIsLoading(true);
@@ -170,6 +242,7 @@ export default function LeadSourceFieldsCRM() {
       onAdd={handleAdd}
       onEdit={handleEdit}
       onDelete={handleDelete}
+      onSoftDelete={handleSoftDelete}
       onUpdate={handleUpdate}
       isLoading={isLoading}
     />
