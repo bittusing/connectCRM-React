@@ -102,14 +102,14 @@ const LeadAction: React.FC = () => {
       setLeadData(leadDetails);
 
       setFormData({
-        status: leadDetails.lead.leadStatus._id,
-        description: leadDetails.lead.description,
-        addToCalendar: leadDetails.lead.addCalender,
-        followup: leadDetails.lead.followUpDate,
-        comment: leadDetails.lead.comment || "",
-        assignedAgent: leadDetails.lead.assignedAgent._id || "",
-        leadWonAmount: leadDetails.lead.leadWonAmount || 0,
-        leadLostReasonId: leadDetails.lead.leadLostReasonId || "",
+        status: leadDetails.lead?.leadStatus?._id,
+        description: leadDetails.lead?.description,
+        addToCalendar: leadDetails.lead?.addCalender,
+        followup: leadDetails.lead?.followUpDate,
+        comment: leadDetails.lead?.comment || "",
+        assignedAgent: leadDetails.lead?.assignedAgent._id || "",
+        leadWonAmount: leadDetails.lead?.leadWonAmount || 0,
+        leadLostReasonId: leadDetails.lead?.leadLostReasonId || "",
       });
     } catch (error: any) {
       console.error(error.message || "Failed to fetch lead details");

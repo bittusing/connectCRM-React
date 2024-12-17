@@ -54,18 +54,16 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ title, value }) => (
   </Card>
 );
 
-const agentList = getStoredAgents(true);
-const serviceList = getStoredProductsServices(true);
-const sourceList = getStoredSources(true);
-const statusList = getStoredStatus(true);
-
 const ManageReports: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [reportData, setReportData] = useState<ReportResponse | null>(null);
-
   // Get stored data for dropdowns
+  const agentList = getStoredAgents(true);
+  const serviceList = getStoredProductsServices(true);
+  const sourceList = getStoredSources(true);
+  const statusList = getStoredStatus(true);
 
   // Form state
+  const [isLoading, setIsLoading] = useState(false);
+  const [reportData, setReportData] = useState<ReportResponse | null>(null);
   const [selectedAgent, setSelectedAgent] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
   const [selectedSource, setSelectedSource] = useState("");
@@ -155,7 +153,7 @@ const ManageReports: React.FC = () => {
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-      <Heading title="CRM Report"/>
+      <Heading title="CRM Report" />
       <div className="mb-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
         <div className="col-span-1">
           <SelectGroupOne

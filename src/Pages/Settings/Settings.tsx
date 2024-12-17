@@ -7,8 +7,11 @@ import CRMFields from "./Components/CRMFields";
 import StorageInsights from "./Components/StorageInsight";
 import TabPanel from "../../components/TabPanel/TabPanel";
 import RolePermissions from "./Components/RolePermission";
+import { useParams } from "react-router-dom";
 
 const Settings: React.FC = () => {
+  const { id } = useParams();
+
   const tabsData = [
     {
       tabName: "Company Details",
@@ -32,14 +35,14 @@ const Settings: React.FC = () => {
               tabsData={tabsData}
               type="line"
               tabPosition="left"
-              defaultActiveKey="1"
+              defaultActiveKey={id || "1"}
             />
           ) : (
             <TabPanel
               tabsData={tabsData}
               type="line"
               tabPosition="top"
-              defaultActiveKey="1"
+              defaultActiveKey={id || "1"}
             />
           )}
         </div>

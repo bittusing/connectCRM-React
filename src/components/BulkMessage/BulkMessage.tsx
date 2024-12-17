@@ -15,9 +15,6 @@ interface BulkMessageProps {
   showActionControl?: boolean;
 }
 
-const agentOptions = getStoredAgents(true);
-const baseOptions = getStoredStatus(true);
-
 const templateOptions = [
   { value: "template1", label: "Template 1" },
   { value: "template2", label: "Template 2" },
@@ -30,6 +27,8 @@ const BulkMessage: React.FC<BulkMessageProps> = ({
   showActionControl = true,
   onRefresh,
 }) => {
+  const agentOptions = getStoredAgents(true);
+  const baseOptions = getStoredStatus(true);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     status: "",
