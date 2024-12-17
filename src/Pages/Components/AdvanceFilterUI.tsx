@@ -1,82 +1,152 @@
-import React, { useState } from "react";
+import React from "react";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import DateTimePicker from "../../components/FormElements/DatePicker/DateTimePicker";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
-import { leadStatus } from "../../utils/Constants/UsefullJSON";
+import {
+  getStoredAgents,
+  getStoredProductsServices,
+  getStoredSources,
+  getStoredStatus,
+} from "../../api/commonAPI";
+import dayjs from "dayjs";
 
+interface AdvanceFilterUIProps {
+  onFilter: (filters: {
+    leadStatus?: string;
+    assignedAgent?: string;
+    productService?: string;
+    leadSource?: string;
+    startDate?: string;
+    endDate?: string;
+  }) => void;
+  onReset: () => void;
+  loading?: boolean;
+}
 
-const AdvanceFilterUI: React.FC = () => {
-  const [status, setStatus] = useState<string | number>("");
-  const [agent, setAgent] = useState<string | number>("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+const AdvanceFilterUI: React.FC<AdvanceFilterUIProps> = ({
+  onFilter,
+  onReset,
+  loading = false
+}) => {
+  const agentList = getStoredAgents(true);
+  const serviceList = getStoredProductsServices(true);
+  const sourceList = getStoredSources(true);
+  const statusList = getStoredStatus(true);
 
-  const handleStatusChange = (value: string | number) => {
-    setStatus(value);
+  const [filters, setFilters] = React.useState({
+    leadStatus: "",
+    assignedAgent: "",
+    productService: "",
+    leadSource: "",
+    startDate: "",
+    endDate: ""
+  });
+
+  const handleChange = (name: string, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleAgentChange = (value: string | number) => {
-    setAgent(value);
-  };
-
-  const handleStartDateChange = (_selectedDates: Date[], dateStr: string) => {
-    setStartDate(dateStr);
-  };
-
-  const handleEndDateChange = (_selectedDates: Date[], dateStr: string) => {
-    setEndDate(dateStr);
+  const handleDateChange = (name: string) => (_: Date[], dateStr: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [name]: dateStr
+    }));
   };
 
   const handleSubmit = () => {
-    console.log("Submitting with:", { status, agent, startDate, endDate });
-    // Implement your submit logic here
+    const validFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+      if (value) {
+        if (key === 'startDate' || key === 'endDate') {
+          acc[key] = dayjs(value).format('YYYY-MM-DD');
+        } else {
+          acc[key] = value;
+        }
+      }
+      return acc;
+    }, {} as any);
+
+    onFilter(validFilters);
   };
 
-  const handleRefresh = () => {
-    console.log("Refreshing data");
-    // Implement your refresh logic here
+  const handleReset = () => {
+    setFilters({
+      leadStatus: "",
+      assignedAgent: "",
+      productService: "",
+      leadSource: "",
+      startDate: "",
+      endDate: ""
+    });
+    onReset();
   };
-
-  // Mock options for status and agent dropdowns
-
-  const agentOptions = [
-    { value: "agent1", label: "Agent 1" },
-    { value: "agent2", label: "Agent 2" },
-    { value: "agent3", label: "Agent 3" },
-  ];
 
   return (
     <div className="rounded-lg bg-white p-6 mb-4 shadow-md dark:bg-gray-800">
-      <div className="mb-4 grid sm:grid-cols-4 grid-cols-2 gap-4">
+      <div className="mb-4 grid sm:grid-cols-6 grid-cols-2 gap-4">
         <SelectGroupOne
-          label=""
-          options={leadStatus}
-          setSelectedOption={handleStatusChange}
+          label="Select Status"
+          placeholder="Select Status"
+          options={statusList}
+          selectedOption={filters.leadStatus}
+          setSelectedOption={(value) => handleChange('leadStatus', value)}
+          allowClear
         />
         <SelectGroupOne
-          label=""
-          options={agentOptions}
-          setSelectedOption={handleAgentChange}
+          label="Select Employee"
+          placeholder="Select Employee"
+          options={agentList}
+          selectedOption={filters.assignedAgent}
+          setSelectedOption={(value) => handleChange('assignedAgent', value)}
+          allowClear
         />
-        <DateTimePicker label="" onChange={handleStartDateChange} />
-        <DateTimePicker label="" onChange={handleEndDateChange} />
+        <SelectGroupOne
+          label="Select Product and Service"
+          placeholder="Select Product and Service"
+          options={serviceList}
+          selectedOption={filters.productService}
+          setSelectedOption={(value) => handleChange('productService', value)}
+          allowClear
+        />
+        <SelectGroupOne
+          label="Select Source"
+          placeholder="Select Source"
+          options={sourceList}
+          selectedOption={filters.leadSource}
+          setSelectedOption={(value) => handleChange('leadSource', value)}
+          allowClear
+        />
+        <DateTimePicker 
+          label="Start Date" 
+          onChange={handleDateChange('startDate')}
+          defaultValue={filters.startDate}
+        />
+        <DateTimePicker 
+          label="End Date" 
+          onChange={handleDateChange('endDate')}
+          defaultValue={filters.endDate}
+        />
       </div>
       <div className="w-full flex justify-center gap-4">
         <ButtonDefault
-          label="Submit"
+          label={loading ? "Filtering..." : "Apply Filters"}
           onClick={handleSubmit}
           variant="primary"
           customClasses="bg-blue-500 text-white w-full"
+          disabled={loading}
         />
         <ButtonDefault
-          label="Refresh"
-          onClick={handleRefresh}
+          label="Reset"
+          onClick={handleReset}
           variant="secondary"
           customClasses="bg-black text-white w-full"
+          disabled={loading}
         />
       </div>
     </div>
   );
 };
 
-export default AdvanceFilterUI;
+export default React.memo(AdvanceFilterUI);

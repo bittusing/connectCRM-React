@@ -48,7 +48,8 @@ export interface ApiMethods {
   DeleteAuthAPI: <T = any>(
     id: string | number,
     endPoint: string,
-    tokenRequired: boolean
+    tokenRequired: boolean,
+    body?:any
     // Token?: string,
     // navigate?: NavigateFunction
   ) => Promise<ApiResponse<T>>;

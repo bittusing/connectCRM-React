@@ -48,6 +48,7 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isQuickEditOpen, setIsQuickEditOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState<any>({});
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -56,17 +57,17 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
 
   const transformLeadData = (apiLeads: APILead[]): Lead[] => {
     return apiLeads.map((lead) => ({
-      key: lead._id,
-      name: `${lead.firstName} ${lead.lastName}`.trim(),
-      number: lead.contactNumber,
-      leadSource: lead.leadSource?.name || "-",
-      agent: lead.assignedAgent?.name || "-",
-      status: lead.leadStatus?.name || "-",
-      service: lead.productService?.name || "-",
-      statusData: lead.leadStatus || {},
-      leadWonAmount: lead.leadWonAmount,
-      addCalender: lead.addCalender,
-      followUpDate: new Date(lead.followUpDate),
+      key: lead?._id,
+      name: `${lead?.firstName} ${lead?.lastName}`.trim(),
+      number: lead?.contactNumber,
+      leadSource: lead?.leadSource?.name || "-",
+      agent: lead?.assignedAgent?.name || "-",
+      status: lead?.leadStatus?.name || "-",
+      service: lead?.productService?.name || "-",
+      statusData: lead?.leadStatus || {},
+      leadWonAmount: lead?.leadWonAmount,
+      addCalender: lead?.addCalender,
+      followUpDate: new Date(lead?.followUpDate),
     }));
   };
 
@@ -99,7 +100,8 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
       const params = {
         page: pagination.current,
         limit: pagination.pageSize,
-        ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
+        search: debouncedSearchTerm,
+        ...advancedFilters
       };
 
       const { data, error, options } = await API.getAuthAPI(
@@ -108,13 +110,13 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
         params
       );
 
-      if (error) return;
+      if (error) throw new Error(error);
 
       const transformedLeads = transformLeadData(data);
       setLeads(transformedLeads);
       setPagination({
         ...pagination,
-        total: options.pagination.total,
+        total: options?.pagination?.total,
       });
     } catch (error: any) {
       console.error(error.message || "Failed to fetch leads");
@@ -125,7 +127,17 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
 
   useEffect(() => {
     fetchLeads();
-  }, [pagination.current, pagination.pageSize, debouncedSearchTerm]);
+  }, [pagination.current, pagination.pageSize, debouncedSearchTerm, advancedFilters]);
+
+  const handleAdvancedFilter = useCallback((filters: any) => {
+    setPagination(prev => ({ ...prev, current: 1 }));
+    setAdvancedFilters(filters);
+  }, []);
+
+  const handleResetFilters = useCallback(() => {
+    setAdvancedFilters({});
+    setPagination(prev => ({ ...prev, current: 1 }));
+  }, []);
 
   const handleTableChange = (page: number, pageSize: number) => {
     setPagination({
@@ -161,6 +173,74 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
       setSelectedRowKeys((prevSelected) =>
         prevSelected.filter((key) => !visibleKeys.has(key))
       );
+    }
+  };
+
+  const handleBulkUpdate = async (data: {
+    agentId?: string;
+    statusId?: string;
+  }) => {
+    if (selectedRowKeys.length === 0) return;
+
+    try {
+      const payload = {
+        leadIds: selectedRowKeys,
+        ...(data.agentId && { assignedAgent: data.agentId }),
+        ...(data.statusId && { leadStatus: data.statusId }),
+      };
+
+      const { data: response, error } = await API.updateAuthAPI(
+        payload,
+        "",
+        END_POINT.BULK_UPDATE,
+        true
+      );
+
+      if (error) throw new Error(error);
+
+      toast.success(
+        response.message ||
+          `Successfully updated ${response.modifiedCount} leads`
+      );
+
+      // Reset selected rows and refresh data
+      setSelectedRowKeys([]);
+      fetchLeads();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update leads");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedRowKeys.length === 0) {
+      toast.error("Select alteast one lead.");
+      return;
+    }
+
+    try {
+      const payload = {
+        leadIds: selectedRowKeys,
+      };
+
+      const { data: response, error } = await API.DeleteAuthAPI(
+        "",
+        END_POINT.BULK_DELETE,
+        true,
+        payload
+      );
+
+      if (error) throw new Error(error);
+      // handleTableChange(1, 10);
+      toast.success(
+        response.message ||
+          `Successfully updated ${response.modifiedCount} leads`
+      );
+
+      // Reset selected rows and refresh data
+      setSelectedRowKeys([]);
+      fetchLeads();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update leads");
     }
   };
 
@@ -298,6 +378,12 @@ const AllLeads = ({ derivativeEndpoint = "" }) => {
         handleSearch={handleSearch}
         searchTerm={searchTerm}
         selectedCount={selectedRowKeys.length}
+        onBulkUpdate={handleBulkUpdate}
+        disabled={loading}
+        handleDelete={handleDelete}
+        onAdvancedFilter={handleAdvancedFilter}
+        onResetFilters={handleResetFilters}
+        loading={loading}
       />
 
       <CustomAntdTable

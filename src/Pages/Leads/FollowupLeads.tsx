@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button, Tooltip } from "antd";
-import {
-  EditFilled,
-} from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import CustomAntdTable from "../../components/Tables/CustomAntdTable";
 import CheckboxTwo from "../../components/FormElements/Checkboxes/CheckboxTwo";
 import LeadsTableHeader from "./LeadsTableHeader";
@@ -71,6 +69,7 @@ const FollowupLeads = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isQuickEditOpen, setIsQuickEditOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [advancedFilters, setAdvancedFilters] = useState<any>({});
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -98,8 +97,9 @@ const FollowupLeads = () => {
       const params = {
         page: pagination.current,
         limit: pagination.pageSize,
-        ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
+        search: debouncedSearchTerm,
         type: "followup", // Add type parameter to get only followup leads
+        ...advancedFilters,
       };
 
       const { data, error, options } = await API.getAuthAPI(
@@ -125,7 +125,22 @@ const FollowupLeads = () => {
 
   useEffect(() => {
     fetchLeads();
-  }, [pagination.current, pagination.pageSize, debouncedSearchTerm]);
+  }, [
+    pagination.current,
+    pagination.pageSize,
+    debouncedSearchTerm,
+    advancedFilters,
+  ]);
+
+  const handleAdvancedFilter = useCallback((filters: any) => {
+    setPagination((prev) => ({ ...prev, current: 1 }));
+    setAdvancedFilters(filters);
+  }, []);
+
+  const handleResetFilters = useCallback(() => {
+    setAdvancedFilters({});
+    setPagination((prev) => ({ ...prev, current: 1 }));
+  }, []);
 
   const handleTableChange = (page: number, pageSize: number) => {
     setPagination({
@@ -323,6 +338,74 @@ const FollowupLeads = () => {
     }
   };
 
+  const handleBulkUpdate = async (data: {
+    agentId?: string;
+    statusId?: string;
+  }) => {
+    if (selectedRowKeys.length === 0) return;
+
+    try {
+      const payload = {
+        leadIds: selectedRowKeys,
+        ...(data.agentId && { assignedAgent: data.agentId }),
+        ...(data.statusId && { leadStatus: data.statusId }),
+      };
+
+      const { data: response, error } = await API.updateAuthAPI(
+        payload,
+        "",
+        END_POINT.BULK_UPDATE,
+        true
+      );
+
+      if (error) throw new Error(error);
+
+      toast.success(
+        response.message ||
+          `Successfully updated ${response.modifiedCount} leads`
+      );
+
+      // Reset selected rows and refresh data
+      setSelectedRowKeys([]);
+      fetchLeads();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update leads");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedRowKeys.length === 0) {
+      toast.error("Select alteast one lead.");
+      return;
+    }
+
+    try {
+      const payload = {
+        leadIds: selectedRowKeys,
+      };
+
+      const { data: response, error } = await API.DeleteAuthAPI(
+        "",
+        END_POINT.BULK_DELETE,
+        true,
+        payload
+      );
+
+      if (error) throw new Error(error);
+      // handleTableChange(1, 10);
+      toast.success(
+        response.message ||
+          `Successfully updated ${response.modifiedCount} leads`
+      );
+
+      // Reset selected rows and refresh data
+      setSelectedRowKeys([]);
+      fetchLeads();
+    } catch (error: any) {
+      console.error(error.message || "Failed to update leads");
+    }
+  };
+
   useEffect(() => {
     console.log("Selected rows:", selectedRowKeys);
   }, [selectedRowKeys]);
@@ -333,6 +416,12 @@ const FollowupLeads = () => {
         handleSearch={handleSearch}
         searchTerm={searchTerm}
         selectedCount={selectedRowKeys.length}
+        onBulkUpdate={handleBulkUpdate}
+        disabled={loading}
+        handleDelete={handleDelete}
+        onAdvancedFilter={handleAdvancedFilter}
+        onResetFilters={handleResetFilters}
+        loading={loading}
       />
 
       <CustomAntdTable
@@ -383,69 +472,7 @@ const FollowupLeads = () => {
       )}
 
       <style>{`
-        /* Dark mode styles */
-        .dark .bg-green-50 {
-          background-color: rgba(16, 185, 129, 0.1) !important;
-        }
-        .dark .bg-red-50 {
-          background-color: rgba(239, 68, 68, 0.1) !important;
-        }
-        .dark .bg-green-50:hover {
-          background-color: rgba(16, 185, 129, 0.15) !important;
-        }
-        .dark .bg-red-50:hover {
-          background-color: rgba(239, 68, 68, 0.15) !important;
-        }
-        
-        /* Animation for rows in range */
-        @keyframes softPulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.022); }
-          100% { transform: scale(1); }
-        }
-        
-        .animate-in-range {
-          animation: softPulse 2s ease-in-out infinite;
-          transform-origin: center;
-        }
-        
-        /* Animation for new rows */
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        /* Ensure text remains visible in dark mode */
-        .dark .bg-green-50 td,
-        .dark .bg-red-50 td {
-          color: inherit !important;
-        }
-        
-        .animate-slide-in {
-          animation: slideIn 0.4s ease-out forwards;
-        }
-        
-        /* Optional: Add perspective for better 3D effect */
-        .ant-table-tbody {
-          perspective: 1000px;
-        }
-        
-        /* Ensure smooth transitions */
-        .ant-table-tbody > tr {
-          transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-        
-        /* Optional: Add hover lift effect */
-        .ant-table-tbody > tr:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+       
       `}</style>
     </div>
   );
