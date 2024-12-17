@@ -96,20 +96,20 @@ const LeadAction: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await API.getAuthAPI(`lead/${leadId}`, true);
-      if (response.error) return;
+      if (response.error || !response) return;
 
-      const { leadDetails } = response.data;
+      const { leadDetails } = response?.data;
       setLeadData(leadDetails);
 
       setFormData({
-        status: leadDetails.lead?.leadStatus?._id,
-        description: leadDetails.lead?.description,
-        addToCalendar: leadDetails.lead?.addCalender,
-        followup: leadDetails.lead?.followUpDate,
-        comment: leadDetails.lead?.comment || "",
-        assignedAgent: leadDetails.lead?.assignedAgent._id || "",
-        leadWonAmount: leadDetails.lead?.leadWonAmount || 0,
-        leadLostReasonId: leadDetails.lead?.leadLostReasonId || "",
+        status: leadDetails?.lead?.leadStatus?._id,
+        description: leadDetails?.lead?.description,
+        addToCalendar: leadDetails?.lead?.addCalender,
+        followup: leadDetails?.lead?.followUpDate,
+        comment: leadDetails?.lead?.comment || "",
+        assignedAgent: leadDetails?.lead?.assignedAgent?._id || "",
+        leadWonAmount: leadDetails?.lead?.leadWonAmount || 0,
+        leadLostReasonId: leadDetails?.lead?.leadLostReasonId || "",
       });
     } catch (error: any) {
       console.error(error.message || "Failed to fetch lead details");
@@ -314,7 +314,7 @@ const LeadAction: React.FC = () => {
           <SelectGroupOne
             label="Agent Name"
             options={agendList}
-            selectedOption={leadData?.lead.assignedAgent._id || ""}
+            selectedOption={leadData?.lead?.assignedAgent?._id || ""}
             setSelectedOption={(value) =>
               handleSelectChange("assignedAgent", value)
             }

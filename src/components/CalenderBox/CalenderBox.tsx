@@ -53,19 +53,19 @@ const EventModal = ({ listData }: { listData: CalendarEvent[] }) => (
             <div className="space-y-2 ml-1">
               <div className="flex items-center gap-2 text-sm dark:text-gray-300">
                 <FiUser className="text-primary" size={16} />
-                <span>{item.details.firstName}</span>
+                <span>{item?.details?.firstName}</span>
               </div>
               <div className="flex items-center gap-2 text-sm dark:text-gray-300">
                 <MdOutlineSupportAgent className="text-primary" size={16} />
-                <span>{item.details.assignedAgent.name}</span>
+                <span>{item?.details?.assignedAgent?.name}</span>
               </div>
               <div className="flex items-center gap-2 text-sm dark:text-gray-300">
                 <FiMessageCircle className="text-primary" size={16} />
-                <span>{item.details.comment}</span>
+                <span>{item?.details?.comment}</span>
               </div>
               <div className="flex items-center gap-2 text-sm dark:text-gray-300">
                 <FiClock className="text-primary" size={16} />
-                <span>{dayjs(item.details.followUpDate).format("HH:mm")}</span>
+                <span>{dayjs(item?.details?.followUpDate)?.format("HH:mm")}</span>
               </div>
             </div>
           )}

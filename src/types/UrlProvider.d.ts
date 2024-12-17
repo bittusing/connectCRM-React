@@ -16,6 +16,8 @@ export interface EndPointType {
   CALENDAR: string;
   GET_CURL: string;
   USERS: string;
+  BULK_UPDATE: string;
+  BULK_DELETE: string;
   Funnel: string;
   Crefunel: string;
   SubscrPlane: string;

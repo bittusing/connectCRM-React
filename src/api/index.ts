@@ -92,7 +92,8 @@ export const postAuthAPI1 = async <T>(
 export const DeleteAuthAPI = async <T>(
   id: string | number,
   endPoint: string,
-  tokenRequired: boolean = false
+  tokenRequired: boolean = false,
+  body?: any
   // Token: string = "",
   // navigate?: NavigateFunction
 ): Promise<ApiResponse<T>> => {
@@ -104,7 +105,7 @@ export const DeleteAuthAPI = async <T>(
     headers: {
       Authorization: header,
     },
-    data: "",
+    data: body,
   };
 
   try {
