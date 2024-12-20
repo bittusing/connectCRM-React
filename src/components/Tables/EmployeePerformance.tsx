@@ -124,7 +124,7 @@ const EmployeePerformance: React.FC<EmployeePerformanceProps> = ({ data = [] }) 
         <div className="grid grid-cols-8">
           <div className="col-span-2 px-2 pb-3.5 pl-4">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Agent
+              Employee
             </h5>
           </div>
           <div className="px-2 pb-3.5 text-center">

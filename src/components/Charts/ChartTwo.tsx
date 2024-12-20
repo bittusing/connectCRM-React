@@ -19,11 +19,11 @@ const ChartTwo: React.FC<ChartTwoProps> = ({ paymentOverview }) => {
   const series = [
     {
       name: "Won Deals",
-      data: paymentOverview?.chartData.map(item => item.received) || [],
+      data: paymentOverview?.chartData.map((item) => item.received) || [],
     },
     {
       name: "Lost Deals",
-      data: paymentOverview?.chartData.map(item => item.loss) || [],
+      data: paymentOverview?.chartData.map((item) => item.loss) || [],
     },
   ];
 
@@ -80,7 +80,7 @@ const ChartTwo: React.FC<ChartTwoProps> = ({ paymentOverview }) => {
       },
     },
     xaxis: {
-      categories: paymentOverview?.chartData.map(item => item.month) || [],
+      categories: paymentOverview?.chartData.map((item) => item.month) || [],
     },
     legend: {
       position: "top",
@@ -101,8 +101,11 @@ const ChartTwo: React.FC<ChartTwoProps> = ({ paymentOverview }) => {
     },
   };
 
-  const totalWonDeals = paymentOverview?.chartData.reduce((sum, item) => sum + item.received, 0) || 0;
-  const totalLostDeals = paymentOverview?.chartData.reduce((sum, item) => sum + item.loss, 0) || 0;
+  const totalWonDeals =
+    paymentOverview?.chartData.reduce((sum, item) => sum + item.received, 0) ||
+    0;
+  const totalLostDeals =
+    paymentOverview?.chartData.reduce((sum, item) => sum + item.loss, 0) || 0;
 
   return (
     <div className="col-span-12 rounded-[10px] bg-white px-7.5 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-5">
@@ -116,16 +119,20 @@ const ChartTwo: React.FC<ChartTwoProps> = ({ paymentOverview }) => {
 
       <div className="mb-4 grid grid-cols-2 gap-4">
         <div className="rounded-md border border-stroke bg-gray p-4 dark:border-strokedark dark:bg-meta-4">
-          <h4 className="mb-1.5 text-title-sm font-medium text-black dark:text-white">
+          <h4 className="mb-1.5 text-title-sm font-medium text-black ">
             Won Deals
           </h4>
-          <h3 className="text-title-lg font-bold text-success">{totalWonDeals}</h3>
+          <h3 className="text-title-lg font-bold text-success">
+            {totalWonDeals}
+          </h3>
         </div>
         <div className="rounded-md border border-stroke bg-gray p-4 dark:border-strokedark dark:bg-meta-4">
-          <h4 className="mb-1.5 text-title-sm font-medium text-black dark:text-white">
+          <h4 className="mb-1.5 text-title-sm font-medium text-black ">
             Lost Deals
           </h4>
-          <h3 className="text-title-lg font-bold text-danger">{totalLostDeals}</h3>
+          <h3 className="text-title-lg font-bold text-danger">
+            {totalLostDeals}
+          </h3>
         </div>
       </div>
 
