@@ -73,10 +73,10 @@ const ImportLeads: React.FC = () => {
       return;
     }
 
-    if (!formData.leadSource || !formData.status || !formData.assignToAgent) {
-      message.error("Please fill in all required fields");
-      return;
-    }
+    // if (!formData.leadSource || !formData.status || !formData.assignToAgent) {
+    //   message.error("Please fill in all required fields");
+    //   return;
+    // }
 
     try {
       setIsLoading(true);
