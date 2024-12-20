@@ -1,5 +1,6 @@
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
+import { useEffect, useState } from "react";
 
 interface PaymentOverview {
   chartData: Array<{
@@ -20,14 +21,38 @@ interface ChartOneProps {
 }
 
 const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
+  // Track dark mode
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check initial dark mode
+    setIsDark(document.documentElement.classList.contains("dark"));
+
+    // Create observer to watch for dark mode changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class") {
+          setIsDark(document.documentElement.classList.contains("dark"));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const series = [
     {
       name: "Won Amount",
-      data: paymentOverview?.chartData.map(item => item.receivedAmount) || [],
+      data: paymentOverview?.chartData.map((item) => item.receivedAmount) || [],
     },
     {
       name: "Lost Amount",
-      data: paymentOverview?.chartData.map(item => item.lossAmount) || [],
+      data: paymentOverview?.chartData.map((item) => item.lossAmount) || [],
     },
   ];
 
@@ -36,6 +61,9 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
       show: false,
       position: "top",
       horizontalAlign: "left",
+      labels: {
+        colors: isDark ? "#fff" : undefined,
+      },
     },
     colors: ["#5750F1", "#0ABEF9"],
     chart: {
@@ -45,11 +73,13 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
       toolbar: {
         show: false,
       },
+      background: "transparent",
+      foreColor: isDark ? "#A0AEC0" : "#4A5568", // Text color for axes and labels
     },
     fill: {
       gradient: {
-        opacityFrom: 0.55,
-        opacityTo: 0,
+        opacityFrom: isDark ? 0.35 : 0.55,
+        opacityTo: 0.05,
       },
     },
     responsive: [
@@ -72,12 +102,16 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
     ],
     stroke: {
       curve: "smooth",
+      width: 2,
     },
     markers: {
       size: 0,
+      colors: isDark ? ["#fff"] : undefined,
+      strokeColors: "#fff",
     },
     grid: {
       strokeDashArray: 5,
+      borderColor: isDark ? "#2D3748" : "#E2E8F0",
       xaxis: {
         lines: {
           show: false,
@@ -93,6 +127,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
       enabled: false,
     },
     tooltip: {
+      theme: isDark ? "dark" : "light",
       fixed: {
         enabled: false,
       },
@@ -100,10 +135,8 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
         show: false,
       },
       y: {
-        title: {
-          formatter: function (_e) {
-            return "";
-          },
+        formatter: function (value) {
+          return `₹${value.toLocaleString()}`;
         },
       },
       marker: {
@@ -112,25 +145,39 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
     },
     xaxis: {
       type: "category",
-      categories: paymentOverview?.chartData.map(item => item.month) || [],
+      categories: paymentOverview?.chartData.map((item) => item.month) || [],
       axisBorder: {
         show: false,
       },
       axisTicks: {
         show: false,
       },
+      labels: {
+        style: {
+          colors: isDark ? "#A0AEC0" : "#4A5568",
+          fontSize: "12px",
+        },
+      },
     },
     yaxis: {
-      title: {
+      labels: {
         style: {
-          fontSize: "0px",
+          colors: isDark ? "#A0AEC0" : "#4A5568",
+          fontSize: "12px",
+        },
+        formatter: function (value) {
+          return `₹${value.toLocaleString()}`;
         },
       },
     },
   };
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7">
+    <div
+      className={
+        "col-span-12 rounded-sm bg-white px-5 pt-7.5 pb-5 shadow-default dark:bg-gray-dark sm:px-7.5 xl:col-span-7"
+      }
+    >
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
           <div className="flex min-w-47.5">
@@ -139,13 +186,6 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
             </h4>
           </div>
         </div>
-        {/* <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
-            <button className="rounded bg-white py-1 px-3 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
-              Month
-            </button>
-          </div>
-        </div> */}
       </div>
 
       <div className="mb-2">
@@ -162,30 +202,33 @@ const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
       <div className="flex flex-wrap items-start justify-center gap-3.5 sm:flex-nowrap sm:gap-5">
         <div className="flex w-full flex-wrap items-center gap-3.5 sm:gap-5">
           <div className="w-full px-8">
-            <div className="flex w-full items-center gap-3.5">
+            <div className="flex w-full items-center justify-center gap-3.5">
               <div className="w-full max-w-52">
-                <div className="flex w-full items-center justify-between border-b border-stroke pb-2.5 dark:border-strokedark">
+                <div className="flex w-full items-center justify-between border-b border-stroke pb-2.5 dark:border-stroke dark">
                   <div className="flex items-center gap-1.5">
                     <span className="block h-3 w-3 rounded-full bg-primary"></span>
-                    <span className="font-medium w-fit text-black dark:text-white">
+                    <span className="font-medium w-fit " style={{color: isDark?"white":"black"}}>
                       Won Amount
                     </span>
                   </div>
-                  <span className="font-medium text-meta-3">
-                    ₹{paymentOverview?.summary.receivedLeads.toLocaleString() || '0'}
+                  <span className="font-medium text-gray-6 ">
+                    ₹
+                    {paymentOverview?.summary.receivedLeads.toLocaleString() ||
+                      "0"}
                   </span>
                 </div>
               </div>
               <div className="w-full max-w-45">
                 <div className="flex w-full items-center justify-between border-b border-stroke pb-2.5 dark:border-strokedark">
                   <div className="flex items-center gap-1.5">
-                    <span className="block h-3 w-3 rounded-full bg-secondary"></span>
+                    <span className="block h-3 w-3 rounded-full  bg-red"></span>
                     <span className="font-medium text-black dark:text-white">
                       Lost Amount
                     </span>
                   </div>
-                  <span className="font-medium text-meta-3 ml-3">
-                    ₹{paymentOverview?.summary.lostLeads.toLocaleString() || '0'}
+                  <span className="font-medium text-gray-6  ml-3">
+                    ₹
+                    {paymentOverview?.summary.lostLeads.toLocaleString() || "0"}
                   </span>
                 </div>
               </div>
