@@ -302,7 +302,7 @@ export default function DepartmentSetting() {
         <SelectGroupOne
           label=""
           options={[
-            { value: "Team Admin", label: "Team Admin" },
+            // { value: "Team Admin", label: "Team Admin" },
             { value: "User", label: "User" },
           ]}
           selectedOption={formData.userType}
