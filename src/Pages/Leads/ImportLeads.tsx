@@ -132,11 +132,23 @@ const ImportLeads: React.FC = () => {
       setIsLoading(false);
     }
   };
-
+  
   const handleDownloadSample = () => {
-    // TODO: Implement sample file download logic
-    message.info("Sample file download functionality coming soon");
-  };
+    try {
+      // Create an anchor element
+      const link = document.createElement('a');
+      link.href = '/sampleSheet.xlsx';  // Path to the file in public directory
+      link.download = 'sampleSheet.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      message.success('Sample file downloaded successfully');
+    } catch (error) {
+      console.error('Error downloading sample file:', error);
+      message.error('Failed to download sample file');
+    }
+  }; 
 
   const mockOptions = [
     { value: "option1", label: "Option 1" },
