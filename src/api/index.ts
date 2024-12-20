@@ -67,22 +67,23 @@ export const postAuthAPI1 = async <T>(
   body: any,
   endPoint: string,
   Token: string = "",
-  navigate: NavigateFunction | null = null
+  navigate: NavigateFunction | null = null,
+  isFormData: boolean = false,
+  config: any = {}
 ): Promise<ApiResponse<T>> => {
-  const config: ApiConfig = {
-    method: "post",
-    maxBodyLength: Infinity,
-    url: `${BASE_URL}${endPoint}`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: Token || "",
-    },
-    data: body,
-  };
-
   try {
-    const response = await axios.request<T>(config);
-    const { data, message, error }: any = response?.data;
+    const response = await axios({
+      method: 'post',
+      url: `${BASE_URL}${endPoint}`,
+      data: body,
+      headers: {
+        ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+        'Authorization': Token,
+        ...config.headers
+      }
+    });
+
+    const { data, message, error } = response?.data;
     return { data, message, error };
   } catch (error) {
     return handleApiError(error);
