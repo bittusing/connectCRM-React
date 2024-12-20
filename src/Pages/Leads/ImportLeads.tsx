@@ -132,29 +132,23 @@ const ImportLeads: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
+
   const handleDownloadSample = () => {
     try {
       // Create an anchor element
-      const link = document.createElement('a');
-      link.href = '/sampleSheet.xlsx';  // Path to the file in public directory
-      link.download = 'sampleSheet.xlsx';
+      const link = document.createElement("a");
+      link.href = "/sampleSheet.xlsx"; // Path to the file in public directory
+      link.download = "sampleSheet.xlsx";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      message.success('Sample file downloaded successfully');
-    } catch (error) {
-      console.error('Error downloading sample file:', error);
-      message.error('Failed to download sample file');
-    }
-  }; 
 
-  const mockOptions = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
-  ];
+      message.success("Sample file downloaded successfully");
+    } catch (error) {
+      console.error("Error downloading sample file:", error);
+      message.error("Failed to download sample file");
+    }
+  };
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
@@ -181,7 +175,7 @@ const ImportLeads: React.FC = () => {
       {/* Form Fields */}
       <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
         <SelectGroupOne
-          label="Lead Source*"
+          label="Lead Source"
           options={sourceList}
           selectedOption={formData.leadSource}
           setSelectedOption={(value) => handleSelectChange("leadSource", value)}
@@ -193,7 +187,7 @@ const ImportLeads: React.FC = () => {
           setSelectedOption={(value) => handleSelectChange("service", value)}
         />
         <SelectGroupOne
-          label="Status*"
+          label="Status"
           options={statusList}
           selectedOption={formData.status}
           setSelectedOption={(value) => handleSelectChange("status", value)}
@@ -205,7 +199,7 @@ const ImportLeads: React.FC = () => {
           setSelectedOption={(value) => handleSelectChange("country", value)}
         />
         <SelectGroupOne
-          label="Assign to agent*"
+          label="Assign to agent"
           options={agentList}
           selectedOption={formData.assignToAgent}
           setSelectedOption={(value) =>
