@@ -42,7 +42,9 @@ export interface ApiMethods {
     body: any,
     endPoint: string,
     Token?: string,
-    navigate?: NavigateFunction | null
+    navigate?: NavigateFunction | null,
+    isFormData?: boolean,
+    config?: any
   ) => Promise<ApiResponse<T>>;
 
   DeleteAuthAPI: <T = any>(

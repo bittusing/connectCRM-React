@@ -1,13 +1,38 @@
-"use client";
-
 import React, { useState, useRef } from "react";
 import { message } from "antd";
 import SelectGroupOne from "../../components/FormElements/SelectGroup/SelectGroupOne";
 import ButtonDefault from "../../components/Buttons/ButtonDefault";
 import FileUploadFillType from "../../components/FormElements/FileUpload/FileUploadFillType";
+import { API } from "../../api";
+import {
+  getStoredAgents,
+  getStoredCountries,
+  getStoredProductsServices,
+  getStoredSources,
+  getStoredStatus,
+} from "../../api/commonAPI";
+interface BulkUploadResponse {
+  totalProcessed: number;
+  successful: number;
+  skipped: number;
+  duplicateDetails: string[];
+}
 
 const ImportLeads: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadResult, setUploadResult] = useState<BulkUploadResponse | null>(
+    null
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const agentList = getStoredAgents(true);
+  const serviceList = getStoredProductsServices(true);
+  const sourceList = getStoredSources(true);
+  const statusList = getStoredStatus(true);
+  const countryOptions = getStoredCountries(true);
+
+  // Form state
   const [formData, setFormData] = useState({
     leadSource: "",
     status: "",
@@ -16,7 +41,6 @@ const ImportLeads: React.FC = () => {
     country: "",
     state: "",
   });
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -24,12 +48,14 @@ const ImportLeads: React.FC = () => {
       const fileExtension = file.name.split(".").pop()?.toLowerCase();
       if (fileExtension === "xlsx" || fileExtension === "xls") {
         setSelectedFile(file);
+        setUploadResult(null); // Reset previous results
         message.success("Excel file selected successfully");
       } else {
         message.error("Please select only Excel files (.xlsx or .xls)");
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
+        setSelectedFile(null);
       }
     }
   };
@@ -41,18 +67,77 @@ const ImportLeads: React.FC = () => {
     }));
   };
 
-  const handleNextClick = () => {
-    console.log("Form data:", formData);
-    console.log("Selected file:", selectedFile);
-    // Here you would typically process the file and form data
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      message.error("Please select a file first");
+      return;
+    }
+
+    if (!formData.leadSource || !formData.status || !formData.assignToAgent) {
+      message.error("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const formPayload = new FormData();
+      formPayload.append("file", selectedFile);
+      formPayload.append("leadSource", formData.leadSource);
+      formPayload.append("service", formData.service);
+      formPayload.append("status", formData.status);
+      formPayload.append("country", formData.country);
+      // formPayload.append("state", formData.state);
+      formPayload.append("assignToAgent", formData.assignToAgent);
+
+      const token = localStorage.getItem("accessToken") || "";
+
+      const response = await API.postAuthAPI1(
+        formPayload,
+        "bulkUplodeLead",
+        token,
+        null,
+        true,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        }
+      );
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      setUploadResult(response.data);
+      message.success("File processed successfully");
+
+      // Reset form after successful upload
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setSelectedFile(null);
+      setFormData({
+        leadSource: "",
+        status: "",
+        assignToAgent: "",
+        service: "",
+        country: "",
+        state: "",
+      });
+    } catch (error: any) {
+      message.error(error.message || "Failed to process file");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDownloadSample = () => {
-    // Implement the logic to download a sample CSV file
-    console.log("Downloading sample file...");
+    // TODO: Implement sample file download logic
+    message.info("Sample file download functionality coming soon");
   };
 
-  // Mock options for select inputs
   const mockOptions = [
     { value: "option1", label: "Option 1" },
     { value: "option2", label: "Option 2" },
@@ -61,9 +146,10 @@ const ImportLeads: React.FC = () => {
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-md dark:bg-gray-800">
+      {/* File Upload Section */}
       <div className="mb-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
         <label className="block text-lg font-medium text-gray-700 dark:text-gray-300">
-          Select File (CSV File)
+          Select File (Excel File)
         </label>
         <FileUploadFillType
           onChange={handleFileChange}
@@ -80,46 +166,82 @@ const ImportLeads: React.FC = () => {
         />
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-6">
+      {/* Form Fields */}
+      <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
         <SelectGroupOne
-          label=" Lead Source"
-          options={mockOptions}
+          label="Lead Source*"
+          options={sourceList}
+          selectedOption={formData.leadSource}
           setSelectedOption={(value) => handleSelectChange("leadSource", value)}
         />
         <SelectGroupOne
-          label=" Service"
-          options={mockOptions}
+          label="Service"
+          options={serviceList}
+          selectedOption={formData.service}
           setSelectedOption={(value) => handleSelectChange("service", value)}
         />
         <SelectGroupOne
-          label=" Status"
-          options={mockOptions}
+          label="Status*"
+          options={statusList}
+          selectedOption={formData.status}
           setSelectedOption={(value) => handleSelectChange("status", value)}
         />
         <SelectGroupOne
-          label=" Country"
-          options={mockOptions}
+          label="Country"
+          options={countryOptions}
+          selectedOption={formData.country}
           setSelectedOption={(value) => handleSelectChange("country", value)}
         />
         <SelectGroupOne
-          label=" Assign to agent"
-          options={mockOptions}
+          label="Assign to agent*"
+          options={agentList}
+          selectedOption={formData.assignToAgent}
           setSelectedOption={(value) =>
             handleSelectChange("assignToAgent", value)
           }
         />
-        <SelectGroupOne
-          label=" State"
+        {/* <SelectGroupOne
+          label="State"
           options={mockOptions}
+          selectedOption={formData.state}
           setSelectedOption={(value) => handleSelectChange("state", value)}
-        />
+        /> */}
       </div>
+
+      {/* Upload Results */}
+      {uploadResult && (
+        <div className="mb-6 rounded-lg border border-stroke bg-gray-50 p-4 dark:border-strokedark dark:bg-gray-700">
+          <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+            Upload Results
+          </h3>
+          <div className="space-y-2 text-gray-700 dark:text-gray-300">
+            <p>Total Processed: {uploadResult.totalProcessed}</p>
+            <p>Successfully Imported: {uploadResult.successful}</p>
+            <p>Skipped: {uploadResult.skipped}</p>
+            {uploadResult.duplicateDetails.length > 0 && (
+              <div>
+                <p className="mb-2 font-medium">Duplicate Entries:</p>
+                <ul className="list-inside list-disc space-y-1 text-sm">
+                  {uploadResult.duplicateDetails.map((detail, index) => (
+                    <li key={index} className="text-red-600 dark:text-red-400">
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Submit Button */}
       <div className="flex w-full justify-center">
         <ButtonDefault
-          label="Next"
-          onClick={handleNextClick}
+          label={isLoading ? "Processing..." : "Import Leads"}
+          onClick={handleUpload}
           variant="primary"
           customClasses="w-full bg-primary text-white"
+          disabled={isLoading || !selectedFile}
         />
       </div>
     </div>
