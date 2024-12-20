@@ -1,17 +1,33 @@
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
-import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 
+interface PaymentOverview {
+  chartData: Array<{
+    month: string;
+    received: number;
+    loss: number;
+    receivedAmount: number;
+    lossAmount: number;
+  }>;
+  summary: {
+    receivedLeads: number;
+    lostLeads: number;
+  };
+}
 
-const ChartOne: React.FC = () => {
+interface ChartOneProps {
+  paymentOverview: PaymentOverview | null;
+}
+
+const ChartOne: React.FC<ChartOneProps> = ({ paymentOverview }) => {
   const series = [
     {
-      name: "Received Amount",
-      data: [0, 20, 35, 45, 35, 55, 65, 50, 65, 75, 60, 75],
+      name: "Won Amount",
+      data: paymentOverview?.chartData.map(item => item.receivedAmount) || [],
     },
     {
-      name: "Due Amount",
-      data: [15, 9, 17, 32, 25, 68, 80, 68, 84, 94, 74, 62],
+      name: "Lost Amount",
+      data: paymentOverview?.chartData.map(item => item.lossAmount) || [],
     },
   ];
 
@@ -57,7 +73,6 @@ const ChartOne: React.FC = () => {
     stroke: {
       curve: "smooth",
     },
-
     markers: {
       size: 0,
     },
@@ -79,10 +94,10 @@ const ChartOne: React.FC = () => {
     },
     tooltip: {
       fixed: {
-        enabled: !1,
+        enabled: false,
       },
       x: {
-        show: !1,
+        show: false,
       },
       y: {
         title: {
@@ -92,25 +107,12 @@ const ChartOne: React.FC = () => {
         },
       },
       marker: {
-        show: !1,
+        show: false,
       },
     },
     xaxis: {
       type: "category",
-      categories: [
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-      ],
+      categories: paymentOverview?.chartData.map(item => item.month) || [],
       axisBorder: {
         show: false,
       },
@@ -128,43 +130,67 @@ const ChartOne: React.FC = () => {
   };
 
   return (
-    <div className="col-span-12 rounded-[10px] bg-white px-7.5 pb-6 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-7">
-      <div className="mb-3.5 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-            Payments Overview
-          </h4>
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7">
+      <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
+        <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+          <div className="flex min-w-47.5">
+            <h4 className="text-xl font-bold text-black dark:text-white">
+              Won - Loss Overview
+            </h4>
+          </div>
         </div>
-        <div className="flex items-center gap-2.5">
-          <p className="font-medium uppercase text-dark dark:text-dark-6">
-            Short by:
-          </p>
-          <DefaultSelectOption options={["Monthly", "Yearly"]} />
-        </div>
+        {/* <div className="flex w-full max-w-45 justify-end">
+          <div className="inline-flex items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4">
+            <button className="rounded bg-white py-1 px-3 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card dark:bg-boxdark dark:text-white dark:hover:bg-boxdark">
+              Month
+            </button>
+          </div>
+        </div> */}
       </div>
-      <div>
-        <div className="-ml-4 -mr-5">
+
+      <div className="mb-2">
+        <div id="chartOne" className="-ml-5">
           <ReactApexChart
             options={options}
             series={series}
             type="area"
-            height={310}
+            height={350}
           />
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 text-center xsm:flex-row xsm:gap-0">
-        <div className="border-stroke dark:border-dark-3 xsm:w-1/2 xsm:border-r">
-          <p className="font-medium">Received Amount</p>
-          <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            $45,070.00
-          </h4>
-        </div>
-        <div className="xsm:w-1/2">
-          <p className="font-medium">Due Amount</p>
-          <h4 className="mt-1 text-xl font-bold text-dark dark:text-white">
-            $32,400.00
-          </h4>
+      <div className="flex flex-wrap items-start justify-center gap-3.5 sm:flex-nowrap sm:gap-5">
+        <div className="flex w-full flex-wrap items-center gap-3.5 sm:gap-5">
+          <div className="w-full px-8">
+            <div className="flex w-full items-center gap-3.5">
+              <div className="w-full max-w-52">
+                <div className="flex w-full items-center justify-between border-b border-stroke pb-2.5 dark:border-strokedark">
+                  <div className="flex items-center gap-1.5">
+                    <span className="block h-3 w-3 rounded-full bg-primary"></span>
+                    <span className="font-medium w-fit text-black dark:text-white">
+                      Won Amount
+                    </span>
+                  </div>
+                  <span className="font-medium text-meta-3">
+                    ₹{paymentOverview?.summary.receivedLeads.toLocaleString() || '0'}
+                  </span>
+                </div>
+              </div>
+              <div className="w-full max-w-45">
+                <div className="flex w-full items-center justify-between border-b border-stroke pb-2.5 dark:border-strokedark">
+                  <div className="flex items-center gap-1.5">
+                    <span className="block h-3 w-3 rounded-full bg-secondary"></span>
+                    <span className="font-medium text-black dark:text-white">
+                      Lost Amount
+                    </span>
+                  </div>
+                  <span className="font-medium text-meta-3 ml-3">
+                    ₹{paymentOverview?.summary.lostLeads.toLocaleString() || '0'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

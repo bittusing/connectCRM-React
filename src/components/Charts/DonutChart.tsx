@@ -2,23 +2,26 @@ import { ApexOptions } from "apexcharts";
 import React, { useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const leadsSourceData = [
-  { label: "Facebook Ads", value: 15000 },
-  { label: "Google Ads", value: 7000 },
-  { label: "Twitter Ads", value: 5000 },
-  { label: "LinkedIn Ads", value: 4000 },
-  { label: "Insta Ads", value: 14000 },
-  { label: "xyz Ads", value: 10000 },
-  { label: "abc Ads", value: 9000 },
-  { label: "efv Ads", value: 8000 },
-  { label: "Other", value: 2000 },
-];
+interface LeadSource {
+  name: string;
+  value: number;
+  color: string;
+  percentage: string;
+}
+
+interface LeadSourceOverview {
+  total: number;
+  sources: LeadSource[];
+}
+
+interface DonutChartsProps {
+  leadSourceMetrics: LeadSourceOverview | null;
+}
 
 const generateColors = (count: number): string[] => {
   const baseColor = [37, 28, 255]; // #5750F1 in RGB
   const maxColor = [180, 180, 255]; // Limit the lightest color to avoid white
   const colors: string[] = [];
-
   for (let i = 0; i < count; i++) {
     const factor = i / (count - 1);
     const r = Math.round(baseColor[0] + (maxColor[0] - baseColor[0]) * factor);
@@ -26,14 +29,16 @@ const generateColors = (count: number): string[] => {
     const b = Math.round(baseColor[2] + (maxColor[2] - baseColor[2]) * factor);
     colors.push(`rgb(${r},${g},${b})`);
   }
-
   return colors;
 };
 
-const DonutCharts: React.FC = () => {
-  const series = leadsSourceData.map((item) => item.value);
-  const labels = leadsSourceData.map((item) => item.label);
-  const colors = useMemo(() => generateColors(leadsSourceData.length), []);
+const DonutCharts: React.FC<DonutChartsProps> = ({ leadSourceMetrics }) => {
+  const series = leadSourceMetrics?.sources.map((item) => item.value) || [];
+  const labels = leadSourceMetrics?.sources.map((item) => item.name) || [];
+  const colors = useMemo(() => 
+    generateColors(leadSourceMetrics?.sources.length || 0), 
+    [leadSourceMetrics?.sources.length]
+  );
 
   const options: ApexOptions = {
     chart: {
@@ -56,9 +61,12 @@ const DonutCharts: React.FC = () => {
             total: {
               show: true,
               showAlways: true,
-              label: "Leads",
+              label: "Total Leads",
               fontSize: "16px",
               fontWeight: "400",
+              formatter: function () {
+                return leadSourceMetrics?.total.toString() || "0";
+              },
             },
             value: {
               show: true,
@@ -92,34 +100,46 @@ const DonutCharts: React.FC = () => {
     ],
   };
 
+  if (!leadSourceMetrics || leadSourceMetrics.sources.length === 0) {
+    return (
+      <div className="col-span-12 rounded-[10px] bg-white px-7.5 pb-7 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-5">
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-500 dark:text-gray-400">No lead source data available</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="col-span-12 rounded-[10px] bg-white px-7.5 pb-7 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-5">
       <div className="mb-9 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-            Leads source overview
+            Leads Source Overview
           </h4>
         </div>
       </div>
-
       <div className="mb-8">
         <div className="mx-auto flex justify-center">
-          <ReactApexChart options={options} series={series} type="donut" />
+          <ReactApexChart 
+            options={options} 
+            series={series} 
+            type="donut" 
+          />
         </div>
       </div>
-
       <div className="mx-auto w-full">
         <div className="-mx-7.5 flex flex-wrap items-center gap-y-2.5">
-          {leadsSourceData.map((item, index) => (
-            <div key={item.label} className="w-full px-7.5 sm:w-1/2">
+          {leadSourceMetrics.sources.map((item, index) => (
+            <div key={item.name} className="w-full px-7.5 sm:w-1/2">
               <div className="flex w-full items-center">
                 <span
                   className="mr-2 block h-3 w-full max-w-3 rounded-full"
                   style={{ backgroundColor: colors[index] }}
                 ></span>
                 <p className="flex w-full justify-between text-body-sm font-medium text-dark dark:text-dark-6">
-                  <span>{item.label}</span>
-                  <span>{item.value}</span>
+                  <span>{item.name}</span>
+                  <span>{item.value} ({item.percentage}%)</span>
                 </p>
               </div>
             </div>

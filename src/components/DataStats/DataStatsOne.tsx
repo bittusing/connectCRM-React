@@ -36,7 +36,7 @@ const DataStatsOne: React.FC<DataStatsProps> = ({ dataList }) => {
                     : "text-red"
                 }`}
               >
-                {item.growthRate && `${item.growthRate}%`}
+                {item.growthRate ? `${item.growthRate}%`:null}
                 {item.growthRate && item.growthRate > 0 ? (
                   <GrowthIconGreen />
                 ) : item.growthRate && item.growthRate <= 0 ? (

@@ -1,17 +1,29 @@
 import { ApexOptions } from "apexcharts";
 import ReactApexChart from "react-apexcharts";
-import DefaultSelectOption from "../SelectOption/DefaultSelectOption";
 
+interface PaymentOverview {
+  chartData: Array<{
+    month: string;
+    received: number;
+    loss: number;
+    receivedAmount: number;
+    lossAmount: number;
+  }>;
+}
 
-const ChartTwo: React.FC = () => {
+interface ChartTwoProps {
+  paymentOverview: PaymentOverview | null;
+}
+
+const ChartTwo: React.FC<ChartTwoProps> = ({ paymentOverview }) => {
   const series = [
     {
-      name: "Sales",
-      data: [44, 55, 41, 67, 22, 43, 65],
+      name: "Won Deals",
+      data: paymentOverview?.chartData.map(item => item.received) || [],
     },
     {
-      name: "Revenue",
-      data: [13, 23, 20, 8, 13, 27, 15],
+      name: "Lost Deals",
+      data: paymentOverview?.chartData.map(item => item.loss) || [],
     },
   ];
 
@@ -29,7 +41,6 @@ const ChartTwo: React.FC = () => {
         enabled: false,
       },
     },
-
     responsive: [
       {
         breakpoint: 1536,
@@ -55,7 +66,6 @@ const ChartTwo: React.FC = () => {
     dataLabels: {
       enabled: false,
     },
-
     grid: {
       strokeDashArray: 5,
       xaxis: {
@@ -69,9 +79,8 @@ const ChartTwo: React.FC = () => {
         },
       },
     },
-
     xaxis: {
-      categories: ["M", "T", "W", "T", "F", "S", "S"],
+      categories: paymentOverview?.chartData.map(item => item.month) || [],
     },
     legend: {
       position: "top",
@@ -79,7 +88,6 @@ const ChartTwo: React.FC = () => {
       fontFamily: "Satoshi",
       fontWeight: 500,
       fontSize: "14px",
-
       markers: {
         radius: 99,
         width: 16,
@@ -87,31 +95,37 @@ const ChartTwo: React.FC = () => {
         strokeWidth: 10,
         strokeColor: "transparent",
       },
-      // markers: {
-      //   size: 99,
-      //   // width: 16,
-      //   // height: 16,
-      //   strokeWidth: 10, // Instead of strokeColor
-      //   fillColors: ["transparent"], // If you need to set colors
-      //   offsetX: 0,
-      //   offsetY: 0,
-      // },
     },
     fill: {
       opacity: 1,
     },
   };
 
+  const totalWonDeals = paymentOverview?.chartData.reduce((sum, item) => sum + item.received, 0) || 0;
+  const totalLostDeals = paymentOverview?.chartData.reduce((sum, item) => sum + item.loss, 0) || 0;
+
   return (
     <div className="col-span-12 rounded-[10px] bg-white px-7.5 pt-7.5 shadow-1 dark:bg-gray-dark dark:shadow-card xl:col-span-5">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
           <h4 className="text-body-2xlg font-bold text-dark dark:text-white">
-            Profit this week
+            Deal Analytics
           </h4>
         </div>
-        <div>
-          <DefaultSelectOption options={["This Week", "Last Week"]} />
+      </div>
+
+      <div className="mb-4 grid grid-cols-2 gap-4">
+        <div className="rounded-md border border-stroke bg-gray p-4 dark:border-strokedark dark:bg-meta-4">
+          <h4 className="mb-1.5 text-title-sm font-medium text-black dark:text-white">
+            Won Deals
+          </h4>
+          <h3 className="text-title-lg font-bold text-success">{totalWonDeals}</h3>
+        </div>
+        <div className="rounded-md border border-stroke bg-gray p-4 dark:border-strokedark dark:bg-meta-4">
+          <h4 className="mb-1.5 text-title-sm font-medium text-black dark:text-white">
+            Lost Deals
+          </h4>
+          <h3 className="text-title-lg font-bold text-danger">{totalLostDeals}</h3>
         </div>
       </div>
 
